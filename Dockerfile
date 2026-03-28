@@ -38,7 +38,7 @@ FROM base AS production
 WORKDIR /app
 COPY --chown=node:node --from=build /app /app
 RUN npm install --global --omit=dev @anthropic-ai/claude-code@latest @openai/codex@latest opencode-ai \
-  && pip3 install --break-system-packages hermes-agent \
+  && pip3 install --break-system-packages git+https://github.com/NousResearch/hermes-agent.git \
   && mkdir -p /paperclip \
   && chown node:node /paperclip
 
