@@ -1,0 +1,134 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { chatApi } from "@/api/chat";
+import { queryKeys } from "@/lib/queryKeys";
+import { ChatMessageList } from "./ChatMessageList";
+import { ChatInput } from "./ChatInput";
+import { ChatAdapterSelector } from "./ChatAdapterSelector";
+import { useChatStream } from "@/hooks/useChatStream";
+
+interface ChatMessageAreaProps {
+  companyId: string;
+  threadId: string;
+}
+
+export function ChatMessageArea({ companyId, threadId }: ChatMessageAreaProps) {
+  const queryClient = useQueryClient();
+  const [inputValue, setInputValue] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeRunId, setActiveRunId] = useState<string | null>(null);
+  const [streamingContent, setStreamingContent] = useState("");
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const isAtBottomRef = useRef(true);
+
+  const { data: thread } = useQuery({
+    queryKey: queryKeys.chat.thread(threadId),
+    queryFn: () => chatApi.getThread(threadId),
+  });
+
+  const { data: messages, refetch: refetchMessages } = useQuery({
+    queryKey: queryKeys.chat.messages(threadId),
+    queryFn: () => chatApi.listMessages(threadId),
+  });
+
+  const scrollToBottom = useCallback(() => {
+    if (isAtBottomRef.current) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
+
+  // Stream handler
+  useChatStream({
+    companyId,
+    activeRunId,
+    onChunk: useCallback(
+      (text: string) => {
+        setStreamingContent((prev) => prev + text);
+        scrollToBottom();
+      },
+      [scrollToBottom],
+    ),
+    onComplete: useCallback(() => {
+      setActiveRunId(null);
+      setStreamingContent("");
+      refetchMessages();
+      queryClient.invalidateQueries({ queryKey: queryKeys.chat.threads(companyId) });
+    }, [refetchMessages, queryClient, companyId]),
+    onError: useCallback(
+      (error: string) => {
+        setActiveRunId(null);
+        setStreamingContent("");
+        refetchMessages();
+      },
+      [refetchMessages],
+    ),
+  });
+
+  // Scroll on new messages
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
+
+  const handleSubmit = async () => {
+    const content = inputValue.trim();
+    if (!content || isSubmitting) return;
+
+    setInputValue("");
+    setIsSubmitting(true);
+
+    try {
+      const result = await chatApi.sendMessage(threadId, { content });
+      setActiveRunId(result.runId);
+      refetchMessages();
+      queryClient.invalidateQueries({ queryKey: queryKeys.chat.threads(companyId) });
+    } catch (err) {
+      console.error("Failed to send message:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    isAtBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 50;
+  };
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-2 border-b min-h-[3rem]">
+        <h2 className="text-sm font-medium truncate">
+          {thread?.title ?? "Chat"}
+        </h2>
+        {thread && (
+          <ChatAdapterSelector
+            threadId={threadId}
+            adapterType={thread.adapterType}
+            model={thread.model}
+            companyId={companyId}
+          />
+        )}
+      </div>
+
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-4 py-4" onScroll={handleScroll}>
+        <ChatMessageList
+          messages={messages ?? []}
+          streamingContent={streamingContent}
+          isStreaming={!!activeRunId}
+        />
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Input */}
+      <div className="border-t p-4">
+        <ChatInput
+          value={inputValue}
+          onChange={setInputValue}
+          onSubmit={handleSubmit}
+          disabled={isSubmitting || !!activeRunId}
+        />
+      </div>
+    </div>
+  );
+}
