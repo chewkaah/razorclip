@@ -41,6 +41,7 @@ import { AuthPage } from "./pages/Auth";
 import { BoardClaimPage } from "./pages/BoardClaim";
 import { CliAuthPage } from "./pages/CliAuth";
 import { InviteLandingPage } from "./pages/InviteLanding";
+import { Chat } from "./pages/Chat";
 import { NotFoundPage } from "./pages/NotFound";
 import { queryKeys } from "./lib/queryKeys";
 import { useCompany } from "./context/CompanyContext";
@@ -170,6 +171,8 @@ function boardRoutes() {
       <Route path="inbox/unread" element={<Inbox />} />
       <Route path="inbox/all" element={<Inbox />} />
       <Route path="inbox/new" element={<Navigate to="/inbox/mine" replace />} />
+      <Route path="chat" element={<Chat />} />
+      <Route path="chat/:threadId" element={<Chat />} />
       <Route path="design-guide" element={<DesignGuide />} />
       <Route path="tests/ux/runs" element={<RunTranscriptUxLab />} />
       <Route path=":pluginRoutePath" element={<PluginPage />} />

@@ -317,6 +317,7 @@ export const LIVE_EVENT_TYPES = [
   "plugin.ui.updated",
   "plugin.worker.crashed",
   "plugin.worker.restarted",
+  "chat.message.streaming",
 ] as const;
 export type LiveEventType = (typeof LIVE_EVENT_TYPES)[number];
 
@@ -506,6 +507,7 @@ export const PLUGIN_RESERVED_COMPANY_ROUTE_SEGMENTS = [
   "inbox",
   "design-guide",
   "tests",
+  "chat",
 ] as const;
 export type PluginReservedCompanyRouteSegment =
   (typeof PLUGIN_RESERVED_COMPANY_ROUTE_SEGMENTS)[number];
