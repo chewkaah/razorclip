@@ -1,5 +1,7 @@
-import { useCallback, useMemo, useRef, useState } from "react";
-import { Send, Plus, AtSign, Mic } from "lucide-react";
+/**
+ * ChatInput — pixel-perfect from Stitch chat_interface footer
+ */
+import { useCallback, useMemo, useRef } from "react";
 import { ChatSlashMenu } from "./ChatSlashMenu";
 
 interface ChatInputProps {
@@ -9,12 +11,6 @@ interface ChatInputProps {
   disabled: boolean;
 }
 
-/**
- * ChatInput — Kinetic Terminal styled chat input.
- *
- * Glass card with rounded corners, + button, @ mention, mic, send FAB.
- * Slash command menu triggers on /
- */
 export function ChatInput({ value, onChange, onSubmit, disabled }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -27,14 +23,10 @@ export function ChatInput({ value, onChange, onSubmit, disabled }: ChatInputProp
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (isSlashActive && ["ArrowUp", "ArrowDown", "Enter", "Escape"].includes(e.key)) {
-        return;
-      }
+      if (isSlashActive && ["ArrowUp", "ArrowDown", "Enter", "Escape"].includes(e.key)) return;
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
-        if (!disabled && value.trim()) {
-          onSubmit();
-        }
+        if (!disabled && value.trim()) onSubmit();
       }
     },
     [disabled, value, onSubmit, isSlashActive],
@@ -55,20 +47,17 @@ export function ChatInput({ value, onChange, onSubmit, disabled }: ChatInputProp
   return (
     <div className="relative">
       {isSlashActive && (
-        <ChatSlashMenu
-          query={slashQuery}
-          onSelect={handleSlashSelect}
-          onClose={() => onChange("")}
-        />
+        <ChatSlashMenu query={slashQuery} onSelect={handleSlashSelect} onClose={() => onChange("")} />
       )}
-      <div className="flex items-end gap-3">
-        <div className="flex-1 bg-kt-surface-container-high rounded-3xl flex items-end px-4 py-2 border border-kt-outline-variant/20 focus-within:border-kt-primary/40 focus-within:shadow-[0_0_20px_rgba(194,193,255,0.1)] transition-all min-h-[48px]">
-          <button
-            className="text-kt-on-surface-variant/50 hover:text-kt-primary transition-colors p-1 shrink-0 mb-0.5"
-            type="button"
+      <div className="max-w-4xl mx-auto flex items-end gap-3">
+        {/* Input bar — from Stitch */}
+        <div className="flex-1 glass-card min-h-[56px] rounded-3xl px-5 py-3 flex items-center gap-3 focus-within:ring-1 focus-within:ring-[#c2c1ff]/50 transition-all">
+          <span
+            className="material-symbols-outlined text-[#c7c4d7]/50 text-xl cursor-pointer hover:text-[#c2c1ff] transition-colors"
+            style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}
           >
-            <Plus className="w-5 h-5" />
-          </button>
+            add_circle
+          </span>
           <textarea
             ref={textareaRef}
             value={value}
@@ -77,21 +66,27 @@ export function ChatInput({ value, onChange, onSubmit, disabled }: ChatInputProp
             placeholder="Send a message... (/ for commands)"
             disabled={disabled}
             rows={1}
-            className="flex-1 resize-none bg-transparent border-none focus:outline-none focus:ring-0 text-sm text-kt-on-surface placeholder:text-kt-on-surface-variant/40 py-1.5 px-2 min-h-[28px] max-h-[200px]"
+            className="flex-1 resize-none bg-transparent border-none focus:outline-none focus:ring-0 text-sm text-[#e2e2eb] placeholder:text-[#c7c4d7]/40 py-1.5 min-h-[28px] max-h-[200px]"
           />
-          <button
-            className="text-kt-on-surface-variant/50 hover:text-kt-primary transition-colors p-1 shrink-0 mb-0.5"
-            type="button"
+          <span
+            className="material-symbols-outlined text-[#c7c4d7]/50 text-xl cursor-pointer hover:text-[#c2c1ff] transition-colors"
+            style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}
           >
-            <Mic className="w-5 h-5" />
-          </button>
+            mic
+          </span>
         </div>
+        {/* Send FAB — from Stitch */}
         <button
           onClick={onSubmit}
           disabled={disabled || !value.trim()}
-          className="w-12 h-12 rounded-full bg-kt-primary flex items-center justify-center shadow-[0_8px_20px_rgba(194,193,255,0.3)] active:scale-90 transition-transform disabled:opacity-40 disabled:shadow-none shrink-0"
+          className="w-14 h-14 rounded-full bg-[#c2c1ff] flex items-center justify-center shadow-[0_8px_20px_rgba(194,193,255,0.3)] active:scale-90 transition-transform disabled:opacity-40 disabled:shadow-none shrink-0"
         >
-          <Send className="w-5 h-5 text-kt-on-primary" />
+          <span
+            className="material-symbols-outlined text-[#1800a7] text-2xl"
+            style={{ fontVariationSettings: "'FILL' 1, 'wght' 300" }}
+          >
+            send
+          </span>
         </button>
       </div>
     </div>
