@@ -226,8 +226,12 @@
   body {
     @apply bg-background text-foreground antialiased;
     height: 100%;
-    overflow: hidden;
+    overflow: hidden; /* Paperclip Layout needs this — RazorclipShell overrides per-page */
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  /* RazorclipShell pages: main content scrolls, body stays locked for sidebar */
+  body:has(.razorclip-shell) {
+    overflow: hidden;
   }
   h1,
   h2,

@@ -166,7 +166,7 @@ export function RazorclipShell() {
   const [showCompanySwitcher, setShowCompanySwitcher] = useState(false);
 
   return (
-    <div className="bg-[--rc-surface] text-[--rc-on-surface] font-['Inter'] min-h-screen selection:bg-[--rc-primary]/30">
+    <div className="razorclip-shell bg-[--rc-surface] text-[--rc-on-surface] font-['Inter'] h-screen overflow-hidden selection:bg-[--rc-primary]/30">
       {/* ─── Sidebar ─── */}
       <aside className="fixed left-0 top-0 h-full flex flex-col py-6 bg-[--rc-sidebar-bg] backdrop-blur-3xl w-64 border-r border-[--rc-primary]/10 tabular-nums tracking-tight font-medium text-sm shadow-[20px_0_40px_-12px_rgba(194,193,255,0.05)] z-50">
         {/* Brand + Company Switcher */}
@@ -303,7 +303,7 @@ export function RazorclipShell() {
       </header>
 
       {/* ─── Main content ─── */}
-      <main className="ml-64 pt-24 pb-12 px-8 min-h-screen overflow-y-auto h-screen">
+      <main className="ml-64 pt-24 pb-12 px-8 overflow-y-auto" style={{ height: "100vh" }}>
         <Outlet />
       </main>
     </div>
