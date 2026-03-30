@@ -33,8 +33,7 @@ function resolveSlug(name: string): AgentSlug | null {
 export function Home() {
   const { selectedCompanyId } = useCompany();
   const { setBreadcrumbs } = useBreadcrumbs();
-  const { profile } = useUserProfile();
-  const userName = profile?.displayName || "there";
+  const { displayName: userName } = useUserProfile();
 
   useEffect(() => { setBreadcrumbs([{ label: "Command Center" }]); }, [setBreadcrumbs]);
 
