@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Issue Detail - RAZORCLIP</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container": "#1e1f26",
+            "on-background": "#e2e2eb",
+            "inverse-primary": "#4d4ad5",
+            "on-secondary-fixed": "#181b25",
+            "on-primary-fixed-variant": "#332dbc",
+            "error": "#ffb4ab",
+            "surface-container-lowest": "#0c0e14",
+            "tertiary-container": "#caa900",
+            "on-primary": "#1800a7",
+            "surface-variant": "#33343b",
+            "primary": "#c2c1ff",
+            "on-primary-fixed": "#0c006b",
+            "secondary-fixed-dim": "#c4c6d3",
+            "tertiary-fixed-dim": "#e9c400",
+            "on-secondary-container": "#b2b4c2",
+            "inverse-surface": "#e2e2eb",
+            "on-error-container": "#ffdad6",
+            "surface-tint": "#c2c1ff",
+            "secondary": "#c4c6d3",
+            "on-tertiary-fixed-variant": "#554600",
+            "tertiary-fixed": "#ffe171",
+            "outline-variant": "#464554",
+            "outline": "#918fa0",
+            "surface-container-low": "#191b22",
+            "on-surface-variant": "#c7c4d7",
+            "surface-dim": "#111319",
+            "surface-container-high": "#282a30",
+            "primary-fixed-dim": "#c2c1ff",
+            "on-tertiary-fixed": "#221b00",
+            "on-tertiary-container": "#4c3f00",
+            "tertiary": "#eac400",
+            "on-secondary": "#2d303b",
+            "on-error": "#690005",
+            "background": "#111319",
+            "secondary-fixed": "#e0e2f0",
+            "on-tertiary": "#3b2f00",
+            "on-secondary-fixed-variant": "#444652",
+            "primary-fixed": "#e2dfff",
+            "error-container": "#93000a",
+            "on-primary-container": "#f4f1ff",
+            "on-surface": "#e2e2eb",
+            "surface-bright": "#373940",
+            "surface": "#111319",
+            "secondary-container": "#444652",
+            "primary-container": "#5e5ce6",
+            "surface-container-highest": "#33343b",
+            "inverse-on-surface": "#2e3037"
+          },
+          fontFamily: {
+            "headline": ["Inter"],
+            "body": ["Inter"],
+            "label": ["Inter"],
+            "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+          },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-panel {
+      background: rgba(51, 52, 59, 0.6);
+      backdrop-filter: blur(24px);
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
+    .agent-glow-purple { box-shadow: 0 0 15px rgba(139, 92, 246, 0.2); }
+    .streaming-text::after {
+      content: '_';
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest text-on-surface font-body selection:bg-primary/30 min-h-screen overflow-hidden">
+<!-- Main Background Canvas -->
+<div class="fixed inset-0 z-0 bg-surface">
+<div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 2px 2px, #c2c1ff 1px, transparent 0); background-size: 32px 32px;"></div>
+</div>
+<!-- Simulated Parent Screen Content (Visible behind sheet) -->
+<div class="relative z-0 p-6 opacity-40 blur-sm pointer-events-none">
+<div class="flex flex-col gap-4">
+<div class="h-12 w-32 bg-surface-container-high rounded-xl"></div>
+<div class="h-64 w-full bg-surface-container-high rounded-2xl"></div>
+<div class="h-40 w-full bg-surface-container-high rounded-2xl"></div>
+</div>
+</div>
+<!-- MOBILE SLIDE-UP SHEET CONTAINER -->
+<div class="fixed inset-0 z-40 flex flex-col justify-end bg-surface/40 backdrop-blur-sm">
+<!-- Drag Handle Area -->
+<div class="w-full flex justify-center py-3">
+<div class="w-12 h-1 bg-outline-variant/50 rounded-full"></div>
+</div>
+<!-- Sheet Content -->
+<div class="w-full h-[813px] glass-panel rounded-t-[2rem] border-t border-primary/15 flex flex-col shadow-[0_-20px_50px_-10px_rgba(0,0,0,0.5)]">
+<!-- Sticky Header -->
+<div class="px-6 py-5 border-b border-outline-variant/10 flex items-center justify-between shrink-0">
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">keyboard_double_arrow_down</span>
+</button>
+<div class="flex flex-col">
+<span class="text-[10px] font-label tracking-[0.1em] text-primary uppercase">Issue ID: RC-8821</span>
+<h1 class="text-lg font-headline font-bold text-on-surface leading-tight">Syncing Neural Core v2.1</h1>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="px-2.5 py-1 bg-primary/10 border border-primary/20 rounded-full flex items-center gap-1.5">
+<div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(194,193,255,0.8)]"></div>
+<span class="text-[10px] font-label font-bold text-primary tracking-wider">IN-PROGRESS</span>
+</div>
+</div>
+</div>
+<!-- Scrollable Body -->
+<div class="flex-1 overflow-y-auto scrollbar-hide px-6 py-6 flex flex-col gap-8 pb-32">
+<!-- Metadata Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-4 rounded-2xl flex items-center gap-3 border border-outline-variant/5">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="Avatar of Dante, an AI agent with futuristic purple aesthetics and digital highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF2zbiuxbMvIFK4hPMUACRwSCCqO9_GhOlEvvcDlig647D3wQvd_8CYS4d_0UGS0db9gfF_YNX56idqHtrjJpN_vAbxY_sJlONUvk_g0TSoDj2z263CFJRPXhgGmxwsSkw9qge04IxSV1thdIwJEdEUhJAN_JlMEcJ5cQYy1izHobd1gNBDTD3YmJSMG47PpP7dXqiaCBCcvwKElQicud5XoWVueJbQL6IxHD9vCUsbtFurtvV2ETsqaKnvVqQzMqV5Bx3v8iDgGo"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-label text-on-surface-variant uppercase tracking-wider">Assigned Agent</span>
+<span class="text-sm font-medium text-on-surface">Dante (Lead)</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-2xl flex items-center gap-3 border border-outline-variant/5">
+<div class="w-10 h-10 rounded-full bg-tertiary/10 flex items-center justify-center border border-tertiary/20">
+<span class="material-symbols-outlined text-tertiary">priority_high</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-label text-on-surface-variant uppercase tracking-wider">Priority</span>
+<span class="text-sm font-medium text-tertiary">Critical Path</span>
+</div>
+</div>
+</div>
+<!-- Tags Row -->
+<div class="flex flex-wrap gap-2">
+<div class="px-3 py-1.5 bg-surface-container-high rounded-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-xs text-on-surface-variant">corporate_fare</span>
+<span class="text-xs font-medium text-on-surface-variant">CLIENT: NEXUS_CORP</span>
+</div>
+<div class="px-3 py-1.5 bg-surface-container-high rounded-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-xs text-on-surface-variant">tag</span>
+<span class="text-xs font-medium text-on-surface-variant">INFRASTRUCTURE</span>
+</div>
+</div>
+<!-- Description Section (Markdown Style) -->
+<div class="flex flex-col gap-3">
+<h2 class="text-sm font-label font-bold text-on-surface uppercase tracking-[0.05em]">Description</h2>
+<div class="text-on-surface-variant text-sm leading-relaxed space-y-4">
+<p>Deploying the new **Neural Core** architecture to the production cluster. The previous version (v2.0) is experiencing latency spikes during peak inference cycles.</p>
+<ul class="list-disc list-inside space-y-2 marker:text-primary">
+<li>Initialize tertiary buffer protocols</li>
+<li>Re-route agent traffic through proxy-v4</li>
+<li>Verify cryptographic integrity of the weights</li>
+</ul>
+</div>
+</div>
+<!-- Live Streaming Terminal Block -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<h2 class="text-sm font-label font-bold text-on-surface uppercase tracking-[0.05em]">Live Execution</h2>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="text-[10px] font-mono text-primary uppercase">Streaming Output</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-4 font-mono text-[11px] leading-relaxed border border-primary/10 shadow-inner">
+<div class="text-on-surface-variant opacity-60">[08:42:01] <span class="text-primary">INFO</span> Initializing core sync...</div>
+<div class="text-on-surface-variant opacity-60">[08:42:04] <span class="text-primary">INFO</span> Connection established via port 443</div>
+<div class="text-on-surface-variant opacity-60">[08:42:05] <span class="text-primary">INFO</span> Handshake verified [RSA-4096]</div>
+<div class="text-on-surface-variant opacity-80">[08:42:08] <span class="text-tertiary">WARN</span> Latency spike detected: 142ms</div>
+<div class="text-on-surface font-medium">[08:42:12] <span class="text-primary">PROCESS</span> Syncing weights: 64.2%...</div>
+<div class="text-primary streaming-text mt-1">Executing recursive node verification...</div>
+</div>
+</div>
+<!-- Activity/Comments Thread -->
+<div class="flex flex-col gap-6">
+<h2 class="text-sm font-label font-bold text-on-surface uppercase tracking-[0.05em]">Communication Thread</h2>
+<!-- Comment 1 (Agent) -->
+<div class="flex gap-4">
+<div class="shrink-0">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/20 agent-glow-purple">
+<img class="w-full h-full" data-alt="Close up of AI agent Dante avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaW8xHL_3nH7Zah3wATry2GnVMOiVuBO45r-EnKaTFvJJwJtLhHqMl1Y6EKCgFAZXtIQuZ5t5Sb3JuuC0GhFp8PwuBVJpqpMFZj7u7lHlL02W7hjx_H8IWpwnGHTBmk3UMEQb7-J3VHoOiWthreaVr7Qv1V7sygD3PN_ayhqDs6a4DTdiGiFtmBsbfUTX5Xg0kdCFSgmLUguii7L-HgCx5bdTQD7YH0_FqJF5uQ4fYA2_FnRO2KbgMlGemRE1BDS1KMA3uoKrsUqw"/>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1.5">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-primary tracking-tight">Dante (AI)</span>
+<span class="text-[10px] text-on-surface-variant/50 tabular-nums">12m ago</span>
+</div>
+<div class="bg-surface-container-high/40 p-3 rounded-2xl rounded-tl-none border border-outline-variant/10">
+<p class="text-xs text-on-surface-variant leading-relaxed">I've detected a slight mismatch in the checksum for the core-v2 assets. Attempting an automated re-fetch from the secure vault.</p>
+</div>
+</div>
+</div>
+<!-- Comment 2 (Human) -->
+<div class="flex gap-4">
+<div class="shrink-0">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img class="w-full h-full" data-alt="Avatar of Alex, a human system operator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAaNelMXtg38mzCuuzr2ILYXGdUv3yU1zkLg9pDYy_-vi6uwGTKUXIly9KraXPQhvGRNoP5a2Ty8ztXVdIYrk81Jhi-Zkm18iFn2GcQvz2WEAArT8DCw4brXE43NpGTpYNx0JlucO22j2GwEbFcsB7zou8qUUP_Jfdf9VsJ-1gB_u_Sj_FS-USrBtCZ03vN4XD3xM490ITGJVQ6OnotM9iF2I6tYtA36ztIsPZYWJCAeZZEFYcJ1ZW0iSjk2aZCsgmJuftrry3oX8"/>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1.5">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-on-surface tracking-tight">Alex Rivera (Human)</span>
+<span class="text-[10px] text-on-surface-variant/50 tabular-nums">5m ago</span>
+</div>
+<div class="bg-surface-container-high p-3 rounded-2xl rounded-tl-none border border-outline-variant/10">
+<p class="text-xs text-on-surface-variant leading-relaxed">Copy that, Dante. Stand by for manual override if the vault rejects the secondary request. Proceed with caution.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Persistent Floating Action Bar -->
+<div class="absolute bottom-0 left-0 w-full p-6 pb-10 bg-gradient-to-t from-surface-dim via-surface-dim to-transparent flex flex-col gap-4 pointer-events-none">
+<!-- Action Buttons -->
+<div class="flex items-center gap-3 pointer-events-auto">
+<button class="flex-[2] bg-primary text-on-primary font-label font-bold text-[11px] h-12 rounded-xl flex items-center justify-center gap-2 shadow-[0_4px_20px_-4px_rgba(194,193,255,0.4)] active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+            APPROVE
+          </button>
+<button class="flex-1 bg-surface-variant/80 backdrop-blur-md text-on-surface font-label font-bold text-[11px] h-12 rounded-xl flex items-center justify-center gap-2 border border-outline-variant/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+            CHAT
+          </button>
+<button class="w-12 h-12 bg-surface-variant/80 backdrop-blur-md text-on-surface flex items-center justify-center rounded-xl border border-outline-variant/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<!-- Quick Input Bar -->
+<div class="pointer-events-auto">
+<div class="relative">
+<input class="w-full h-12 bg-surface-container-highest/60 backdrop-blur-xl border-none border-b border-primary/20 rounded-xl px-4 pr-12 text-sm text-on-surface placeholder:text-on-surface-variant/40 focus:ring-1 focus:ring-primary/30" placeholder="Type a message or command..." type="text"/>
+<button class="absolute right-2 top-2 w-8 h-8 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation (Shared Component) - Rendered for context but under the sheet -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2 bg-[#111319]/90 backdrop-blur-2xl border-t border-[#c2c1ff]/10 rounded-t-2xl pointer-events-none opacity-20">
+<div class="flex flex-col items-center justify-center text-[#c2c1ff] bg-[#c2c1ff]/10 rounded-xl px-4 py-1">
+<span class="material-symbols-outlined">home_max</span>
+<span class="font-['Inter'] text-[10px] tracking-[0.05em] font-medium uppercase">HOME</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#c7c4d7]/50">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="font-['Inter'] text-[10px] tracking-[0.05em] font-medium uppercase">CHAT</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#c7c4d7]/50">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-['Inter'] text-[10px] tracking-[0.05em] font-medium uppercase">AGENTS</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#c7c4d7]/50">
+<span class="material-symbols-outlined">monitor_heart</span>
+<span class="font-['Inter'] text-[10px] tracking-[0.05em] font-medium uppercase">HEALTH</span>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#111319",
+              "on-primary-container": "#f4f1ff",
+              "tertiary-container": "#caa900",
+              "primary-fixed-dim": "#c2c1ff",
+              "on-surface": "#e2e2eb",
+              "outline": "#918fa0",
+              "error-container": "#93000a",
+              "inverse-surface": "#e2e2eb",
+              "on-tertiary-container": "#4c3f00",
+              "secondary-fixed-dim": "#c4c6d3",
+              "secondary-fixed": "#e0e2f0",
+              "surface-container-highest": "#33343b",
+              "surface-bright": "#373940",
+              "secondary": "#c4c6d3",
+              "on-secondary-fixed-variant": "#444652",
+              "tertiary-fixed-dim": "#e9c400",
+              "surface-container-lowest": "#0c0e14",
+              "primary-fixed": "#e2dfff",
+              "on-error": "#690005",
+              "surface-container-low": "#191b22",
+              "on-tertiary-fixed-variant": "#554600",
+              "on-primary-fixed": "#0c006b",
+              "inverse-primary": "#4d4ad5",
+              "on-surface-variant": "#c7c4d7",
+              "secondary-container": "#444652",
+              "on-tertiary-fixed": "#221b00",
+              "on-secondary-fixed": "#181b25",
+              "on-background": "#e2e2eb",
+              "on-tertiary": "#3b2f00",
+              "error": "#ffb4ab",
+              "on-error-container": "#ffdad6",
+              "surface-variant": "#33343b",
+              "tertiary": "#eac400",
+              "tertiary-fixed": "#ffe171",
+              "primary-container": "#5e5ce6",
+              "background": "#111319",
+              "on-secondary": "#2d303b",
+              "surface-container-high": "#282a30",
+              "on-primary-fixed-variant": "#332dbc",
+              "inverse-on-surface": "#2e3037",
+              "surface-tint": "#c2c1ff",
+              "on-primary": "#1800a7",
+              "surface-container": "#1e1f26",
+              "surface-dim": "#111319",
+              "on-secondary-container": "#b2b4c2",
+              "primary": "#c2c1ff",
+              "outline-variant": "#464554"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+        .glass-card {
+            background: rgba(26, 29, 39, 0.6);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .active-glow-purple { box-shadow: 0 0 30px -5px rgba(139, 92, 246, 0.2); }
+        .active-glow-blue { box-shadow: 0 0 30px -5px rgba(59, 130, 246, 0.2); }
+        .active-glow-green { box-shadow: 0 0 30px -5px rgba(16, 185, 129, 0.2); }
+        .active-glow-orange { box-shadow: 0 0 30px -5px rgba(245, 158, 11, 0.2); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30">
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-6 bg-[#111319]/80 backdrop-blur-3xl docked left-0 h-screen w-64 border-r border-[#c2c1ff]/10 font-['Inter'] tabular-nums tracking-tight font-medium text-sm shadow-[20px_0_40px_-12px_rgba(194,193,255,0.05)] z-50">
+<div class="px-6 mb-8">
+<h1 class="text-xl font-thin tracking-tighter text-[#c2c1ff] uppercase">War Room</h1>
+<p class="text-[10px] text-on-surface-variant tracking-[0.2em] uppercase opacity-60">Global Orchestration</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#c2c1ff] bg-[#c2c1ff]/10 font-semibold border-r-2 border-[#c2c1ff] transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="chat_bubble">chat_bubble</span>
+<span>Chat</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="inbox">inbox</span>
+<span>Inbox</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="error">error</span>
+<span>Issues</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="sync">sync</span>
+<span>Routines</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="target">target</span>
+<span>Goals</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#c2c1ff] bg-[#c2c1ff]/10 font-semibold border-r-2 border-[#c2c1ff] transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="smart_toy">smart_toy</span>
+<span>Agents</span>
+</a>
+</nav>
+<div class="px-3 pt-4 border-t border-outline-variant/10 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help_outline">help_outline</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar (Shared Component) -->
+<header class="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-8 z-40 bg-[#111319]/60 backdrop-blur-xl border-b border-[#c2c1ff]/10 font-['Inter'] font-medium text-xs uppercase tracking-widest">
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-[10px] w-64 pl-10 text-on-surface" placeholder="CMD + K TO SEARCH..." type="text"/>
+</div>
+<nav class="hidden md:flex gap-8">
+<a class="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all" href="#">System Status</a>
+<a class="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all" href="#">Network</a>
+<a class="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all" href="#">Logs</a>
+</nav>
+</div>
+<div class="flex items-center gap-4 text-[#c2c1ff]">
+<button class="material-symbols-outlined p-2 scale-95 active:opacity-80 transition-all" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined p-2 scale-95 active:opacity-80 transition-all" data-icon="terminal">terminal</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-high border border-outline-variant/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 pt-24 pb-12 px-8 min-h-screen">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="text-4xl font-light tracking-tight text-on-surface mb-1">Active Agents</h2>
+<div class="flex items-center gap-3 text-on-surface-variant font-label text-[10px] uppercase tracking-[0.2em]">
+<span class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></span>
+                        14 Systems Nominal
+                    </span>
+<span class="w-1 h-1 rounded-full bg-outline/30"></span>
+<span class="flex items-center gap-1.5 tabular-nums">
+                        Last synced: 14:02:31
+                    </span>
+</div>
+</div>
+<button class="group flex items-center gap-2 px-5 py-2.5 bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/10 rounded-xl transition-all duration-300">
+<span class="material-symbols-outlined text-lg group-hover:rotate-180 transition-transform duration-500" data-icon="refresh">refresh</span>
+<span class="font-label text-[10px] uppercase tracking-widest">Manual Refresh</span>
+</button>
+</div>
+<!-- Agent Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Agent Card: Dante -->
+<div class="glass-card group p-6 rounded-xl border border-outline-variant/10 transition-all duration-500 hover:scale-[1.02] active-glow-purple relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#8B5CF6] to-[#D8B4FE] opacity-40"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="relative">
+<div class="w-16 h-16 rounded-full p-1 border-2 border-[#8B5CF6]">
+<img alt="Dante Avatar" class="w-full h-full rounded-full bg-surface-container-low" data-alt="Stylized 3D avatar of a male AI agent with futuristic purple accessories and a sharp, focused expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqvoi0EHWaiy8i52d4_0X5lgnNuw4z2rlyQl5_tYnyK4wlyNBVVoFZ9M3cdwRPT3kUKzFbs7y_rqu9tKrjV6GW0q48T3CaH4mdsZvxapDTw7ncKzGd6idmwFmFkvyPL7OTYSqxZoPBeckJxO-Ym3L0sblV2ze1j7qty1UCrJCGZXgY28qoJnl-bbkEjXe_u60mgqsYfU_8fdArJARX89Oo3MafT7r9gdS9eswn-olwtDQvZfni_YJ9qEaJKAkMx9LDYXPr6hIV-R8"/>
+</div>
+<span class="absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-surface bg-[#10B981]"></span>
+</div>
+<div class="flex flex-col items-end">
+<span class="bg-[#8B5CF6]/10 text-[#D8B4FE] text-[10px] px-2 py-0.5 rounded-full font-label uppercase tracking-widest mb-2">Active</span>
+<div class="bg-primary/20 text-primary w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold tabular-nums border border-primary/30">3</div>
+</div>
+</div>
+<div class="mb-6">
+<h3 class="text-xl font-semibold text-on-surface">Dante</h3>
+<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest opacity-70">Strategic Analytics</p>
+</div>
+<div class="space-y-4">
+<div class="p-3 bg-surface-container-lowest/50 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-label uppercase text-on-surface-variant">Task Snippet</span>
+<span class="text-[10px] tabular-nums text-primary font-medium">84%</span>
+</div>
+<p class="text-xs text-on-surface/80 mb-3 line-clamp-1">Refining Q4 projection models for cluster-7</p>
+<div class="h-1 w-full bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-[#8B5CF6] to-[#D8B4FE] w-[84%]"></div>
+</div>
+</div>
+<div>
+<span class="text-[10px] font-label uppercase text-on-surface-variant mb-2 block">8w Activity</span>
+<div class="flex items-end gap-1 h-8">
+<div class="flex-1 bg-primary/20 h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[60%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[30%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[80%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[90%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[50%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[75%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-full rounded-t-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Agent Card: Brent -->
+<div class="glass-card group p-6 rounded-xl border border-outline-variant/10 transition-all duration-500 hover:scale-[1.02] active-glow-blue relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#3B82F6] to-[#93C5FD] opacity-40"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="relative">
+<div class="w-16 h-16 rounded-full p-1 border-2 border-[#3B82F6]">
+<img alt="Brent Avatar" class="w-full h-full rounded-full bg-surface-container-low" data-alt="Profile of a sleek AI agent with blue glowing neural patterns on the side of his head, professional and calm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-6dc4bSCdtwOZkPJoEdkGJliUXCKTmW2C3b7fj9iJiS2qUqsXf9tUgmmZWGLN_M6IztqrzbK9ddw7YhT7v9AsSKjmuiiAClCi6UoKoxhOWJChtFZ185dgbT_yEiMiiN5cUPPaHl35qV07Ti7cD5mCHm_JuToZUbUV7Lt4WQjK9TthcYIpDKR6jB_IP7w7d0N1IEGvCtlLlvaIoZSLlR7e483noksG9GdRJezkUzvUa-TwAXyY6fXiY7dT5ewGwTcS8wL02tFj68A"/>
+</div>
+<span class="absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-surface bg-[#10B981]"></span>
+</div>
+<div class="flex flex-col items-end">
+<span class="bg-[#3B82F6]/10 text-[#93C5FD] text-[10px] px-2 py-0.5 rounded-full font-label uppercase tracking-widest mb-2">Standby</span>
+<div class="bg-primary/20 text-primary w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold tabular-nums border border-primary/30">0</div>
+</div>
+</div>
+<div class="mb-6">
+<h3 class="text-xl font-semibold text-on-surface">Brent</h3>
+<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest opacity-70">System Integrity</p>
+</div>
+<div class="space-y-4">
+<div class="p-3 bg-surface-container-lowest/50 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-label uppercase text-on-surface-variant">Task Snippet</span>
+<span class="text-[10px] tabular-nums text-primary font-medium">100%</span>
+</div>
+<p class="text-xs text-on-surface/80 mb-3 line-clamp-1">Kernel patch verification complete</p>
+<div class="h-1 w-full bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-[#3B82F6] to-[#93C5FD] w-full"></div>
+</div>
+</div>
+<div>
+<span class="text-[10px] font-label uppercase text-on-surface-variant mb-2 block">8w Activity</span>
+<div class="flex items-end gap-1 h-8">
+<div class="flex-1 bg-primary/20 h-[20%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[25%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[35%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[30%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[20%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[10%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[15%] rounded-t-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Agent Card: Rex -->
+<div class="glass-card group p-6 rounded-xl border border-outline-variant/10 transition-all duration-500 hover:scale-[1.02] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-[#ffb4ab]/40"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="relative">
+<div class="w-16 h-16 rounded-full p-1 border-2 border-error">
+<img alt="Rex Avatar" class="w-full h-full rounded-full bg-surface-container-low" data-alt="Expressive AI character avatar with tech goggles and a slightly distressed look, green and white color palette" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTQGnLMqY-cVKxaMqQZtyzm_D8QMIIXRbZjZH77UxkL90o1oi7DnmxCktg9G48JLJTj6XsCjar_k5PEYRf_Za3uGH1Pu-SYqSP1hd18B88f_aqBxa11oMq6A2jm5DrJDPzBbrxSbAzs5HUYaMIfs0vCCbXmRKVCgFNlcPlgG6H09Knx3YhDiniyYapOAldMHuiIoLDppFzVqG8Dc3ejnP-C92YLY20trzkt_wNQwy8kSDzZLVvPmDvW-LRsEFxRLlMHieWD1ds8NQ"/>
+</div>
+<span class="absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-surface bg-error"></span>
+</div>
+<div class="flex flex-col items-end">
+<span class="bg-error/10 text-error text-[10px] px-2 py-0.5 rounded-full font-label uppercase tracking-widest mb-2">Error</span>
+<div class="bg-error/20 text-error w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold tabular-nums border border-error/30">12</div>
+</div>
+</div>
+<div class="mb-6">
+<h3 class="text-xl font-semibold text-on-surface">Rex</h3>
+<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest opacity-70">Deployment Pilot</p>
+</div>
+<div class="space-y-4">
+<div class="p-3 bg-error-container/10 border border-error/20 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-label uppercase text-error">Critical Failure</span>
+<span class="text-[10px] tabular-nums text-error font-medium">12%</span>
+</div>
+<p class="text-xs text-error/80 mb-3 line-clamp-1">Connection timed out: Node-4X</p>
+<div class="h-1 w-full bg-error/20 rounded-full overflow-hidden">
+<div class="h-full bg-error w-[12%]"></div>
+</div>
+</div>
+<div>
+<span class="text-[10px] font-label uppercase text-on-surface-variant mb-2 block">8w Activity</span>
+<div class="flex items-end gap-1 h-8">
+<div class="flex-1 bg-primary/20 h-[90%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[85%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[95%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[100%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[10%] rounded-t-sm"></div>
+<div class="flex-1 bg-error/40 h-[5%] rounded-t-sm"></div>
+<div class="flex-1 bg-error/60 h-[2%] rounded-t-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Agent Card: Scout -->
+<div class="glass-card group p-6 rounded-xl border border-outline-variant/10 transition-all duration-500 hover:scale-[1.02] active-glow-orange relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#F59E0B] to-[#FCD34D] opacity-40"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="relative">
+<div class="w-16 h-16 rounded-full p-1 border-2 border-[#F59E0B]">
+<img alt="Scout Avatar" class="w-full h-full rounded-full bg-surface-container-low" data-alt="Agile AI bot avatar with orange optical sensors, designed for scouting and discovery, minimalist tech style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQDeQEwxq0YTXR27crEOU8FHPxFNPObaxAI5MwVXYaFXvai0kre9G1z03NwFnRicslVYS3VK1_AUvxm38ryjN0MxLpVCXtLXUiBln4Jq5fYVMAUyHNTbm9ZnNTW5mTPsusmpRTfGrk5TYMAWTMMUyxjMtzkHAXchXiZtB8YMph3Dae8I0iNz5-JH2gwws3d0jSwKbGN56sBb4PCbxjhzV_uV3UcR_UKCUIY6oxUvJW3iPZf3zYgYc32Kv0xdikvSP_6rEbBpkruns"/>
+</div>
+<span class="absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-surface bg-[#10B981]"></span>
+</div>
+<div class="flex flex-col items-end">
+<span class="bg-[#F59E0B]/10 text-[#FCD34D] text-[10px] px-2 py-0.5 rounded-full font-label uppercase tracking-widest mb-2">Active</span>
+<div class="bg-primary/20 text-primary w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold tabular-nums border border-primary/30">1</div>
+</div>
+</div>
+<div class="mb-6">
+<h3 class="text-xl font-semibold text-on-surface">Scout</h3>
+<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest opacity-70">Market Discovery</p>
+</div>
+<div class="space-y-4">
+<div class="p-3 bg-surface-container-lowest/50 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-label uppercase text-on-surface-variant">Task Snippet</span>
+<span class="text-[10px] tabular-nums text-primary font-medium">31%</span>
+</div>
+<p class="text-xs text-on-surface/80 mb-3 line-clamp-1">Scraping sentiment data from tech forums</p>
+<div class="h-1 w-full bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-[#F59E0B] to-[#FCD34D] w-[31%]"></div>
+</div>
+</div>
+<div>
+<span class="text-[10px] font-label uppercase text-on-surface-variant mb-2 block">8w Activity</span>
+<div class="flex items-end gap-1 h-8">
+<div class="flex-1 bg-primary/20 h-[10%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[20%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[40%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[60%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[80%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[90%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[95%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-full rounded-t-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Agent Card: Nova -->
+<div class="glass-card group p-6 rounded-xl border border-outline-variant/10 transition-all duration-500 hover:scale-[1.02] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#EC4899] to-[#FBCFE8] opacity-40"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="relative">
+<div class="w-16 h-16 rounded-full p-1 border-2 border-[#EC4899]">
+<img alt="Nova Avatar" class="w-full h-full rounded-full bg-surface-container-low" data-alt="Elegant female AI avatar with pink holographic hair and soft lighting, representing creative intelligence" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5o1uW6pRfT5j1FyaJEg29EWhRC0Cle488qaTpFv4At4Xv-PFoxVJqfLBv92InXzW1qhXFSRXqrCtWpjcO0DaotiOzDdCp-iX7Gkn5MVoZHR8S6W5WmYm73ri-wo1JVkMNNL5PtXiGINrqAx6hs9qAC47l2wg3lxN6MemgwKgo93QcU1Vpi3urGz__to7vZscbMhu7hrhxVbPHgl5GQpNfIgbxOAiNFP8pSg-ZgGBPn8OcXDdbAFG662ssBUcs2eyLHKkpc31QwRs"/>
+</div>
+<span class="absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-surface bg-outline"></span>
+</div>
+<div class="flex flex-col items-end">
+<span class="bg-[#EC4899]/10 text-[#FBCFE8] text-[10px] px-2 py-0.5 rounded-full font-label uppercase tracking-widest mb-2">Offline</span>
+<div class="bg-primary/5 text-on-surface-variant w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold tabular-nums border border-outline-variant/30">0</div>
+</div>
+</div>
+<div class="mb-6">
+<h3 class="text-xl font-semibold text-on-surface">Nova</h3>
+<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest opacity-70">Creative Synthesis</p>
+</div>
+<div class="space-y-4">
+<div class="p-3 bg-surface-container-lowest/50 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-label uppercase text-on-surface-variant">Task Snippet</span>
+<span class="text-[10px] tabular-nums text-on-surface-variant font-medium">0%</span>
+</div>
+<p class="text-xs text-on-surface-variant mb-3 line-clamp-1">Awaiting next generation prompt</p>
+<div class="h-1 w-full bg-outline-variant/10 rounded-full overflow-hidden">
+<div class="h-full bg-outline-variant/40 w-0"></div>
+</div>
+</div>
+<div>
+<span class="text-[10px] font-label uppercase text-on-surface-variant mb-2 block">8w Activity</span>
+<div class="flex items-end gap-1 h-8">
+<div class="flex-1 bg-primary/20 h-[60%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[70%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[80%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[50%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[20%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[10%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/10 h-[5%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/5 h-[2%] rounded-t-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Agent Card: Victor -->
+<div class="glass-card group p-6 rounded-xl border border-outline-variant/10 transition-all duration-500 hover:scale-[1.02] active-glow-green relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#EAB308] to-[#FEF08A] opacity-40"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="relative">
+<div class="w-16 h-16 rounded-full p-1 border-2 border-[#EAB308]">
+<img alt="Victor Avatar" class="w-full h-full rounded-full bg-surface-container-low" data-alt="Sophisticated AI butler avatar with gold accents and a monocle-style interface, representing high-end management" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLwDMmrofQjczQJP5o6uTwyhHWLMdKUQ_BDhBQrr69El0od4L9aTmR8eo6aEdFzREvz6oOzaVO05TxmwRQ6HSqgaavhd4Qz-oJr1pH96QALgQg22IieGaq-36ezYNevAH27n18oAstM319kLbeOl1B3uZ2dzSdmNgY7aloWfEZsHxIBKk_RR4h3_4DoXh3AjjfhPKh4MELsk3h2bx_I7ACAthcrGF-T-a4wPgviCxDom8LKVWCggMxiyeRF23WSTMebrWLp7IfUos"/>
+</div>
+<span class="absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-surface bg-[#10B981]"></span>
+</div>
+<div class="flex flex-col items-end">
+<span class="bg-[#EAB308]/10 text-[#FEF08A] text-[10px] px-2 py-0.5 rounded-full font-label uppercase tracking-widest mb-2">Optimizing</span>
+<div class="bg-primary/20 text-primary w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold tabular-nums border border-primary/30">1</div>
+</div>
+</div>
+<div class="mb-6">
+<h3 class="text-xl font-semibold text-on-surface">Victor</h3>
+<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest opacity-70">Fleet Orchestration</p>
+</div>
+<div class="space-y-4">
+<div class="p-3 bg-surface-container-lowest/50 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-label uppercase text-on-surface-variant">Task Snippet</span>
+<span class="text-[10px] tabular-nums text-primary font-medium">55%</span>
+</div>
+<p class="text-xs text-on-surface/80 mb-3 line-clamp-1">Rebalancing load across tertiary servers</p>
+<div class="h-1 w-full bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-[#EAB308] to-[#FEF08A] w-[55%]"></div>
+</div>
+</div>
+<div>
+<span class="text-[10px] font-label uppercase text-on-surface-variant mb-2 block">8w Activity</span>
+<div class="flex items-end gap-1 h-8">
+<div class="flex-1 bg-primary/20 h-[80%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[75%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[85%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[90%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[80%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[70%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[65%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[75%] rounded-t-sm"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Stats Banner -->
+<div class="mt-16 glass-card rounded-2xl p-8 border border-outline-variant/10 flex flex-wrap gap-12 items-center justify-between">
+<div class="flex gap-12">
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant opacity-60 block mb-2">Total Processing</span>
+<div class="text-2xl font-light tabular-nums">1.42 <span class="text-sm text-primary opacity-70">PetaFLOPS</span></div>
+</div>
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant opacity-60 block mb-2">Avg Latency</span>
+<div class="text-2xl font-light tabular-nums">12.4 <span class="text-sm text-primary opacity-70">ms</span></div>
+</div>
+<div>
+<span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant opacity-60 block mb-2">Fleet Uptime</span>
+<div class="text-2xl font-light tabular-nums">99.998 <span class="text-sm text-primary opacity-70">%</span></div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex -space-x-3">
+<img alt="Member" class="w-10 h-10 rounded-full border-2 border-surface bg-surface-container-low" data-alt="avatar 1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0MS0As3fsssPX634TjxIm0OSroxfepjd40gqhRhSndCERGrI1dxxkmaj_djMZQohzlV_1h21kVk-QQU-3g4yyjKa7g0XZ-iyZdCPapT-XgSUIJuXY3RYK7C4xE0DlqczN0TyMRrUvw0jRWwVVpbf0nJX3wX0RAsekq93ox27dnuWw_lhtZ5VlsHwG-C9yRDmKmitaSV8W3OuWyGh95MKQ0ME_1N-u2Py1VTiV1Hke4HEPJuhN6yNZeHRNqpyyWY2zHyyFCaxkoNA"/>
+<img alt="Member" class="w-10 h-10 rounded-full border-2 border-surface bg-surface-container-low" data-alt="avatar 2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4GUARuvb5Vhw47f32vClZZTXoa_Rq2eGr1uAdmdM4rIJwYiVNjNIIXEVpXLGoKkVru6UC3MgSx6zvSYSPteoaJRFhNucWsnfT7oIameC6he6sSkKf4ngBPMHwQ_95VmybOvp4eOdbD-YJhcYvu_eFwCnTbHg6GG-A81cD476DVyWDi7fQuj4Nb0Hdp9tfD5aq3TsEvVMOGIAvb8w06Ai50p0YGR-dosUnsqHWOcSaPETb8YYWsByw7DMK_neYYqU3VSDYZkjgBVc"/>
+<img alt="Member" class="w-10 h-10 rounded-full border-2 border-surface bg-surface-container-low" data-alt="avatar 3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUpr7t14F-dzjNsgBh9lqgMM30ydQQoFKX5NaLKlkE7DaRsHFLxSpFuON4PkXPaU_zeNjndn2P4jM2KADOu5tus_L9TclgbI0wFpcjLNA0JOwinQit1n8qz_rjrJn8hC5FSk3MvooIWrfsKXiYbO2HfWlrLhfUaClmPc9UYdG_JBFJnTmQL7XyKIGNiZD0289bw22Graz8dw_T6jUGWp10FCuqwONEh7Ul5WgJz4TaE_GLn2zRx0WelBNmB1m_YOqtGwrkxY6jsYE"/>
+<div class="w-10 h-10 rounded-full border-2 border-surface bg-primary-container text-on-primary-container flex items-center justify-center text-[10px] font-bold">+11</div>
+</div>
+<button class="px-6 py-3 bg-primary text-on-primary font-semibold rounded-xl text-xs uppercase tracking-widest transition-transform hover:scale-105 active:scale-95">Deploy New Agent</button>
+</div>
+</div>
+</main>
+</body></html>

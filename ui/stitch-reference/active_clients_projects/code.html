@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Active Clients | Kinetic Terminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-container": "#444652",
+                        "secondary": "#c4c6d3",
+                        "surface-container-low": "#191b22",
+                        "surface-bright": "#373940",
+                        "on-primary": "#1800a7",
+                        "primary-fixed-dim": "#c2c1ff",
+                        "primary": "#c2c1ff",
+                        "surface-container-highest": "#33343b",
+                        "on-tertiary-fixed": "#221b00",
+                        "on-error": "#690005",
+                        "inverse-primary": "#4d4ad5",
+                        "outline-variant": "#464554",
+                        "inverse-on-surface": "#2e3037",
+                        "inverse-surface": "#e2e2eb",
+                        "surface-dim": "#111319",
+                        "on-secondary-fixed-variant": "#444652",
+                        "surface-container-high": "#282a30",
+                        "surface-container": "#1e1f26",
+                        "surface-tint": "#c2c1ff",
+                        "tertiary-fixed-dim": "#e9c400",
+                        "secondary-fixed": "#e0e2f0",
+                        "tertiary-fixed": "#ffe171",
+                        "on-secondary-container": "#b2b4c2",
+                        "on-tertiary-container": "#4c3f00",
+                        "tertiary-container": "#caa900",
+                        "primary-container": "#5e5ce6",
+                        "outline": "#918fa0",
+                        "tertiary": "#eac400",
+                        "surface-container-lowest": "#0c0e14",
+                        "on-secondary-fixed": "#181b25",
+                        "error": "#ffb4ab",
+                        "background": "#111319",
+                        "on-primary-fixed-variant": "#332dbc",
+                        "error-container": "#93000a",
+                        "surface": "#111319",
+                        "secondary-fixed-dim": "#c4c6d3",
+                        "on-tertiary-fixed-variant": "#554600",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#e2e2eb",
+                        "on-surface": "#e2e2eb",
+                        "on-secondary": "#2d303b",
+                        "on-tertiary": "#3b2f00",
+                        "on-primary-fixed": "#0c006b",
+                        "primary-fixed": "#e2dfff",
+                        "surface-variant": "#33343b",
+                        "on-surface-variant": "#c7c4d7",
+                        "on-primary-container": "#f4f1ff"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .glass-card {
+            background: rgba(51, 52, 59, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .agent-glow-purple { box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
+        .agent-glow-blue { box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+        .agent-glow-green { box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 scrollbar-hide">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#111319]/60 backdrop-blur-2xl border-b border-[#c2c1ff]/10 shadow-[0_20px_40px_-12px_rgba(194,193,255,0.08)]">
+<div class="flex items-center justify-between px-6 h-16 w-full max-w-none">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#c2c1ff]" data-icon="terminal">terminal</span>
+<h1 class="font-['Inter'] tracking-[-0.02em] font-light tabular-nums text-xl font-thin tracking-tighter text-[#c2c1ff]">Clients</h1>
+</div>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-primary/20 bg-surface-container-highest flex items-center justify-center scale-95 active:scale-90 transition-transform duration-200 cursor-pointer">
+<img alt="Agency Logo" data-alt="minimalist agency logo icon with geometric shapes on a dark circular background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEUR9gsfi1_H5REEIJ0E_N0GFbSXeuZyTHURznyU9u6unVuAFmGqW3fTVnmc7Wvh7vSyfdU0SID_40-jRIJUv3iAdpGhm3SnM1rWmei5VH0GGUuWI1GlHfsx5UWrc25imNdo-qtLhLBrKJ64LrYGrh2cslDHOAcpoqb_IWGSy7py646RYeQdTrcNUNU2FVg3tYGIQ-24p_0J9ACusnRGgj7Vz8S2kV4PI7Tcg4cvUzQv1of0mXEUsNblGPSle4E5-Ntqa3MLjBlC0"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-5xl mx-auto min-h-screen">
+<!-- Dashboard Header -->
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<p class="text-[10px] uppercase tracking-[0.15em] text-primary mb-2 font-bold">System Status: Operational</p>
+<h2 class="text-4xl md:text-5xl font-extrabold tracking-tighter text-on-surface leading-none">Active Clients</h2>
+</div>
+<div class="flex gap-4 items-center">
+<div class="glass-card px-4 py-2 rounded-xl border border-outline-variant/20">
+<span class="text-[10px] uppercase tracking-[0.05em] text-on-surface-variant block mb-1">Total MRR</span>
+<span class="text-xl font-bold tracking-tight tabular-nums text-primary">$142,500.00</span>
+</div>
+<div class="glass-card px-4 py-2 rounded-xl border border-outline-variant/20">
+<span class="text-[10px] uppercase tracking-[0.05em] text-on-surface-variant block mb-1">Active Projects</span>
+<span class="text-xl font-bold tracking-tight tabular-nums text-on-surface">12</span>
+</div>
+</div>
+</div>
+<!-- Client List -->
+<div class="grid grid-cols-1 gap-6">
+<!-- Client Card 1: Integral Studio -->
+<div class="glass-card border border-[#c2c1ff]/10 rounded-2xl overflow-hidden group transition-all duration-300 hover:border-primary/30 hover:bg-surface-container-high/60">
+<div class="p-6 md:p-8">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+<div class="flex items-center gap-5">
+<div class="w-14 h-14 rounded-2xl bg-surface-container-lowest flex items-center justify-center p-3 border border-outline-variant/20 shadow-inner">
+<img alt="Integral Studio" data-alt="sleek modern corporate logo with abstract geometric lines and high contrast black and white palette" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLuISnwuwgX2W1Dq4E8dNpDDozlrVh8uY2vyua8obbY6TLmtO5qYueGaIPUbiRGJB3G5xgoSkDGXpv6kqaHRw9z9XRPlFjQ6Ag5YtyjumiiAI1de6dBGhqJCYO4LZ1_O4bmlaQjbKvX8-mKtI-Xtb27L0Ck5s3FVYDGZVnHR6S-jzN82YksoMON_WOIOkCVCHAHCg__cTcEfJDtGeQFCGPZeZraE87gRZQvCQHDv8QHGdDOp89aZdZ5TcMTVLuhhH-SuqIJJcxIXI"/>
+</div>
+<div>
+<h3 class="text-2xl font-bold tracking-tight">Integral Studio</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
+<span class="text-xs font-medium text-emerald-400 uppercase tracking-wider">Healthy</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:items-end">
+<span class="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant mb-1">Monthly Retainer</span>
+<span class="text-2xl font-bold tabular-nums text-on-surface">$12,500<span class="text-on-surface-variant/50 text-sm font-normal">/mo</span></span>
+</div>
+</div>
+<!-- Middle Section: Agents and Progress -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+<div>
+<span class="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant block mb-4">Assigned Agents</span>
+<div class="flex flex-wrap gap-3">
+<!-- Agent Chip: Dante -->
+<div class="flex items-center gap-2 bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 py-1.5 px-3 rounded-full agent-glow-purple">
+<span class="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse"></span>
+<span class="text-[11px] font-bold text-[#D8B4FE] tracking-wide">DANTE</span>
+</div>
+<!-- Agent Chip: Rex -->
+<div class="flex items-center gap-2 bg-[#10B981]/10 border border-[#10B981]/20 py-1.5 px-3 rounded-full agent-glow-green">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+<span class="text-[11px] font-bold text-[#6EE7B7] tracking-wide">REX</span>
+</div>
+<!-- Agent Chip: Scout -->
+<div class="flex items-center gap-2 bg-[#F59E0B]/10 border border-[#F59E0B]/20 py-1.5 px-3 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-[#F59E0B]"></span>
+<span class="text-[11px] font-bold text-[#FCD34D] tracking-wide">SCOUT</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-xl p-5 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="text-[10px] px-2 py-0.5 rounded bg-primary/20 text-primary font-bold tracking-tighter uppercase">Live</span>
+<h4 class="text-sm font-bold tracking-tight">Q4 Strategy Refresh</h4>
+</div>
+<span class="text-xs font-bold text-primary tabular-nums">78%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden mb-3">
+<div class="h-full bg-gradient-to-r from-primary-container to-primary w-[78%] rounded-full"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] uppercase tracking-wider font-medium">
+<span class="text-on-surface-variant">Next Milestone</span>
+<span class="text-on-surface truncate max-w-[150px]">Brand Asset Finalization...</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Client Card 2: Symphony.to -->
+<div class="glass-card border border-[#c2c1ff]/10 rounded-2xl overflow-hidden group transition-all duration-300 hover:border-primary/30 hover:bg-surface-container-high/60">
+<div class="p-6 md:p-8">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+<div class="flex items-center gap-5">
+<div class="w-14 h-14 rounded-2xl bg-surface-container-lowest flex items-center justify-center p-3 border border-outline-variant/20 shadow-inner">
+<img alt="Symphony.to" data-alt="minimalist musical wave inspired logo with sharp neon accents on a dark matte background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBddtQ8GcCtf_wL5L0sXSqqBB7K3zWCLwCzfWSXx0tsvFT5coceXdRwelgQjzuceDjbDAUuy1YJOIniigWzPHadQorKhGvEMoPe6r5uV0AYxsqokFhcjei6Cuu8Vspg1htVIob9r13WCsyjg31yH4iaow11hWJdqhng_-fCQAi1l-psFcfkl7YTTb8WqMkmbzSazIm_sAMip3A_gxTGOodFrTcWfdASMs4IGQaZgiEF3fFAu7qY07O7wF3Vy09Fi5WEHCqe8te3_DQ"/>
+</div>
+<div>
+<h3 class="text-2xl font-bold tracking-tight">Symphony.to</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]"></span>
+<span class="text-xs font-medium text-amber-400 uppercase tracking-wider">At Risk</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:items-end">
+<span class="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant mb-1">Monthly Retainer</span>
+<span class="text-2xl font-bold tabular-nums text-on-surface">$28,000<span class="text-on-surface-variant/50 text-sm font-normal">/mo</span></span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+<div>
+<span class="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant block mb-4">Assigned Agents</span>
+<div class="flex flex-wrap gap-3">
+<div class="flex items-center gap-2 bg-[#3B82F6]/10 border border-[#3B82F6]/20 py-1.5 px-3 rounded-full agent-glow-blue">
+<span class="w-1.5 h-1.5 rounded-full bg-[#3B82F6] animate-pulse"></span>
+<span class="text-[11px] font-bold text-[#93C5FD] tracking-wide">BRENT</span>
+</div>
+<div class="flex items-center gap-2 bg-[#EC4899]/10 border border-[#EC4899]/20 py-1.5 px-3 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-[#EC4899]"></span>
+<span class="text-[11px] font-bold text-[#FBCFE8] tracking-wide">NOVA</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-xl p-5 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold tracking-tighter uppercase">Reviewing</span>
+<h4 class="text-sm font-bold tracking-tight">Ad Ops Optimization</h4>
+</div>
+<span class="text-xs font-bold text-amber-400 tabular-nums">34%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden mb-3">
+<div class="h-full bg-gradient-to-r from-amber-600 to-amber-300 w-[34%] rounded-full"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] uppercase tracking-wider font-medium">
+<span class="text-on-surface-variant">Next Milestone</span>
+<span class="text-on-surface truncate max-w-[150px]">Conversion Audit Report...</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Client Card 3: Nexus Corp -->
+<div class="glass-card border border-[#c2c1ff]/10 rounded-2xl overflow-hidden group transition-all duration-300 hover:border-primary/30 hover:bg-surface-container-high/60">
+<div class="p-6 md:p-8">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+<div class="flex items-center gap-5">
+<div class="w-14 h-14 rounded-2xl bg-surface-container-lowest flex items-center justify-center p-3 border border-outline-variant/20 shadow-inner">
+<img alt="Nexus Corp" data-alt="futuristic corporate logo featuring interconnected nodes and metallic textures on a dark charcoal background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9LJWIv6oPoIWmw0yG5R6vnoyCrgcL1neKtquKSA_lHyv2_ybj6oV0DazUcwX28T2C5sMspz42s8at2MjGfkrYSFfpY-kO0_SsAmBZPETi-frnfCNrn7tEljKHGMC1wLj6izI2VxRoHuH2rQpuR0JnI3gKCAfk-D2d-VuJWr6x4vAI8QYP-J_uhEHTjbhdXwkUhdZnkpMK83-hwv1DDP14tUGhGL89nzz86P4_R8GC1sA8K80S5swgL6PRiJTB4yEnRX9CIZ7ZQVU"/>
+</div>
+<div>
+<h3 class="text-2xl font-bold tracking-tight">Nexus Corp</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
+<span class="text-xs font-medium text-emerald-400 uppercase tracking-wider">Healthy</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:items-end">
+<span class="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant mb-1">Monthly Retainer</span>
+<span class="text-2xl font-bold tabular-nums text-on-surface">$45,000<span class="text-on-surface-variant/50 text-sm font-normal">/mo</span></span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+<div>
+<span class="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant block mb-4">Assigned Agents</span>
+<div class="flex flex-wrap gap-3">
+<div class="flex items-center gap-2 bg-[#EAB308]/10 border border-[#EAB308]/20 py-1.5 px-3 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-[#EAB308]"></span>
+<span class="text-[11px] font-bold text-[#FEF08A] tracking-wide">VICTOR</span>
+</div>
+<div class="flex items-center gap-2 bg-[#8B5CF6]/10 border border-[#8B5CF6]/20 py-1.5 px-3 rounded-full agent-glow-purple">
+<span class="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] animate-pulse"></span>
+<span class="text-[11px] font-bold text-[#D8B4FE] tracking-wide">DANTE</span>
+</div>
+<div class="flex items-center gap-2 bg-[#10B981]/10 border border-[#10B981]/20 py-1.5 px-3 rounded-full agent-glow-green">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+<span class="text-[11px] font-bold text-[#6EE7B7] tracking-wide">REX</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-xl p-5 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="text-[10px] px-2 py-0.5 rounded bg-primary/20 text-primary font-bold tracking-tighter uppercase">Live</span>
+<h4 class="text-sm font-bold tracking-tight">Supply Chain Automation</h4>
+</div>
+<span class="text-xs font-bold text-primary tabular-nums">92%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden mb-3">
+<div class="h-full bg-gradient-to-r from-primary-container to-primary w-[92%] rounded-full"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] uppercase tracking-wider font-medium">
+<span class="text-on-surface-variant">Next Milestone</span>
+<span class="text-on-surface truncate max-w-[150px]">L4 Deployment Testing...</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 rounded-t-2xl bg-[#111319]/80 backdrop-blur-3xl shadow-none">
+<div class="bg-gradient-to-r from-transparent via-[#c2c1ff]/20 to-transparent h-[1px]"></div>
+<div class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-2 h-20">
+<button class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="grid_view">grid_view</span>
+<span class="font-['Inter'] uppercase tracking-[0.05em] text-[10px] font-bold">Terminal</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#c2c1ff] bg-[#c2c1ff]/10 rounded-xl py-1 px-4 spring-bounce-300 scale-110">
+<span class="material-symbols-outlined mb-1" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-['Inter'] uppercase tracking-[0.05em] text-[10px] font-bold">Clients</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="smart_toy">smart_toy</span>
+<span class="font-['Inter'] uppercase tracking-[0.05em] text-[10px] font-bold">Agents</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-['Inter'] uppercase tracking-[0.05em] text-[10px] font-bold">ledger</span>
+</button>
+</div>
+</nav>
+</body></html>

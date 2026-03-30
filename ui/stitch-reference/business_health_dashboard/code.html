@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Razorclip Founder Briefing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#373940",
+              "outline": "#918fa0",
+              "surface": "#111319",
+              "tertiary": "#eac400",
+              "on-error-container": "#ffdad6",
+              "on-tertiary-container": "#4c3f00",
+              "primary-fixed": "#e2dfff",
+              "outline-variant": "#464554",
+              "surface-tint": "#c2c1ff",
+              "tertiary-container": "#caa900",
+              "on-secondary-fixed-variant": "#444652",
+              "on-background": "#e2e2eb",
+              "primary": "#c2c1ff",
+              "on-error": "#690005",
+              "surface-container-high": "#282a30",
+              "on-secondary-container": "#b2b4c2",
+              "tertiary-fixed": "#ffe171",
+              "secondary-fixed-dim": "#c4c6d3",
+              "primary-fixed-dim": "#c2c1ff",
+              "background": "#111319",
+              "secondary": "#c4c6d3",
+              "on-tertiary-fixed-variant": "#554600",
+              "surface-container-highest": "#33343b",
+              "on-primary-fixed": "#0c006b",
+              "on-primary-container": "#f4f1ff",
+              "on-primary": "#1800a7",
+              "surface-container-lowest": "#0c0e14",
+              "on-surface-variant": "#c7c4d7",
+              "surface-variant": "#33343b",
+              "secondary-fixed": "#e0e2f0",
+              "inverse-surface": "#e2e2eb",
+              "on-tertiary-fixed": "#221b00",
+              "on-primary-fixed-variant": "#332dbc",
+              "on-surface": "#e2e2eb",
+              "on-tertiary": "#3b2f00",
+              "surface-container-low": "#191b22",
+              "on-secondary-fixed": "#181b25",
+              "error": "#ffb4ab",
+              "primary-container": "#5e5ce6",
+              "surface-container": "#1e1f26",
+              "inverse-on-surface": "#2e3037",
+              "on-secondary": "#2d303b",
+              "tertiary-fixed-dim": "#e9c400",
+              "inverse-primary": "#4d4ad5",
+              "secondary-container": "#444652",
+              "surface-dim": "#111319",
+              "error-container": "#93000a"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        .glass-card {
+            background: rgba(51, 52, 59, 0.4);
+            backdrop-filter: blur(24px);
+        }
+        body {
+            background-color: #111319;
+            color: #e2e2eb;
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#111319]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_20px_40px_-12px_rgba(194,193,255,0.08)]">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/20">
+<img class="w-full h-full object-cover" data-alt="Close up professional headshot of Chuka, a tech founder with clean lighting and minimal dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKaTOmENjS1DFQu224F8p4vYILu1YXUz3c2AZvDo0iTRfdbfDxAdKByCoJHHH8OK5fk-q4kpJSnHj6r8pjWEXLSmtJPQ9CS-Zg0Z3XjPrUS35i_PCE38y_aNkQKDtdA8pvsJixhfaluMFLsK98B4lX4Wh9HMABFJtLyvTJXk85L9y9sqwKyHD9HUEAh91bQkmBcBujqydzdqa8TumueXYMhD_eeioCUTqMumdvlj8AqmPzfNt46FccCqHIwl_8eJplYUK5I-POyaY"/>
+</div>
+<span class="text-xl font-thin tracking-tighter text-[#c2c1ff]">Razorclip</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-['Inter'] tracking-tight tabular-nums font-light text-[#c2c1ff]">Integral</span>
+<span class="material-symbols-outlined text-[#c2c1ff]">bolt</span>
+</div>
+</header>
+<main class="pt-20 pb-32 px-4 space-y-6">
+<!-- Founder Greeting -->
+<section class="px-2">
+<p class="text-[10px] uppercase tracking-[0.15em] text-on-surface-variant font-medium">Founder's Morning Briefing</p>
+<h1 class="text-3xl font-light tracking-tight mt-1">Good morning, <span class="text-primary font-normal">Chuka</span>.</h1>
+<p class="text-sm text-on-surface-variant mt-2 font-light">Here is your weekly health pulse for October 24.</p>
+</section>
+<!-- Weekly Top Metrics (Grid) -->
+<section class="grid grid-cols-2 gap-3">
+<div class="p-4 rounded-3xl bg-surface-container-low border border-outline-variant/5">
+<p class="text-[10px] uppercase tracking-wider text-on-surface-variant mb-1">Weekly Revenue</p>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-light tracking-tight tabular-nums">$124k</span>
+<span class="text-[10px] text-tertiary">+12%</span>
+</div>
+</div>
+<div class="p-4 rounded-3xl bg-surface-container-low border border-outline-variant/5">
+<p class="text-[10px] uppercase tracking-wider text-on-surface-variant mb-1">Weekly Burn</p>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-light tracking-tight tabular-nums">$18.5k</span>
+<span class="text-[10px] text-error">-2%</span>
+</div>
+</div>
+<div class="p-4 rounded-3xl bg-surface-container-low border border-outline-variant/5">
+<p class="text-[10px] uppercase tracking-wider text-on-surface-variant mb-1">Margin</p>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-light tracking-tight tabular-nums">85%</span>
+<span class="material-symbols-outlined text-[12px] text-primary">trending_up</span>
+</div>
+</div>
+<div class="p-4 rounded-3xl bg-surface-container-low border border-outline-variant/5">
+<p class="text-[10px] uppercase tracking-wider text-on-surface-variant mb-1">Pipeline</p>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-light tracking-tight tabular-nums">$2.1M</span>
+<span class="text-[10px] text-on-surface-variant">Active</span>
+</div>
+</div>
+</section>
+<!-- Stripe / Mercury Toggle Section -->
+<section class="glass-card rounded-[2rem] p-6 border border-white/5 overflow-hidden">
+<div class="flex justify-between items-center mb-6">
+<div class="flex p-1 bg-surface-container-lowest rounded-full border border-white/5">
+<button class="px-4 py-1.5 text-[10px] font-semibold uppercase tracking-widest bg-primary text-on-primary rounded-full shadow-lg">Stripe</button>
+<button class="px-4 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-on-surface-variant hover:text-on-surface">Mercury</button>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</div>
+<div class="space-y-4">
+<div>
+<p class="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant">Total MRR</p>
+<h2 class="text-4xl font-extralight tracking-tighter tabular-nums mt-1">$420,000</h2>
+</div>
+<div class="h-16 flex items-end gap-1.5">
+<!-- Minimal Chart Bars -->
+<div class="flex-1 bg-primary/10 rounded-t-lg h-1/2"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-2/3"></div>
+<div class="flex-1 bg-primary/10 rounded-t-lg h-3/4"></div>
+<div class="flex-1 bg-primary/40 rounded-t-lg h-full"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-5/6"></div>
+<div class="flex-1 bg-primary/60 rounded-t-lg h-3/4"></div>
+<div class="flex-1 bg-primary rounded-t-lg h-[90%]"></div>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+<div>
+<p class="text-[10px] text-on-surface-variant">Weekly Collections</p>
+<p class="text-lg font-light tabular-nums">$32,104</p>
+</div>
+<div>
+<p class="text-[10px] text-on-surface-variant">Failed Payments</p>
+<p class="text-lg font-light tabular-nums text-error">4 <span class="text-[10px] text-on-surface-variant">($1.2k)</span></p>
+</div>
+</div>
+</div>
+</section>
+<!-- Client Pulse -->
+<section class="space-y-4">
+<div class="flex justify-between items-end px-2">
+<h3 class="text-lg font-light tracking-tight">Active Clients</h3>
+<span class="text-[10px] text-primary uppercase tracking-widest font-medium">View All</span>
+</div>
+<div class="space-y-3">
+<!-- Integral Studio -->
+<div class="glass-card p-4 rounded-3xl border border-white/5 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="relative w-12 h-12 rounded-2xl bg-surface-container-highest flex items-center justify-center border border-white/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Abstract minimalist logo for a tech design studio with deep blues and geometric shapes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYHBoydqBMYBO4rpnnkDjYgh7JAteycD19qXqwwoybEd7-uE1X6i16RMHC6hjfGFm5tTGdI-pzyAo2DdZK4lqqJlBdY6mQtK-tvbzPffKWC4NvyXSZn3fJ2OBcJkPd93gLvwqOEYMlatsIK3I6nlxIJwl97rJDYSP7kTwaxBoLd5UkvxtPKDMmS2nILpqXK3OkoaVBl9ykvJjce9L8fNJP8ugOuWGcJ9klgrAlrbofU-hAO5bfjC_q6SCNyTTqJwHJ4qXXtj2-_bo"/>
+<div class="absolute -top-1 -right-1 w-3 h-3 bg-[#10B981] rounded-full border-2 border-surface animate-pulse"></div>
+</div>
+<div>
+<p class="text-sm font-medium">Integral Studio</p>
+<p class="text-[10px] text-on-surface-variant tabular-nums">$12,500 retainer</p>
+</div>
+</div>
+<!-- Agent Chip: Dante -->
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20">
+<div class="w-1.5 h-1.5 rounded-full bg-[#8B5CF6]"></div>
+<span class="text-[10px] font-bold text-[#D8B4FE] tracking-tighter">Dante</span>
+</div>
+</div>
+<!-- Symphony.to -->
+<div class="glass-card p-4 rounded-3xl border border-white/5 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="relative w-12 h-12 rounded-2xl bg-surface-container-highest flex items-center justify-center border border-white/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Modern abstract minimalist tech logo with vibrant purple and pink gradients on dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA78ay2eVLxQZ3sDoA8ZHmrUZfNYWMUkYHQQ8_Ge19rWEe15pWLsCln87dUL3QzMqyuhwInrTJrKgvJQbv13sH4WsBWKcb5nYMmxMBiAcuEdAilAt8GnmYzAxCIMBoJTYgCUMwOrxL09FkkaqFLFboxr1xPNVa6nTFBd4AG2G75y2vPx8sCnEYAtfbcki7hh0NBGLmB0kIhXbkd_VMGLquRw58ARJwWtDHerSc1u2nw9ea3-OtM4Q7kbeajNiZBVxGXaMqs6F06Yl4"/>
+<div class="absolute -top-1 -right-1 w-3 h-3 bg-[#10B981] rounded-full border-2 border-surface"></div>
+</div>
+<div>
+<p class="text-sm font-medium">Symphony.to</p>
+<p class="text-[10px] text-on-surface-variant tabular-nums">$8,000 retainer</p>
+</div>
+</div>
+<!-- Agent Chip: Nova -->
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-[#EC4899]/10 border border-[#EC4899]/20">
+<div class="w-1.5 h-1.5 rounded-full bg-[#EC4899]"></div>
+<span class="text-[10px] font-bold text-[#FBCFE8] tracking-tighter">Nova</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Web Traffic -->
+<section class="glass-card rounded-[2rem] p-6 border border-white/5">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="text-[10px] uppercase tracking-[0.1em] text-on-surface-variant mb-1">Weekly Visitors</p>
+<div class="flex items-baseline gap-2">
+<h2 class="text-3xl font-light tracking-tight tabular-nums">4.2k</h2>
+<span class="text-xs text-[#10B981]">+15%</span>
+</div>
+</div>
+<div class="w-24 h-12">
+<svg class="w-full h-full" viewbox="0 0 100 40">
+<path d="M0 35 Q 25 35, 40 15 T 70 20 T 100 5" fill="none" stroke="#c2c1ff" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+<path d="M0 35 Q 25 35, 40 15 T 70 20 T 100 5 L 100 40 L 0 40 Z" fill="url(#grad1)" opacity="0.2"></path>
+<defs>
+<lineargradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#c2c1ff;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#c2c1ff;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+</div>
+<div class="space-y-3 mt-6">
+<div class="flex justify-between items-center text-[10px] text-on-surface-variant border-b border-white/5 pb-2">
+<span>TOP PAGES</span>
+<span>VIEWS</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs font-light">/solutions/ai-agents</span>
+<span class="text-xs tabular-nums font-medium text-on-surface">1,842</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs font-light">/case-studies/integral</span>
+<span class="text-xs tabular-nums font-medium text-on-surface">921</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs font-light">/pricing</span>
+<span class="text-xs tabular-nums font-medium text-on-surface">432</span>
+</div>
+</div>
+</section>
+<!-- LinkedIn Section -->
+<section class="space-y-4">
+<div class="flex items-center gap-2 px-2">
+<span class="material-symbols-outlined text-primary">share</span>
+<h3 class="text-lg font-light tracking-tight">LinkedIn Presence</h3>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-surface-container-low p-3 rounded-2xl flex flex-col items-center">
+<span class="text-[9px] text-on-surface-variant uppercase tracking-tighter">Views</span>
+<span class="text-sm font-medium tabular-nums">1.2k</span>
+</div>
+<div class="bg-surface-container-low p-3 rounded-2xl flex flex-col items-center">
+<span class="text-[9px] text-on-surface-variant uppercase tracking-tighter">Impressions</span>
+<span class="text-sm font-medium tabular-nums">42k</span>
+</div>
+<div class="bg-surface-container-low p-3 rounded-2xl flex flex-col items-center border border-primary/20">
+<span class="text-[9px] text-primary uppercase tracking-tighter">Engage</span>
+<span class="text-sm font-medium tabular-nums text-primary">4.2%</span>
+</div>
+</div>
+<!-- Top Post Preview -->
+<div class="glass-card p-4 rounded-3xl border border-white/5">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Professional headshot of founder for social media profile preview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyU5rXAPsgu1tl90NA1FC1TY_WprDynAcknC6KN3Yrg0L_3SA9i-c2T9fSd1yxPVfBgLTuk90I04MeXnLkIGM69muFjc28dQNz-MEsXWnll-mMKioLVTotnWBeaRR8a7L9QVgNwaeg1fKFUN3QOpT4ppPpyRsRz8I7Jvmy_Au-cgIc60Nt9jUSOx7NiJU9_GZKVR1Z35lif-SlKY0kXBoY0MhJ0KXlgmJ8LoPBQqvdN86GYH8BFSSxECdN8DnQ7RSSNbgFTruLtyk"/>
+</div>
+<div>
+<p class="text-xs font-semibold">Chuka • <span class="text-[10px] text-on-surface-variant font-normal">Founder at Razorclip</span></p>
+<p class="text-[9px] text-on-surface-variant">2d ago</p>
+</div>
+</div>
+<p class="text-xs font-light line-clamp-2 mb-3 leading-relaxed">
+                    Why the Bloomberg Terminal was the peak of UI design and why we're bringing that rigor back to AI-native dashboards...
+                </p>
+<div class="rounded-2xl overflow-hidden aspect-video border border-white/5">
+<img class="w-full h-full object-cover" data-alt="High tech cinematic close up of a dark futuristic digital terminal with data visualizations in neon lavender and deep charcoal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8GNKaqf5s0u5utwKRSBceaP9c-CovpH-CxXmin4Mi_1O0ZOkzzF7bLWKlvqComFHYeDU3gV8jvPGNkVoeXV0V_quRjiR5wTKYROXWtVRe99S63mS6MkS6nu0sDF25E0MipFunkn7iqGKXnWy3EwC0PsbpifZ4uLyObj4me_bD_hENi0XiZXg_3Kk3PSBZGIUF39cdh9DlXt9DVjKLLqeMT3LXN45GODkqYdgK0XDSQqndoy1CUb6rC8MGgVKd69rYyCUo2SZd6VY"/>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#111319]/90 backdrop-blur-2xl rounded-t-3xl border-none">
+<a class="flex flex-col items-center justify-center text-[#c2c1ff] bg-[#c2c1ff]/10 rounded-xl px-3 py-1 spring-stiffness-400 transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] spring-stiffness-400 transition-all" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] spring-stiffness-400 transition-all" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Agents</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] spring-stiffness-400 transition-all" href="#">
+<span class="material-symbols-outlined">monitor_heart</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Health</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] spring-stiffness-400 transition-all" href="#">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">More</span>
+</a>
+</nav>
+</body></html>

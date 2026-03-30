@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111319;
+            color: #e2e2eb;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-card {
+            background: rgba(51, 52, 59, 0.6);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(194, 193, 255, 0.05);
+        }
+        .tabular {
+            font-variant-numeric: tabular-nums;
+        }
+        .agent-glow-purple { box-shadow: 0 0 15px -3px rgba(139, 92, 246, 0.3); }
+        .agent-glow-blue { box-shadow: 0 0 15px -3px rgba(59, 130, 246, 0.3); }
+        .agent-glow-orange { box-shadow: 0 0 15px -3px rgba(245, 158, 11, 0.3); }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#111319",
+                        "on-primary-container": "#f4f1ff",
+                        "tertiary-container": "#caa900",
+                        "primary-fixed-dim": "#c2c1ff",
+                        "on-surface": "#e2e2eb",
+                        "outline": "#918fa0",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#e2e2eb",
+                        "on-tertiary-container": "#4c3f00",
+                        "secondary-fixed-dim": "#c4c6d3",
+                        "secondary-fixed": "#e0e2f0",
+                        "surface-container-highest": "#33343b",
+                        "surface-bright": "#373940",
+                        "secondary": "#c4c6d3",
+                        "on-secondary-fixed-variant": "#444652",
+                        "tertiary-fixed-dim": "#e9c400",
+                        "surface-container-lowest": "#0c0e14",
+                        "primary-fixed": "#e2dfff",
+                        "on-error": "#690005",
+                        "surface-container-low": "#191b22",
+                        "on-tertiary-fixed-variant": "#554600",
+                        "on-primary-fixed": "#0c006b",
+                        "inverse-primary": "#4d4ad5",
+                        "on-surface-variant": "#c7c4d7",
+                        "secondary-container": "#444652",
+                        "on-tertiary-fixed": "#221b00",
+                        "on-secondary-fixed": "#181b25",
+                        "on-background": "#e2e2eb",
+                        "on-tertiary": "#3b2f00",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "surface-variant": "#33343b",
+                        "tertiary": "#eac400",
+                        "tertiary-fixed": "#ffe171",
+                        "primary-container": "#5e5ce6",
+                        "background": "#111319",
+                        "on-secondary": "#2d303b",
+                        "surface-container-high": "#282a30",
+                        "on-primary-fixed-variant": "#332dbc",
+                        "inverse-on-surface": "#2e3037",
+                        "surface-tint": "#c2c1ff",
+                        "on-primary": "#1800a7",
+                        "surface-container": "#1e1f26",
+                        "surface-dim": "#111319",
+                        "on-secondary-container": "#b2b4c2",
+                        "primary": "#c2c1ff",
+                        "outline-variant": "#464554"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary selection:text-on-primary">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-6 bg-[#111319]/80 backdrop-blur-3xl border-r border-[#c2c1ff]/10 w-64 z-50 font-['Inter'] tabular-nums tracking-tight font-medium text-sm">
+<div class="px-6 mb-8">
+<h1 class="text-xl font-thin tracking-tighter text-[#c2c1ff] uppercase">War Room</h1>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-[0.2em] mt-1">Global Orchestration</p>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">chat_bubble</span>
+                Chat
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">inbox</span>
+                Inbox
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c2c1ff] bg-[#c2c1ff]/10 font-semibold border-r-2 border-[#c2c1ff] transition-transform duration-300 ease-out scale-[1.02] rounded-l-lg" href="#">
+<span class="material-symbols-outlined text-lg">error</span>
+                Issues
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">sync</span>
+                Routines
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">target</span>
+                Goals
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">smart_toy</span>
+                Agents
+            </a>
+</nav>
+<div class="px-3 mt-auto space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg">help_outline</span>
+                Support
+            </a>
+<div class="mt-4 pt-4 border-t border-outline-variant/20 px-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="User profile" data-alt="close-up portrait of a professional man with clean aesthetic and soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKmwieQYQH_hmOBS5lGzhUaxBG2zTpyirf6aHqZiT3MiwDx_2sXI9MM_66CF5pE1j4LQvCdLGqtH33DPxLqXSI9qoGBG_HGL9PRnHwfCN4F56weaQReqtzj8k1oGTm6D7sTwmVjIB8AHRWn6KpAUit1i8hoDNYfGEm3V0hsyJ_yS9dd-6eWXB_51VWEITAmsUTf6bCTobYNgm47y6b37JFdAfwze3eRP8a8k5Eb2O8hOZHvZnA6rjppoGH1m1JJnLoJ4jFPrukh68"/>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-semibold">Alex Rivera</span>
+<span class="text-[10px] text-on-surface-variant">Admin Level 4</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-[#111319]/60 backdrop-blur-xl flex justify-between items-center px-8 z-40 border-b border-[#c2c1ff]/10 font-['Inter'] font-medium text-xs uppercase tracking-widest">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/10">
+<span class="material-symbols-outlined text-sm text-primary">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-xs w-64 placeholder:text-on-surface-variant" placeholder="Search approvals..." type="text"/>
+</div>
+<nav class="flex items-center gap-6">
+<a class="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all" href="#">System Status</a>
+<a class="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all" href="#">Network</a>
+<a class="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all" href="#">Logs</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<button class="bg-primary text-on-primary px-4 py-2 rounded-xl text-[10px] font-bold tracking-widest flex items-center gap-2 hover:scale-[1.02] transition-transform">
+<span class="material-symbols-outlined text-sm">done_all</span>
+                BATCH APPROVE
+            </button>
+<div class="flex items-center gap-4 text-[#c7c4d7]">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">terminal</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 pt-24 px-12 pb-12 min-h-screen">
+<!-- Breadcrumbs & Header -->
+<div class="mb-10 flex justify-between items-end">
+<div>
+<nav class="flex items-center gap-2 text-[10px] uppercase tracking-widest text-on-surface-variant mb-2">
+<span>Razorclip</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="text-primary">Approval Queue</span>
+</nav>
+<h2 class="text-4xl font-light tracking-tight text-on-surface">Pending <span class="font-bold">Authorizations</span></h2>
+<p class="text-on-surface-variant mt-2 max-w-lg font-medium text-sm">Reviewing 14 high-impact actions from autonomous agents across the production stack.</p>
+</div>
+<div class="flex gap-4">
+<div class="glass-card px-4 py-2 rounded-xl flex items-center gap-3">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant">Est. Burn</span>
+<span class="tabular font-bold text-primary">$412.08</span>
+</div>
+<div class="glass-card px-4 py-2 rounded-xl flex items-center gap-3">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant">Queue Depth</span>
+<span class="tabular font-bold text-primary">14</span>
+</div>
+</div>
+</div>
+<!-- Approval Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Card 1: Dante -->
+<div class="glass-card rounded-2xl flex flex-col p-6 hover:translate-y-[-4px] transition-all duration-300 group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#8B5CF6] to-[#D8B4FE] p-[2px] agent-glow-purple">
+<div class="w-full h-full rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+<img alt="Dante Agent" data-alt="abstract 3D render of a purple nebula with crystalline structures and digital artifacts" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4CnmxXN3cbnMkPwq7xqTXPlih_mk-p61bHCyfcGPiY8ExbUaS8U2oYXYlWKj089Jdhe0W3CHMKmia3S__7kP9O_M7uDXp5cnscxBMIVj-GM3Tmiss56-EMpSja-A2ehUlpbfjtrE01K-5pQrCym2UI-ExZ9-h5eCcLNzwJE1-91ipgdTAutfD-W633YZGRUzN28mxnqwzwJqcE2hHC132_c-7AiOyg0MRltPQIaPl2vV66nZqGUaucmGJ_OhScwA-AkHdh-yyOTc"/>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Dante</h3>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant py-0.5 px-2 bg-surface-container-high rounded-full border border-outline-variant/20">Security Specialist</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="tabular text-xs font-semibold text-primary">~$2.40 API</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Cost Impact</span>
+</div>
+</div>
+<div class="mb-4">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant mb-2 font-bold">Requested Action</p>
+<p class="text-sm font-medium leading-relaxed">Rotate AWS IAM credentials for <code class="bg-surface-container px-1.5 py-0.5 rounded text-primary">prod-gateway-01</code> and update KMS policy.</p>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-xl p-4 mb-6 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant">Diff Preview</span>
+<span class="text-[10px] px-2 py-0.5 rounded bg-error/10 text-error border border-error/20">High Risk</span>
+</div>
+<div class="font-mono text-[11px] space-y-1">
+<div class="text-[#6EE7B7]">+ "Action": "kms:Decrypt"</div>
+<div class="text-[#ffb4ab]">- "Action": "kms:*"</div>
+<div class="text-on-surface-variant">... (12 lines omitted)</div>
+</div>
+</div>
+<div class="mt-auto flex items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<div class="h-1 w-4 rounded-full bg-[#8B5CF6]"></div>
+<div class="h-1 w-4 rounded-full bg-[#8B5CF6]"></div>
+<div class="h-1 w-4 rounded-full bg-[#8B5CF6]/30"></div>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-tighter tabular">92% Signal</span>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-xl border border-outline-variant/20 flex items-center justify-center hover:bg-error/10 hover:text-error transition-all active:scale-90">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+<button class="px-4 py-2 rounded-xl bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-primary/10">
+                            Approve
+                        </button>
+</div>
+</div>
+</div>
+<!-- Card 2: Brent -->
+<div class="glass-card rounded-2xl flex flex-col p-6 hover:translate-y-[-4px] transition-all duration-300 group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#3B82F6] to-[#93C5FD] p-[2px] agent-glow-blue">
+<div class="w-full h-full rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+<img alt="Brent Agent" data-alt="vibrant blue abstract liquid swirl with reflective surfaces and futuristic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYo-0636EjXCSBp3TBlCrPcObjmhasDXV2MFFYvW2Xlx5jT9CQjCBpspBvpvZr4IlPpj41ujlJ12EKI9TiWI7EIlngJMKayMDszH0cGAwA7-krH2_Q0YMb6RBTBi00JKjIGC1u5v7VcUDNgbTOxxLhSsRqVLp8azbVlvlfAC31oPWweKRkiH3LhfBkXn1LYar9WBC6fnoAvzBFes56eu1b0rfwCM2XPFfCyLIC2_UVR25WKyCI_NMaJZczrwLH_Hft4AKQqG1Hx9I"/>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Brent</h3>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant py-0.5 px-2 bg-surface-container-high rounded-full border border-outline-variant/20">DB Architect</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="tabular text-xs font-semibold text-primary">~$0.08 API</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Cost Impact</span>
+</div>
+</div>
+<div class="mb-4">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant mb-2 font-bold">Requested Action</p>
+<p class="text-sm font-medium leading-relaxed">Scale RDS instance <code class="bg-surface-container px-1.5 py-0.5 rounded text-primary">db-read-replica-04</code> to db.m5.xlarge for traffic surge.</p>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-xl p-4 mb-6 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant">Context Summary</span>
+<span class="text-[10px] px-2 py-0.5 rounded bg-tertiary/10 text-tertiary border border-tertiary/20">Scaling Event</span>
+</div>
+<p class="text-[11px] text-on-surface-variant leading-relaxed">Observed 85% CPU utilization over 10m window. Predicted growth of 2x in next hour based on APAC marketing launch.</p>
+</div>
+<div class="mt-auto flex items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<div class="h-1 w-4 rounded-full bg-[#3B82F6]"></div>
+<div class="h-1 w-4 rounded-full bg-[#3B82F6]"></div>
+<div class="h-1 w-4 rounded-full bg-[#3B82F6]"></div>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-tighter tabular">100% Signal</span>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-xl border border-outline-variant/20 flex items-center justify-center hover:bg-error/10 hover:text-error transition-all active:scale-90">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+<button class="px-4 py-2 rounded-xl bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-primary/10">
+                            Approve
+                        </button>
+</div>
+</div>
+</div>
+<!-- Card 3: Scout -->
+<div class="glass-card rounded-2xl flex flex-col p-6 hover:translate-y-[-4px] transition-all duration-300 group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#F59E0B] to-[#FCD34D] p-[2px] agent-glow-orange">
+<div class="w-full h-full rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+<img alt="Scout Agent" data-alt="warm orange and yellow geometric patterns with flowing silk textures and soft bokeh light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCewWdstc7F8MTRTVbYaoPT0NgREV-8p-qGeaSoxRCCI8lV5pJTGfZoCCzy_pKcIwJyH9GY2JuVS4nwy8_ZcYsX5ms85S8Bysm2FXIxcA051uUFec6vi_3TARHvZpMBCU46SjqqxOBB5QMIwTrMt9q3Ps_TKMMEpebH6PXVHZinGqi8weQbzDhgLCzDuWQblcLso1u8YAOpUyVAShi1XpJODmx29DuBtfevDYMLuppdKmPdAqWO7-LSXj2eQS8wDRBAsDgvD1DnNvI"/>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Scout</h3>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant py-0.5 px-2 bg-surface-container-high rounded-full border border-outline-variant/20">Asset Hunter</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="tabular text-xs font-semibold text-primary">~$12.50 API</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Cost Impact</span>
+</div>
+</div>
+<div class="mb-4">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant mb-2 font-bold">Requested Action</p>
+<p class="text-sm font-medium leading-relaxed">Deprioritize 420 unused S3 objects and trigger Glacier Instant Retrieval migration.</p>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-xl p-4 mb-6 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant">Savings Projection</span>
+<span class="text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">Optimizing</span>
+</div>
+<div class="flex items-center justify-between text-xs font-bold mt-2">
+<span class="text-on-surface-variant">Annual Savings:</span>
+<span class="text-primary tabular">+$1,240.00</span>
+</div>
+</div>
+<div class="mt-auto flex items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<div class="h-1 w-4 rounded-full bg-[#F59E0B]"></div>
+<div class="h-1 w-4 rounded-full bg-[#F59E0B]/30"></div>
+<div class="h-1 w-4 rounded-full bg-[#F59E0B]/30"></div>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-tighter tabular">64% Signal</span>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-xl border border-outline-variant/20 flex items-center justify-center hover:bg-error/10 hover:text-error transition-all active:scale-90">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+<button class="px-4 py-2 rounded-xl bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-primary/10">
+                            Approve
+                        </button>
+</div>
+</div>
+</div>
+<!-- Card 4: Nova -->
+<div class="glass-card rounded-2xl flex flex-col p-6 hover:translate-y-[-4px] transition-all duration-300 group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#EC4899] to-[#FBCFE8] p-[2px] shadow-[0_0_15px_-3px_rgba(236,72,153,0.3)]">
+<div class="w-full h-full rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+<img alt="Nova Agent" data-alt="iridescent pink and silver cosmic fabric flowing in zero gravity with neon accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwh-UBbiKYuw-JbTs4wX_rMrCp5WkLYDU_227pJUl1a6wbvsSxswKX2fPTt_hQK_CE3loY-I2vr7uTmqK0wCsZ3bCYvaX7a-G-c4j_JDSwOAirSWpDFuQ05E30UTs8rtvqzGZM4i9UuAk_D3pYHOsS55nWzL5gHT3LAkU9uq1E9fCSGQN3Bwj9cWHrhvMsClert3wWUfuIfCv89tJYs6liSGvoMuJEB9fE_NsZ6KednvC-nPJ-NIreZwyOAwwAdxTdr-kbFFIQxlc"/>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Nova</h3>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant py-0.5 px-2 bg-surface-container-high rounded-full border border-outline-variant/20">UI Automator</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="tabular text-xs font-semibold text-primary">~$1.15 API</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Cost Impact</span>
+</div>
+</div>
+<div class="mb-4">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant mb-2 font-bold">Requested Action</p>
+<p class="text-sm font-medium leading-relaxed">Update theme tokens for <code class="bg-surface-container px-1.5 py-0.5 rounded text-primary">marketing-v3</code> component library.</p>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-xl p-4 mb-6 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant">Visual Diff</span>
+<span class="text-[10px] px-2 py-0.5 rounded bg-primary/10 text-primary border border-primary/20">UI Refresh</span>
+</div>
+<div class="flex gap-2 h-8">
+<div class="flex-1 bg-surface-variant rounded"></div>
+<div class="flex-1 bg-primary rounded"></div>
+<div class="flex-1 bg-outline-variant rounded"></div>
+</div>
+</div>
+<div class="mt-auto flex items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<div class="h-1 w-4 rounded-full bg-[#EC4899]"></div>
+<div class="h-1 w-4 rounded-full bg-[#EC4899]"></div>
+<div class="h-1 w-4 rounded-full bg-[#EC4899]"></div>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-tighter tabular">98% Signal</span>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-xl border border-outline-variant/20 flex items-center justify-center hover:bg-error/10 hover:text-error transition-all active:scale-90">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+<button class="px-4 py-2 rounded-xl bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-primary/10">
+                            Approve
+                        </button>
+</div>
+</div>
+</div>
+<!-- Card 5: Rex -->
+<div class="glass-card rounded-2xl flex flex-col p-6 hover:translate-y-[-4px] transition-all duration-300 group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#10B981] to-[#6EE7B7] p-[2px] shadow-[0_0_15px_-3px_rgba(16,185,129,0.3)]">
+<div class="w-full h-full rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+<img alt="Rex Agent" data-alt="deep emerald and mint green abstract topographic map lines with glowing data nodes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdGetFECaNdn_vpt8K-qYttDg5fa1W9hP5_m4hLF8uoP33S0eP_NyOfUfohOqfNtSfbV-p3oMhzX-SSsmW1UcPX01-RVgjbzWxo7XHk_ibJpZOEirLNn8J_9vb1ZWWiC2iamds_U04NCtTiLF0KslfCn4g7MLeFfApA0DyZChKbQcODPDbKXGWsRF3mUziAzSnVUuZqa3wcPI6XMySZ_PK3TRDBlZaaabvBeu6FkGq1a50q9jtmXYm_MgmrQ67FpaVxPesAqj9JVI"/>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Rex</h3>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant py-0.5 px-2 bg-surface-container-high rounded-full border border-outline-variant/20">Logistics Expert</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="tabular text-xs font-semibold text-primary">~$4.90 API</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Cost Impact</span>
+</div>
+</div>
+<div class="mb-4">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant mb-2 font-bold">Requested Action</p>
+<p class="text-sm font-medium leading-relaxed">Reroute 1,200 fleet delivery packets through <code class="bg-surface-container px-1.5 py-0.5 rounded text-primary">eu-central-1</code> to avoid outage.</p>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-xl p-4 mb-6 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant">Active Threat</span>
+<span class="text-[10px] px-2 py-0.5 rounded bg-error/10 text-error border border-error/20">Critical</span>
+</div>
+<p class="text-[11px] text-on-surface-variant leading-relaxed">Latency spike in <code class="text-on-surface">us-east-1</code> detected (340ms+). Automatic failsafe triggered.</p>
+</div>
+<div class="mt-auto flex items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<div class="h-1 w-4 rounded-full bg-[#10B981]"></div>
+<div class="h-1 w-4 rounded-full bg-[#10B981]"></div>
+<div class="h-1 w-4 rounded-full bg-[#10B981]"></div>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-tighter tabular">100% Signal</span>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-xl border border-outline-variant/20 flex items-center justify-center hover:bg-error/10 hover:text-error transition-all active:scale-90">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+<button class="px-4 py-2 rounded-xl bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-primary/10">
+                            Approve
+                        </button>
+</div>
+</div>
+</div>
+<!-- Card 6: Victor -->
+<div class="glass-card rounded-2xl flex flex-col p-6 hover:translate-y-[-4px] transition-all duration-300 group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#EAB308] to-[#FEF08A] p-[2px] shadow-[0_0_15px_-3px_rgba(234,179,8,0.3)]">
+<div class="w-full h-full rounded-full bg-surface-container flex items-center justify-center overflow-hidden">
+<img alt="Victor Agent" data-alt="molten gold and yellow fluid art with metallic flakes and high-contrast dramatic shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQZPwmHjS4zrAPQ0VZDe-mbOgf2qSP71iJjZWS_JUQgxq7-40nQcAfyKOPDJVT6NqRWsdaxSZr3gs-JqMkHQaO2BpwM5ON8f1TOqc2qqiERurZAy6eoVWUqP0BPZrzOlhNbr5lFsZRfH4QoMIizdEj-8VlWXS1QG-A303nIVxJGYO5BsbzVGwVI-K_x0Lj5202yax_uuky56RpsHWjHQIJ4aOxc-p214dJT-ZFKi1soFwnG7IhlXL3v55xtiONntxgDHHlnrZzC40"/>
+</div>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Victor</h3>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant py-0.5 px-2 bg-surface-container-high rounded-full border border-outline-variant/20">Legal Counsel</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="tabular text-xs font-semibold text-primary">~$18.20 API</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Cost Impact</span>
+</div>
+</div>
+<div class="mb-4">
+<p class="text-xs uppercase tracking-widest text-on-surface-variant mb-2 font-bold">Requested Action</p>
+<p class="text-sm font-medium leading-relaxed">Auto-generate and distribute GDPR-compliant Data Processing Addendum to 84 partners.</p>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-xl p-4 mb-6 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant">Clause Preview</span>
+<span class="text-[10px] px-2 py-0.5 rounded bg-tertiary/10 text-tertiary border border-tertiary/20">Compliance</span>
+</div>
+<p class="text-[11px] text-on-surface-variant leading-tight italic">"Section 4.1: The Processor shall implement appropriate technical and organizational measures to ensure a level of security..."</p>
+</div>
+<div class="mt-auto flex items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<div class="flex gap-1">
+<div class="h-1 w-4 rounded-full bg-[#EAB308]"></div>
+<div class="h-1 w-4 rounded-full bg-[#EAB308]"></div>
+<div class="h-1 w-4 rounded-full bg-[#EAB308]/30"></div>
+</div>
+<span class="text-[10px] uppercase font-bold tracking-tighter tabular">81% Signal</span>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-xl border border-outline-variant/20 flex items-center justify-center hover:bg-error/10 hover:text-error transition-all active:scale-90">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+<button class="px-4 py-2 rounded-xl bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-primary/10">
+                            Approve
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination / Footer Actions -->
+<div class="mt-12 flex justify-between items-center border-t border-outline-variant/10 pt-8">
+<div class="flex gap-4">
+<button class="glass-card px-4 py-2 rounded-xl text-[10px] uppercase tracking-widest font-bold flex items-center gap-2 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                    Filter
+                </button>
+<button class="glass-card px-4 py-2 rounded-xl text-[10px] uppercase tracking-widest font-bold flex items-center gap-2 hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm">sort</span>
+                    Sort by Risk
+                </button>
+</div>
+<div class="flex items-center gap-6">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant">Showing 6 of 14</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 rounded-lg border border-outline-variant/20 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg border border-outline-variant/20 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB (Suppressed on this transactional-heavy screen, but keeping structure if needed for context) -->
+</body></html>

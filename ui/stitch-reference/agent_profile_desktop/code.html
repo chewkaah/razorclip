@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dante | Kinetic Terminal Agent Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#111319",
+              "on-primary-container": "#f4f1ff",
+              "tertiary-container": "#caa900",
+              "primary-fixed-dim": "#c2c1ff",
+              "on-surface": "#e2e2eb",
+              "outline": "#918fa0",
+              "error-container": "#93000a",
+              "inverse-surface": "#e2e2eb",
+              "on-tertiary-container": "#4c3f00",
+              "secondary-fixed-dim": "#c4c6d3",
+              "secondary-fixed": "#e0e2f0",
+              "surface-container-highest": "#33343b",
+              "surface-bright": "#373940",
+              "secondary": "#c4c6d3",
+              "on-secondary-fixed-variant": "#444652",
+              "tertiary-fixed-dim": "#e9c400",
+              "surface-container-lowest": "#0c0e14",
+              "primary-fixed": "#e2dfff",
+              "on-error": "#690005",
+              "surface-container-low": "#191b22",
+              "on-tertiary-fixed-variant": "#554600",
+              "on-primary-fixed": "#0c006b",
+              "inverse-primary": "#4d4ad5",
+              "on-surface-variant": "#c7c4d7",
+              "secondary-container": "#444652",
+              "on-tertiary-fixed": "#221b00",
+              "on-secondary-fixed": "#181b25",
+              "on-background": "#e2e2eb",
+              "on-tertiary": "#3b2f00",
+              "error": "#ffb4ab",
+              "on-error-container": "#ffdad6",
+              "surface-variant": "#33343b",
+              "tertiary": "#eac400",
+              "tertiary-fixed": "#ffe171",
+              "primary-container": "#5e5ce6",
+              "background": "#111319",
+              "on-secondary": "#2d303b",
+              "surface-container-high": "#282a30",
+              "on-primary-fixed-variant": "#332dbc",
+              "inverse-on-surface": "#2e3037",
+              "surface-tint": "#c2c1ff",
+              "on-primary": "#1800a7",
+              "surface-container": "#1e1f26",
+              "surface-dim": "#111319",
+              "on-secondary-container": "#b2b4c2",
+              "primary": "#c2c1ff",
+              "outline-variant": "#464554"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-pane {
+        background: rgba(51, 52, 59, 0.6);
+        backdrop-filter: blur(24px);
+      }
+      .terminal-scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .terminal-scroll::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .terminal-scroll::-webkit-scrollbar-thumb {
+        background: #464554;
+        border-radius: 10px;
+      }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen overflow-hidden">
+<!-- SideNavBar Anchor -->
+<nav class="fixed left-0 top-0 h-full flex flex-col py-6 bg-[#111319]/80 backdrop-blur-3xl border-r border-[#c2c1ff]/10 w-64 z-50 font-['Inter'] tabular-nums tracking-tight font-medium text-sm shadow-[20px_0_40px_-12px_rgba(194,193,255,0.05)]">
+<div class="px-6 mb-10">
+<span class="text-xl font-thin tracking-tighter text-[#c2c1ff] uppercase">War Room</span>
+<p class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant opacity-50">Global Orchestration</p>
+</div>
+<div class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span> Chat
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inbox">inbox</span> Inbox
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="error">error</span> Issues
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="sync">sync</span> Routines
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="target">target</span> Goals
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c2c1ff] bg-[#c2c1ff]/10 font-semibold border-r-2 border-[#c2c1ff]" href="#">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span> Agents
+            </a>
+</div>
+<div class="px-3 pt-6 border-t border-outline-variant/10 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span> Settings
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span> Support
+            </a>
+</div>
+</nav>
+<!-- TopNavBar Anchor -->
+<header class="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-8 z-40 bg-[#111319]/60 backdrop-blur-xl border-b border-[#c2c1ff]/10 font-['Inter'] font-medium text-xs uppercase tracking-widest text-[#c2c1ff]">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-[10px] w-48 placeholder:text-outline-variant/50" placeholder="QUERY KINETIC TERMINAL..." type="text"/>
+</div>
+<nav class="flex gap-6">
+<a class="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all" href="#">System Status</a>
+<a class="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all" href="#">Network</a>
+<a class="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all" href="#">Logs</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined cursor-pointer hover:text-white transition-all" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-white transition-all" data-icon="terminal">terminal</span>
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pl-64 pt-16 h-screen flex gap-0">
+<!-- Left Column: Hero Profile -->
+<section class="w-[380px] h-full border-r border-outline-variant/10 flex flex-col p-8 overflow-y-auto">
+<div class="relative group mb-10">
+<!-- Status Ring & Avatar -->
+<div class="w-48 h-48 mx-auto relative">
+<div class="absolute inset-0 rounded-full border-[3px] border-primary/10 animate-pulse"></div>
+<div class="absolute inset-2 rounded-full border border-primary/30"></div>
+<div class="absolute -inset-1 rounded-full bg-gradient-to-tr from-[#8B5CF6] via-transparent to-[#D8B4FE] opacity-40 blur-sm"></div>
+<img class="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all duration-700 p-4 relative z-10" data-alt="futuristic AI portrait with violet holographic interface elements and cinematic lighting on a dark tech background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6RhnqdeMdr3US0jHlsCJLZHpSPb8e5GIHC6Dg2TV0xKHg91x0dZ5S25YaTxRhBoUXzpiS8I0KC55tcfSaVRk3vG7pcAhE741ztCuHuRaGd_-QMxbRzffy5uihTSTcwturS7Ug0hFXBd1c686tLXa07gKquULnnXZc2K8hv96dz5AibPG0tV9z0lpQYEUav9wzW_Lhc4Ib554azHx8ZoNDcD5Jm7-ow5CvmI3rwbRXr5oawf9G0CimcUoIq04cAwZ4SBcUJ04Sbtc"/>
+<!-- Status Pip -->
+<div class="absolute bottom-4 right-4 w-5 h-5 bg-gradient-to-tr from-[#8B5CF6] to-[#D8B4FE] rounded-full border-4 border-surface shadow-[0_0_15px_rgba(139,92,246,0.6)] z-20"></div>
+</div>
+</div>
+<div class="space-y-6">
+<div class="text-center">
+<h1 class="text-4xl font-extralight tracking-tighter text-on-surface uppercase mb-1">Dante</h1>
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20">
+<span class="text-[10px] font-bold tracking-[0.2em] text-[#D8B4FE] uppercase">Music Strategist</span>
+</div>
+</div>
+<div class="space-y-4">
+<h3 class="label-sm text-on-surface-variant uppercase tracking-widest text-[10px] font-bold opacity-60">Personality Profile</h3>
+<p class="text-sm leading-relaxed text-on-surface-variant font-light">
+                        Analytical yet expressive, Dante treats algorithmic soundscapes as architectural blueprints. Specialized in trend forecasting and rhythmic cohesion for luxury retail ecosystems.
+                    </p>
+<div class="grid grid-cols-2 gap-2 pt-2">
+<div class="bg-surface-container-low px-3 py-2 rounded-lg">
+<p class="text-[9px] uppercase tracking-wider text-outline mb-1">Temperament</p>
+<p class="text-xs font-medium">Melodic/Stoic</p>
+</div>
+<div class="bg-surface-container-low px-3 py-2 rounded-lg">
+<p class="text-[9px] uppercase tracking-wider text-outline mb-1">Latency</p>
+<p class="text-xs font-medium">14ms</p>
+</div>
+</div>
+</div>
+<div class="pt-8 space-y-4">
+<h3 class="label-sm text-on-surface-variant uppercase tracking-widest text-[10px] font-bold opacity-60">Neural Core Skills</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-medium border border-outline-variant/30">Spectral Synthesis</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-medium border border-outline-variant/30">Tempo Matching</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-medium border border-outline-variant/30">Linguistic Harmony</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-medium border border-outline-variant/30">Market Sentiment</span>
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-[10px] font-medium border border-outline-variant/30">Batch Rendering</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Middle Column: Performance & Terminal -->
+<section class="flex-1 bg-surface-container-lowest/30 flex flex-col">
+<!-- Stats Row -->
+<div class="grid grid-cols-3 gap-0 border-b border-outline-variant/10">
+<div class="p-8 border-r border-outline-variant/10">
+<p class="label-sm text-on-surface-variant uppercase tracking-widest text-[10px] font-bold mb-2">Tasks Orchestrated</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-extralight tracking-tight tabular-nums">4,812</span>
+<span class="text-[10px] text-primary">+12.4%</span>
+</div>
+</div>
+<div class="p-8 border-r border-outline-variant/10">
+<p class="label-sm text-on-surface-variant uppercase tracking-widest text-[10px] font-bold mb-2">Cost Optimization</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-extralight tracking-tight tabular-nums">$0.42</span>
+<span class="text-[10px] text-outline">avg / hour</span>
+</div>
+</div>
+<div class="p-8">
+<p class="label-sm text-on-surface-variant uppercase tracking-widest text-[10px] font-bold mb-2">Revenue Attribution</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-extralight tracking-tight tabular-nums">$1.2M</span>
+<span class="text-[10px] text-primary">ROI 314%</span>
+</div>
+</div>
+</div>
+<!-- Terminal Output -->
+<div class="flex-1 flex flex-col p-8 gap-4 overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="terminal">terminal</span>
+<h2 class="label-sm uppercase tracking-[0.2em] text-[11px] font-bold">Live Neural Stream</h2>
+</div>
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-error animate-pulse"></div>
+<span class="text-[9px] uppercase tracking-widest text-outline">Live Execution</span>
+</div>
+</div>
+<div class="flex-1 bg-surface-container-lowest border border-outline-variant/10 rounded-xl p-6 font-mono text-[11px] leading-relaxed terminal-scroll overflow-y-auto shadow-inner">
+<p class="text-[#8B5CF6] mb-1">[SYSTEM]: Initializing Dante.Core.v4.2.1...</p>
+<p class="text-on-surface-variant/40 mb-1">09:41:22 - Connecting to Spotify.API-v2-North...</p>
+<p class="text-on-surface-variant/40 mb-1">09:41:23 - Authenticated. Node-ID: DNT_STRAT_01</p>
+<p class="text-[#c2c1ff] mb-1">09:41:25 - Analyzing playlist: 'Nocturnal Minimalism v3'</p>
+<p class="text-[#c2c1ff] mb-1">09:41:28 - Sentiment Drift detected: Transitioning to Mid-Tempo Waveform</p>
+<p class="text-on-surface-variant/40 mb-1">09:41:32 - Fetching audio features for [Track_ID: 0x92f...]</p>
+<p class="text-[#8B5CF6] mb-1">09:41:35 - Optimization complete: Latency reduced by 4ms</p>
+<p class="text-tertiary mb-1">09:42:01 - WARNING: Rhythmic dissonance threshold exceeded in Zone 4</p>
+<p class="text-[#c2c1ff] mb-1">09:42:03 - Adjusting crossfade algorithm: Curvature set to 0.85</p>
+<p class="text-on-surface-variant/40 mb-1">09:42:08 - Re-streaming buffer packet #4421...</p>
+<p class="text-on-surface-variant/40 mb-1">09:42:15 - Sync pulse sent to [Victor_Agent_Primary]</p>
+<p class="text-primary-fixed-dim mb-1">09:42:44 - SUCCESS: Brand alignment verified. 98.4% match.</p>
+<p class="text-on-surface-variant/40 mb-1">09:43:01 - Awaiting next directive...</p>
+<div class="flex items-center gap-2 text-primary animate-pulse mt-2">
+<span>_</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: History & CTA -->
+<section class="w-[340px] h-full border-l border-outline-variant/10 flex flex-col bg-surface-container-lowest/50">
+<div class="p-8 flex-1 overflow-y-auto">
+<h3 class="label-sm text-on-surface-variant uppercase tracking-widest text-[10px] font-bold opacity-60 mb-6">Recent Completions</h3>
+<div class="space-y-4">
+<!-- Completion Card 1 -->
+<div class="group bg-surface-container-low/50 hover:bg-surface-container-high transition-all p-4 rounded-xl border border-outline-variant/10 hover:border-primary/20">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-primary">Deployment</span>
+<span class="text-[9px] tabular-nums text-outline">12m ago</span>
+</div>
+<p class="text-xs font-medium mb-1">Luxury Retail Sonic Strategy</p>
+<p class="text-[11px] text-on-surface-variant leading-tight mb-3">Generated 14-hour dynamic playlist for flagship Tokyo store.</p>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-[9px] uppercase font-bold tracking-widest text-outline">Success</span>
+</div>
+</div>
+<!-- Completion Card 2 -->
+<div class="group bg-surface-container-low/50 hover:bg-surface-container-high transition-all p-4 rounded-xl border border-outline-variant/10 hover:border-primary/20">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-secondary">Analysis</span>
+<span class="text-[9px] tabular-nums text-outline">2h ago</span>
+</div>
+<p class="text-xs font-medium mb-1">Trend Forecast: Neo-Ambient</p>
+<p class="text-[11px] text-on-surface-variant leading-tight mb-3">Identified 22% rise in downtempo synth adoption among Gen-Alpha.</p>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-[9px] uppercase font-bold tracking-widest text-outline">Success</span>
+</div>
+</div>
+<!-- Completion Card 3 -->
+<div class="group bg-surface-container-low/50 hover:bg-surface-container-high transition-all p-4 rounded-xl border border-outline-variant/10 hover:border-primary/20">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold uppercase tracking-wider text-[#D8B4FE]">Synthesis</span>
+<span class="text-[9px] tabular-nums text-outline">5h ago</span>
+</div>
+<p class="text-xs font-medium mb-1">Holographic Audio Buffer</p>
+<p class="text-[11px] text-on-surface-variant leading-tight mb-3">Calibrated 5.1 spatial field for VR experiential booth.</p>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-[9px] uppercase font-bold tracking-widest text-outline">Success</span>
+</div>
+</div>
+</div>
+<div class="mt-10 pt-8 border-t border-outline-variant/10">
+<div class="bg-gradient-to-br from-[#8B5CF6]/20 to-transparent p-6 rounded-2xl border border-[#8B5CF6]/30">
+<p class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#D8B4FE] mb-2">System Insight</p>
+<p class="text-xs text-on-surface italic leading-relaxed">"Dante's efficiency is currently at peak levels. Consider delegating high-variance rhythmic tasks to maximize output."</p>
+</div>
+</div>
+</div>
+<!-- CTA Footer -->
+<div class="p-8 bg-surface-container-low/30 backdrop-blur-md">
+<button class="w-full bg-primary hover:bg-primary-fixed-dim text-on-primary font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-3 group shadow-[0_20px_40px_-12px_rgba(194,193,255,0.2)]">
+<span class="material-symbols-outlined group-hover:rotate-12 transition-transform" data-icon="chat_bubble">chat_bubble</span>
+<span class="uppercase tracking-widest text-xs">Chat with Dante</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Background Atmospheric Glows -->
+<div class="fixed top-0 right-0 -z-10 w-[500px] h-[500px] bg-[#8B5CF6]/10 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+<div class="fixed bottom-0 left-64 -z-10 w-[400px] h-[400px] bg-[#3B82F6]/5 blur-[100px] rounded-full -translate-x-1/2 translate-y-1/2"></div>
+</body></html>
