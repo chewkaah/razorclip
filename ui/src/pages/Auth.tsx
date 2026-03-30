@@ -30,11 +30,16 @@ export function AuthPage() {
     if (session) navigate(nextPath, { replace: true });
   }, [session, navigate, nextPath]);
 
+  const ALLOWED_DOMAIN = "@integral.studio";
+
   const mutation = useMutation({
     mutationFn: async () => {
       if (mode === "sign_in") {
         await authApi.signInEmail({ email: email.trim(), password });
         return;
+      }
+      if (!email.trim().toLowerCase().endsWith(ALLOWED_DOMAIN)) {
+        throw new Error("Only @integral.studio email addresses are allowed");
       }
       await authApi.signUpEmail({ name: name.trim(), email: email.trim(), password });
     },

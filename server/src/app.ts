@@ -127,6 +127,15 @@ export async function createApp(
     });
   });
   if (opts.betterAuthHandler) {
+    // Restrict sign-up to @integral.studio email addresses only
+    app.post("/api/auth/sign-up/email", (req, res, next) => {
+      const email = typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase() : "";
+      if (!email.endsWith("@integral.studio")) {
+        res.status(403).json({ error: "Only @integral.studio email addresses are allowed" });
+        return;
+      }
+      next();
+    });
     app.all("/api/auth/*authPath", opts.betterAuthHandler);
   }
   app.use(llmRoutes(db));
