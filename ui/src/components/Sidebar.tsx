@@ -60,7 +60,7 @@ export function Sidebar() {
             style={{ backgroundColor: selectedCompany.brandColor }}
           />
         )}
-        <span className="flex-1 text-sm font-bold text-foreground truncate pl-1">
+        <span className="flex-1 text-sm font-bold text-[#e2e2eb] truncate pl-1 tracking-tight">
           {selectedCompany?.name ?? "Select company"}
         </span>
         <Button

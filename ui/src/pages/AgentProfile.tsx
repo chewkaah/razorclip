@@ -35,16 +35,32 @@ export function AgentProfile() {
   const { setBreadcrumbs } = useBreadcrumbs();
   const { isMobile } = useSidebar();
 
-  const { data: agent, isLoading } = useQuery({
-    queryKey: queryKeys.agents.detail(agentId!),
-    queryFn: () => agentsApi.get(agentId!),
-    enabled: !!agentId,
+  // agentId from route may be a UUID or a slug/urlKey — fetch the full list and resolve
+  const { data: allAgents, isLoading: agentsLoading } = useQuery({
+    queryKey: queryKeys.agents.list(selectedCompanyId!),
+    queryFn: () => agentsApi.list(selectedCompanyId!),
+    enabled: !!selectedCompanyId,
   });
 
+  // Resolve the agent from the route param (could be UUID, urlKey, or name slug)
+  const agent = useMemo(() => {
+    if (!allAgents || !agentId) return null;
+    return allAgents.find((a: any) =>
+      a.id === agentId ||
+      a.urlKey === agentId ||
+      a.name.toLowerCase().replace(/\s+/g, "-") === agentId.toLowerCase() ||
+      a.name.toLowerCase() === agentId.toLowerCase()
+    ) ?? null;
+  }, [allAgents, agentId]);
+
+  const isLoading = agentsLoading;
+
+  const resolvedAgentId = (agent as any)?.id ?? null;
+
   const { data: runs } = useQuery({
-    queryKey: queryKeys.heartbeats(selectedCompanyId!, agentId),
-    queryFn: () => heartbeatsApi.list(selectedCompanyId!, agentId),
-    enabled: !!selectedCompanyId && !!agentId,
+    queryKey: queryKeys.heartbeats(selectedCompanyId!, resolvedAgentId),
+    queryFn: () => heartbeatsApi.list(selectedCompanyId!, resolvedAgentId),
+    enabled: !!selectedCompanyId && !!resolvedAgentId,
     refetchInterval: 10_000,
   });
 

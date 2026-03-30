@@ -8,7 +8,7 @@ interface SidebarSectionProps {
 export function SidebarSection({ label, children }: SidebarSectionProps) {
   return (
     <div>
-      <div className="px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest font-mono text-muted-foreground/60">
+      <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-[#c7c4d7]/40">
         {label}
       </div>
       <div className="flex flex-col gap-0.5 mt-0.5">{children}</div>
