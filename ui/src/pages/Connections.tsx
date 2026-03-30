@@ -71,7 +71,7 @@ export function Connections() {
   const connectedCount = CONNECTIONS.filter((c) => c.status === "connected").length;
 
   return (
-    <div className="kt-page min-h-full pb-4 space-y-6 max-w-3xl mx-auto">
+    <div className="kt-page min-h-full pb-4 space-y-6 max-w-5xl mx-auto">
       {/* Header */}
       <section>
         <div className="flex items-center gap-3 mb-1">
@@ -106,7 +106,7 @@ export function Connections() {
               </span>
             }
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {connections.map((conn) => (
               <ConnectionCard key={conn.slug} connection={conn} />
             ))}

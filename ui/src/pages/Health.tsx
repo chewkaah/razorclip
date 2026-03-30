@@ -17,7 +17,7 @@ export function Health() {
   })();
 
   return (
-    <div className="kt-page min-h-full pb-4 space-y-6 max-w-2xl mx-auto">
+    <div className="kt-page min-h-full pb-4 space-y-6 max-w-5xl mx-auto">
       {/* Hero */}
       <section>
         <p className="text-[10px] uppercase tracking-[0.15em] text-kt-primary font-bold mb-1">
@@ -34,7 +34,7 @@ export function Health() {
       {/* Hero Metrics */}
       <section className="space-y-4">
         <SectionHeader title="Financial Overview" />
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <MetricPill label="Weekly Revenue" value="—" />
           <MetricPill label="Weekly Burn" value="—" trend="stable" trendLabel="—" />
           <MetricPill label="Net Margin" value="—" />
@@ -55,25 +55,26 @@ export function Health() {
         </GlassCard>
       </section>
 
-      {/* Active Clients */}
-      <section className="space-y-4">
-        <SectionHeader title="Active Clients" />
-        <GlassCard className="p-4">
-          <p className="text-sm text-kt-on-surface-variant text-center py-6">
-            Connect Notion CRM in Connections to sync clients
-          </p>
-        </GlassCard>
-      </section>
+      {/* Active Clients + Cash Position side-by-side on desktop */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section className="space-y-4">
+          <SectionHeader title="Active Clients" />
+          <GlassCard className="p-4">
+            <p className="text-sm text-kt-on-surface-variant text-center py-6">
+              Connect Notion CRM in Connections to sync clients
+            </p>
+          </GlassCard>
+        </section>
 
-      {/* Traffic */}
-      <section className="space-y-4">
-        <SectionHeader title="Website Traffic" />
-        <GlassCard className="p-4">
-          <p className="text-sm text-kt-on-surface-variant text-center py-6">
-            Connect Vercel Analytics or GA4 to see traffic data
-          </p>
-        </GlassCard>
-      </section>
+        <section className="space-y-4">
+          <SectionHeader title="Website Traffic" />
+          <GlassCard className="p-4">
+            <p className="text-sm text-kt-on-surface-variant text-center py-6">
+              Connect Vercel Analytics or GA4 to see traffic data
+            </p>
+          </GlassCard>
+        </section>
+      </div>
 
       {/* LinkedIn */}
       <section className="space-y-4">

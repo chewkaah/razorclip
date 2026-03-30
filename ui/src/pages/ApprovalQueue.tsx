@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@/lib/router";
-import { Check, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, X, ChevronLeft, ChevronRight, Filter, ArrowUpDown } from "lucide-react";
 import { approvalsApi } from "../api/approvals";
 import { useCompany } from "../context/CompanyContext";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
+import { useSidebar } from "../context/SidebarContext";
 import { queryKeys } from "../lib/queryKeys";
 import { cn } from "../lib/utils";
 import {
@@ -25,6 +26,7 @@ function resolveAgentSlug(name: string): AgentSlug | null {
 export function ApprovalQueue() {
   const { selectedCompanyId } = useCompany();
   const { setBreadcrumbs } = useBreadcrumbs();
+  const { isMobile } = useSidebar();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -73,6 +75,97 @@ export function ApprovalQueue() {
   const slug = resolveAgentSlug(agentName);
   const config = slug ? AGENT_REGISTRY[slug] : null;
 
+  // Desktop: multi-card grid view (matches Stitch approval_queue_desktop)
+  if (!isMobile) {
+    return (
+      <div className="kt-page min-h-full pb-4 space-y-6 max-w-5xl mx-auto">
+        {/* Header */}
+        <section className="flex items-end justify-between">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.15em] text-kt-on-surface-variant mb-1">
+              Approval Queue
+            </p>
+            <h1 className="text-3xl font-bold tracking-tight text-kt-on-surface">
+              Pending <span className="text-kt-primary">Authorizations</span>
+            </h1>
+            <p className="text-sm text-kt-on-surface-variant mt-1">
+              Reviewing {pending.length} actions from autonomous agents
+            </p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="glass-card rounded-xl border border-white/5 px-4 py-2">
+              <p className="text-[10px] uppercase tracking-wider text-kt-on-surface-variant/50">Queue Depth</p>
+              <p className="text-xl font-bold tabular-nums text-kt-on-surface">{pending.length}</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Card Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {pending.map((approval) => {
+            const p = approval.payload ?? {};
+            const aName = (p.agentName as string) ?? "Agent";
+            const aTitle = (p.title as string) ?? (p.summary as string) ?? `${approval.type} request`;
+            const aDesc = (p.description as string) ?? (p.plan as string) ?? null;
+            const aSlug = resolveAgentSlug(aName);
+            const aConfig = aSlug ? AGENT_REGISTRY[aSlug] : null;
+
+            return (
+              <GlassCard key={approval.id} className="p-5 flex flex-col gap-4">
+                {/* Agent header */}
+                <div className="flex items-center gap-3">
+                  {aSlug ? (
+                    <AgentAvatar agent={aSlug} size="sm" showRing />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-kt-surface-container-high flex items-center justify-center border border-white/10">
+                      <span className="text-xs font-bold text-kt-on-surface-variant">{aName[0]}</span>
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-bold text-kt-on-surface">{aName}</p>
+                    <p className="text-[10px] text-kt-on-surface-variant/50 uppercase">{approval.type}</p>
+                  </div>
+                  <span className="text-[10px] font-bold text-kt-on-surface-variant tabular-nums">~$—</span>
+                </div>
+
+                {/* Action */}
+                <div>
+                  <p className="text-[10px] uppercase tracking-wider text-kt-on-surface-variant/50 mb-1">Requested Action</p>
+                  <p className="text-sm text-kt-on-surface leading-snug line-clamp-2">{aTitle}</p>
+                </div>
+
+                {/* Description */}
+                {aDesc && (
+                  <div className="bg-kt-surface-container-low rounded-lg p-3">
+                    <p className="text-xs text-kt-on-surface-variant leading-relaxed line-clamp-3">{aDesc}</p>
+                  </div>
+                )}
+
+                {/* Actions */}
+                <div className="flex items-center justify-between mt-auto pt-2">
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i} className="w-4 h-1 rounded-full bg-kt-primary/30" />
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button className="p-1.5 rounded-lg text-kt-on-surface-variant/50 hover:text-kt-danger hover:bg-kt-danger/10 transition-all">
+                      <X className="w-4 h-4" />
+                    </button>
+                    <button className="px-3 py-1.5 rounded-lg bg-kt-primary text-kt-on-primary text-xs font-bold uppercase tracking-wider active:scale-95 transition-transform">
+                      Approve
+                    </button>
+                  </div>
+                </div>
+              </GlassCard>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // Mobile: Tinder-style single card view
   return (
     <div className="kt-page min-h-full flex flex-col items-center justify-center pb-24 px-4">
       {/* Queue Priority Header */}
