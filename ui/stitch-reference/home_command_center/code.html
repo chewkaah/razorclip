@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Razorclip Command Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-bright": "#373940",
+            "outline": "#918fa0",
+            "surface": "#111319",
+            "tertiary": "#eac400",
+            "on-error-container": "#ffdad6",
+            "on-tertiary-container": "#4c3f00",
+            "primary-fixed": "#e2dfff",
+            "outline-variant": "#464554",
+            "surface-tint": "#c2c1ff",
+            "tertiary-container": "#caa900",
+            "on-secondary-fixed-variant": "#444652",
+            "on-background": "#e2e2eb",
+            "primary": "#c2c1ff",
+            "on-error": "#690005",
+            "surface-container-high": "#282a30",
+            "on-secondary-container": "#b2b4c2",
+            "tertiary-fixed": "#ffe171",
+            "secondary-fixed-dim": "#c4c6d3",
+            "primary-fixed-dim": "#c2c1ff",
+            "background": "#111319",
+            "secondary": "#c4c6d3",
+            "on-tertiary-fixed-variant": "#554600",
+            "surface-container-highest": "#33343b",
+            "on-primary-fixed": "#0c006b",
+            "on-primary-container": "#f4f1ff",
+            "on-primary": "#1800a7",
+            "surface-container-lowest": "#0c0e14",
+            "on-surface-variant": "#c7c4d7",
+            "surface-variant": "#33343b",
+            "secondary-fixed": "#e0e2f0",
+            "inverse-surface": "#e2e2eb",
+            "on-tertiary-fixed": "#221b00",
+            "on-primary-fixed-variant": "#332dbc",
+            "on-surface": "#e2e2eb",
+            "on-tertiary": "#3b2f00",
+            "surface-container-low": "#191b22",
+            "on-secondary-fixed": "#181b25",
+            "error": "#ffb4ab",
+            "primary-container": "#5e5ce6",
+            "surface-container": "#1e1f26",
+            "inverse-on-surface": "#2e3037",
+            "on-secondary": "#2d303b",
+            "tertiary-fixed-dim": "#e9c400",
+            "inverse-primary": "#4d4ad5",
+            "secondary-container": "#444652",
+            "surface-dim": "#111319",
+            "error-container": "#93000a"
+          },
+          fontFamily: {
+            "headline": ["Inter"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #111319;
+      color: #e2e2eb;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .glass-card {
+      background: rgba(26, 29, 39, 0.6);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-24">
+<!-- Shared Component: TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#111319]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_20px_40px_-12px_rgba(194,193,255,0.08)]">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/20 bg-surface-container">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Close up portrait of a professional man with short dark hair and a confident expression in soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMPPSFm8-1khwSuysCNSbiKWYM1q8ZpyQHBK8SRVaVM1gt9rlZ-jneq0C4Ts-xkYaNtbR6pZiVjgI8VhbYc6gvrox-D8RocWkhEkGSdZ-T6wsuUkrc2FwWsTc0Cx67RTqXLqT9aHLJee2uOFG93QOdUFKDU2lX4Rm731asuwh2klhoGtOWV-ebwfg0yi97_x1ugILa11tp22wI1WgnIV1xXqUBrEDg10eLlIp_YICFwxHzDpkyBPA_X_vx7kCB6Te8KcLb2EWdaAg"/>
+</div>
+<span class="text-xl font-thin tracking-tighter text-[#c2c1ff]">Razorclip</span>
+</div>
+<div class="flex items-center bg-white/5 px-3 py-1 rounded-full border border-white/5 scale-98 active:scale-95 duration-200 ease-out transition-colors hover:bg-white/10">
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium text-[#c7c4d7] mr-2">Integral</span>
+<span class="material-symbols-outlined text-[14px] text-[#c2c1ff]">unfold_more</span>
+</div>
+</header>
+<main class="pt-20 px-4 space-y-8">
+<!-- Hero Greeting -->
+<section class="mt-4">
+<h1 class="text-3xl font-light tracking-tight text-on-surface">Morning, <span class="font-bold text-primary">Chuka</span></h1>
+<p class="text-on-surface-variant text-sm mt-1 font-label tracking-wide uppercase">Friday, Oct 24 • Command Center</p>
+</section>
+<!-- Section: Business Pulse (The Kinetic Strip) -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="text-xs font-bold uppercase tracking-[0.1em] text-on-surface-variant">Business Pulse</h2>
+<span class="text-[10px] text-primary/60 font-medium tabular-nums uppercase">Real-time • Weekly</span>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<!-- Active Clients -->
+<div class="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden">
+<div class="absolute -right-2 -top-2 w-12 h-12 bg-emerald-500/10 blur-2xl rounded-full"></div>
+<span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider">Active Clients</span>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-semibold tabular-nums">8</span>
+<span class="text-[10px] text-emerald-400 font-bold">+2</span>
+</div>
+</div>
+<!-- Weekly Revenue -->
+<div class="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden">
+<div class="absolute -right-2 -top-2 w-12 h-12 bg-emerald-500/10 blur-2xl rounded-full"></div>
+<span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider">Weekly Revenue</span>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-semibold tabular-nums">$124k</span>
+<span class="material-symbols-outlined text-emerald-400 text-sm">trending_up</span>
+</div>
+</div>
+<!-- Weekly Burn -->
+<div class="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden">
+<div class="absolute -right-2 -top-2 w-12 h-12 bg-amber-500/10 blur-2xl rounded-full"></div>
+<span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider">Weekly Burn</span>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-semibold tabular-nums">$18.5k</span>
+<span class="text-[10px] text-amber-400 font-bold">STABLE</span>
+</div>
+</div>
+<!-- Net Margin -->
+<div class="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden">
+<div class="absolute -right-2 -top-2 w-12 h-12 bg-primary/10 blur-2xl rounded-full"></div>
+<span class="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider">Net Margin</span>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-semibold tabular-nums">85%</span>
+<span class="material-symbols-outlined text-primary text-sm">auto_awesome</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Active Agents (Horizontal Scroll) -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="text-xs font-bold uppercase tracking-[0.1em] text-on-surface-variant">Syncing Agents</h2>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="text-[10px] font-semibold text-emerald-500">6 ONLINE</span>
+</div>
+</div>
+<div class="flex gap-5 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4">
+<!-- Dante (Purple) -->
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="relative p-1 rounded-full bg-gradient-to-br from-[#8B5CF6] to-[#D8B4FE]">
+<div class="bg-surface rounded-full p-0.5">
+<div class="w-14 h-14 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Abstract 3D crystalline entity with purple light refraction and dark backdrop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLuriebWn3lMiulmrlkNqFjx0n8dj9_QaKveGF1dBdHOvh8fx0WmmBt8zkXk4cOsyan8p-bY3Dqanyk3nJvOJca1B9VZ0bVFRGKoKTtTGq6sYxQoseH0nxiWJxfG3qPBvi1E7Umg3A2mna9pYOvdY1D7CoytZXNqiNCLGc3X5f-j5sezt96Rgb4QKxvP7Mdn_F7PPvzp61ISnPBPfGymWlCUOLGoOC4kiTg3Y0ngTMoKv4yd7dgebhbvTiFwOQuL4eEwcDTlbL88c"/>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-bold tracking-widest text-[#8B5CF6] uppercase">Dante</span>
+</div>
+<!-- Brent (Blue) -->
+<div class="flex flex-col items-center gap-2 shrink-0 opacity-80">
+<div class="relative p-1 rounded-full bg-gradient-to-br from-[#3B82F6] to-[#93C5FD]">
+<div class="bg-surface rounded-full p-0.5">
+<div class="w-14 h-14 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Abstract flowing blue liquid silk texture with soft highlights and deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSn-wk4OwSaDvgNuWaxjHcenXClEf5M4UG7PDZLXY6hy7x5RmSgdZYPcQbT2iqnx1PRYsPTSU1hCmwy-ORAb2h-SCq_rY40-iwuwoTRPQFGCEUlWtX1dgFObzJzbbwrkzXwtdLTdg6yVSVUB6xlIdF-eagI4X9ZWB2t_KJv3ON45sdjUmAs9vHfZmAZhVVCAOxXmZJ-bkmKAqGcfGzSgtq2JZME_f_GU0FdNAyKGLUdvrmgQV5mrlRHNPqXeragLijvTXAbCv24Ns"/>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-bold tracking-widest text-[#3B82F6] uppercase">Brent</span>
+</div>
+<!-- Rex (Green) -->
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="relative p-1 rounded-full bg-gradient-to-br from-[#10B981] to-[#6EE7B7]">
+<div class="bg-surface rounded-full p-0.5">
+<div class="w-14 h-14 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Futuristic architectural render with glowing emerald green lines on a dark metal surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqWoFxgqgZ-jqHqwbJkFS4NgFIUFxz-VASyG4oss9fmTXutlR6_oWQ--qxAPgh5XmyLFOMWfgmnMwiKHWzeJaMWEqlT9DaMkVGU2pj7AR0IkTXyh4qYGaFXh5NnyzTex_w80alC1SdTM9mxqpoa2VpKu67_BiWvxEMkfajuawkFKQlJupExI7_dw56BUFEcqi6SO1KUzfKZut9-fRY1bKzUMXGnnejQ8lMh1t-SwnUcClhPCTlvsHzvYr_GBgEZcbJV1dBR9T3LyA"/>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-bold tracking-widest text-[#10B981] uppercase">Rex</span>
+</div>
+<!-- Scout (Orange) -->
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="relative p-1 rounded-full bg-gradient-to-br from-[#F59E0B] to-[#FCD34D]">
+<div class="bg-surface rounded-full p-0.5">
+<div class="w-14 h-14 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Vibrant orange energy nebula with golden light flares and micro-particulates" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0Oi3HQrfP4mpbcl0gMtTis--FgNpRhPXb_hZnlWypWyHy5N6zTjIWqd1bRIefrswLMU0ZQfqHluP4M_cmvaqzT_uQEeKcj4KCb4xG4KkvGgVmFVDRuI8xOYxlHCUeUoyJ3e_1rWzI_sRFHZj0fyIgz9jY8EstoYelnidJpOFY3Il8ViAVMraeYgUSZesYmqCkmaA2qwmxj3-B-WrdmlwsP95bHaoKcy-Z2WsVllbHXMaCTAFcUVnne5G_ATa5uS1_cOI5voqBXu8"/>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-bold tracking-widest text-[#F59E0B] uppercase">Scout</span>
+</div>
+<!-- Nova (Pink) -->
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="relative p-1 rounded-full bg-gradient-to-br from-[#EC4899] to-[#FBCFE8]">
+<div class="bg-surface rounded-full p-0.5">
+<div class="w-14 h-14 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Soft pink and peach ethereal clouds in a dark void with subtle grain texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUhpMshB7axOeeuDWZC2ou7GUMGNpOiX6xwLXGz_TH-_OdQuk7FVVbk2RNN0sHpN0NUF-_0otbib8mx11D4GPgWEtYN_ZZw2q0O7TFCfITO7OcgyFvThVTKgiFU1P1zmW2Z-O2DSNjORtTv1Xg61kxN4IY-IEqIDGTtn80sCejetfrRmteYKqCw48x1D7EFE3Cu-IzcZbvXRzsjxD4dCUFs4yxdMDafQLOa8DNbw8S0PpQyC0E9jz5Nn0bdbAIOHW5jWXeRVwHDyQ"/>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-bold tracking-widest text-[#EC4899] uppercase">Nova</span>
+</div>
+<!-- Victor (Gold) -->
+<div class="flex flex-col items-center gap-2 shrink-0">
+<div class="relative p-1 rounded-full bg-gradient-to-br from-[#EAB308] to-[#FEF08A]">
+<div class="bg-surface rounded-full p-0.5">
+<div class="w-14 h-14 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Macro photo of golden liquid mercury with high contrast specular highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLeuwv6RmW-13TCLqBuzw5VecVR0ARie2zo7YqTR3QpR1I7qXATINWXMwp0FnszEqD0Y0rc16aFwBz7YbNzxtBBWyOpJPCq3q4qX0EnYRqcyxcDxLSVgh3jCP2Y1VllUkfv1a_rpSoLXm32Xv_-a8L2IQHzLvYkgbBrs6RbR90qd3bR6MNN_FG6QbMrW1RvJSqxn3GTdruof8JvDw9_kXOxiwWQ4v62f9lZbBSfGMbGoP2L_sghW6QSbk6xGGGlvdMK3jwmfirZhA"/>
+</div>
+</div>
+</div>
+<span class="text-[10px] font-bold tracking-widest text-[#EAB308] uppercase">Victor</span>
+</div>
+</div>
+</section>
+<!-- Section: Live Activity Feed -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="text-xs font-bold uppercase tracking-[0.1em] text-on-surface-variant">Live Activity</h2>
+<span class="material-symbols-outlined text-primary text-lg">reorder</span>
+</div>
+<div class="space-y-3">
+<!-- Dante Activity -->
+<div class="glass-card rounded-2xl p-4 border border-white/5 flex items-start gap-4 transition-all hover:bg-white/10">
+<div class="w-10 h-10 rounded-full bg-[#8B5CF6]/20 flex items-center justify-center shrink-0 border border-[#8B5CF6]/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Small abstract purple light avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdPcgXocqw3w_TtLwdYc1kUwLdFErfvQyq4o0lxepSnwEXMSFzzmiY173A1WiFCTbC4XYNExa6V18fk3HAF-y6W4Mdg2gm0Fr7Ds6RFtxL9lIY-ANNFwvdOtxKYbS5Tr2Tte9zof7hRyCpJtnAsRRbN56TPhPz1tnc83ciq-fDcrTx_VRgu-LbJ8G9ptQRC86SZtmzQ16YWgPX-wnO3dZbLgX7DFXiAbjPFCh4kolPmyLOza3CdVgd8J293jh0RVgvG91CLWTwemU"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<p class="text-[13px] text-on-surface leading-snug">
+<span class="font-bold text-[#8B5CF6]">Dante:</span> Generated DMP for Drake
+              </p>
+<span class="text-[10px] text-on-surface-variant font-medium tabular-nums ml-2">2m ago</span>
+</div>
+<div class="mt-2 flex gap-2">
+<span class="px-2 py-0.5 rounded-full bg-white/5 border border-white/5 text-[9px] font-bold text-on-surface-variant uppercase tracking-tighter">FINANCE-V3</span>
+</div>
+</div>
+</div>
+<!-- Rex Activity -->
+<div class="glass-card rounded-2xl p-4 border border-white/5 flex items-start gap-4 transition-all hover:bg-white/10">
+<div class="w-10 h-10 rounded-full bg-[#10B981]/20 flex items-center justify-center shrink-0 border border-[#10B981]/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Small abstract green light avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8pAnY_Zi31D15-CZjPfssJLwonoB-5J5TdfVqrxyqYubWIEGw5IJmyCgkjh6E0PwTqjpD4WGuk1Bx6V53QVdQZUDETyAc2y_B3XwaOlEXx_vHbtMHcmV0tKkUOjhu-_dBXhmWT-_fmtb0SVT5wsUQEneKcQMz3rGmDa7fQzVH6_mKse2NzwpRuCVcpt9q7FN_yRqC0Rjl6KgXUSIdSUVBr5mnsnDixahqqQVce4V2nRXyAx9btUqtyw4qiMpp2DFJfG6l27QSL4E"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<p class="text-[13px] text-on-surface leading-snug">
+<span class="font-bold text-[#10B981]">Rex:</span> Optimized ad-spend for Nike Campaign
+              </p>
+<span class="text-[10px] text-on-surface-variant font-medium tabular-nums ml-2">14m ago</span>
+</div>
+<div class="mt-2 flex gap-2">
+<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-bold text-emerald-400 uppercase tracking-tighter">SUCCESS</span>
+</div>
+</div>
+</div>
+<!-- Brent Activity -->
+<div class="glass-card rounded-2xl p-4 border border-white/5 flex items-start gap-4 transition-all hover:bg-white/10">
+<div class="w-10 h-10 rounded-full bg-[#3B82F6]/20 flex items-center justify-center shrink-0 border border-[#3B82F6]/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Small abstract blue light avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjHKmHXy1nwD9KGUyZIMVoL4gWySFXXeIRFZQWXFX-M88rCC9uoWPs5pijVUVIB7dwyIUIFHrZmpurrgkKy-57BLCjDe5ff2MLymxZFK-F3bt3bBLwYKDewu5SFgrkI5IJRuMZZ0IfdznxMvBEykOCR_LVb3ZVqXngkvqs7gHGyDUR5QqnnSIA1SQZY1kti_uH3BzMAhwIZvhj3z04wjKTmlufX4dZH820hE3tBxPXPOs6TcLl0bQ2VizIuCfGEZcxuuQ2GoKGJsA"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<p class="text-[13px] text-on-surface leading-snug">
+<span class="font-bold text-[#3B82F6]">Brent:</span> Ingested 42 new leads from Intercom
+              </p>
+<span class="text-[10px] text-on-surface-variant font-medium tabular-nums ml-2">41m ago</span>
+</div>
+</div>
+</div>
+<!-- Nova Activity -->
+<div class="glass-card rounded-2xl p-4 border border-white/5 flex items-start gap-4 transition-all hover:bg-white/10">
+<div class="w-10 h-10 rounded-full bg-[#EC4899]/20 flex items-center justify-center shrink-0 border border-[#EC4899]/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Small abstract pink light avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEAWwfvIaBehf79tmD-gDjroQNpGrhLd4ORuklAVVHHuGxuRjmu3FZpZt0STmFC549rFg58d_1sUuNHUUhkyip08wZMiYpCnMD2bP3odDm6nP9N5JKDw9ljdhnVGN6u1Qs4IZiOeSlO4MSSYPS0cnwPvG_fgFStSMU2O6lWOcjEOuiFd-FNs1zAqmGDeIIGsOH6QuiNYNy3-RZu5NyTgS9xKNo92TKPuiGHrlpLvcpwQpL-GuLiizyBo7f7YeZLIPto1s8izzet-k"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<p class="text-[13px] text-on-surface leading-snug">
+<span class="font-bold text-[#EC4899]">Nova:</span> Scheduled 5 executive reviews
+              </p>
+<span class="text-[10px] text-on-surface-variant font-medium tabular-nums ml-2">1h ago</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Shared Component: BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#111319]/90 backdrop-blur-2xl rounded-t-3xl">
+<a class="flex flex-col items-center justify-center text-[#c2c1ff] bg-[#c2c1ff]/10 rounded-xl px-3 py-1 transition-all spring-stiffness-400" href="#">
+<span class="material-symbols-outlined mb-0.5">home</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all" href="#">
+<span class="material-symbols-outlined mb-0.5">chat_bubble</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Chat</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all" href="#">
+<span class="material-symbols-outlined mb-0.5">smart_toy</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Agents</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all" href="#">
+<span class="material-symbols-outlined mb-0.5">monitor_heart</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Health</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all" href="#">
+<span class="material-symbols-outlined mb-0.5">more_horiz</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">More</span>
+</a>
+</nav>
+<!-- FAB Trigger (Contextual for Home) -->
+<button class="fixed bottom-24 right-6 w-14 h-14 rounded-full bg-primary text-on-primary shadow-[0_10px_25px_-5px_rgba(194,193,255,0.4)] flex items-center justify-center active:scale-90 transition-transform z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</body></html>

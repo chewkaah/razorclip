@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#373940",
+              "outline": "#918fa0",
+              "surface": "#111319",
+              "tertiary": "#eac400",
+              "on-error-container": "#ffdad6",
+              "on-tertiary-container": "#4c3f00",
+              "primary-fixed": "#e2dfff",
+              "outline-variant": "#464554",
+              "surface-tint": "#c2c1ff",
+              "tertiary-container": "#caa900",
+              "on-secondary-fixed-variant": "#444652",
+              "on-background": "#e2e2eb",
+              "primary": "#c2c1ff",
+              "on-error": "#690005",
+              "surface-container-high": "#282a30",
+              "on-secondary-container": "#b2b4c2",
+              "tertiary-fixed": "#ffe171",
+              "secondary-fixed-dim": "#c4c6d3",
+              "primary-fixed-dim": "#c2c1ff",
+              "background": "#111319",
+              "secondary": "#c4c6d3",
+              "on-tertiary-fixed-variant": "#554600",
+              "surface-container-highest": "#33343b",
+              "on-primary-fixed": "#0c006b",
+              "on-primary-container": "#f4f1ff",
+              "on-primary": "#1800a7",
+              "surface-container-lowest": "#0c0e14",
+              "on-surface-variant": "#c7c4d7",
+              "surface-variant": "#33343b",
+              "secondary-fixed": "#e0e2f0",
+              "inverse-surface": "#e2e2eb",
+              "on-tertiary-fixed": "#221b00",
+              "on-primary-fixed-variant": "#332dbc",
+              "on-surface": "#e2e2eb",
+              "on-tertiary": "#3b2f00",
+              "surface-container-low": "#191b22",
+              "on-secondary-fixed": "#181b25",
+              "error": "#ffb4ab",
+              "primary-container": "#5e5ce6",
+              "surface-container": "#1e1f26",
+              "inverse-on-surface": "#2e3037",
+              "on-secondary": "#2d303b",
+              "tertiary-fixed-dim": "#e9c400",
+              "inverse-primary": "#4d4ad5",
+              "secondary-container": "#444652",
+              "surface-dim": "#111319",
+              "error-container": "#93000a"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-dante-gradient {
+            background: linear-gradient(135deg, rgba(94, 92, 230, 0.4) 0%, rgba(139, 92, 246, 0.1) 100%);
+        }
+        .glass-panel {
+            background: rgba(51, 52, 59, 0.6);
+            backdrop-filter: blur(24px);
+        }
+        .text-glow-primary {
+            text-shadow: 0 0 15px rgba(194, 193, 255, 0.4);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 selection:text-primary min-h-screen pb-32">
+<!-- Top Navigation Anchor -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#111319]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_20px_40px_-12px_rgba(194,193,255,0.08)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="arrow_back">arrow_back</span>
+<span class="text-xl font-thin tracking-tighter text-[#c2c1ff]">Razorclip</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant/20 flex items-center justify-center overflow-hidden">
+<img alt="User profile" data-alt="close up headshot of a stylish professional user with neutral lighting and minimalist background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpQBR0Tiy4TEBJ6TUydbA3e8AD0Y0wQ9G7LASDlX8uH99_ILEYdC1sEObC3APG6x39FT9pu7BETwoBzyL9pEhF0IgIvbzDjd9QUEfA8VMHYfO3DEaig2br32md-9S5Q7OaTc6fe_EagKFjFVaIQjS_LkzcGFcy4b9-bFW3aam3j7WVdxNM9qZpnp1jEAMNAJ3t9N253crtLsfz9cy4qq2UBc8XOVvuJ5RxYujDnWT01EmQd_l7DSO9e6kpGP3dOguYlGGC7OX0XQo"/>
+</div>
+</div>
+</nav>
+<!-- Full-Bleed Hero Section -->
+<section class="relative pt-24 pb-12 px-6 overflow-hidden">
+<!-- Ambient Background Glow -->
+<div class="absolute top-0 left-0 w-full h-full bg-dante-gradient -z-10"></div>
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-container/20 rounded-full blur-[100px]"></div>
+<div class="flex flex-col items-start gap-6">
+<!-- Large Dante Avatar -->
+<div class="relative">
+<div class="w-32 h-32 rounded-3xl overflow-hidden ring-1 ring-primary/20 shadow-2xl">
+<img alt="Dante Avatar" class="w-full h-full object-cover" data-alt="artistic digital portrait of a sophisticated AI agent persona with purple neon highlights and sleek metallic textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8OwW78lCr5jrBoOd2MqvE_3LE6ogc0tdAfMt5InaxEtZPh7IjuhquUxcEsXgocXqiBuP9F29cHGixLCbvYe6vdh8kA12aEhm8dCbEqp_q428HnqWWl-YCpduwL7cyd0gowYw_KzQuxqWRRoGABoum6kRsiLAP13SuKO2GbCfsuiB4cPA086grx8LuD2a0MzEi3JtbF4ASO37akRv0atAyryZyNl5xP4huD_g5xBVmawnp8VWcQg6aTHBcXssn_G8RUFFSUeqs88Y"/>
+</div>
+<!-- Status Pip -->
+<div class="absolute -bottom-2 -right-2 bg-surface p-1 rounded-full border border-outline-variant/10">
+<div class="w-4 h-4 rounded-full bg-[#8B5CF6] animate-pulse"></div>
+</div>
+</div>
+<div class="space-y-1">
+<h1 class="text-4xl font-headline font-extrabold tracking-tight text-white text-glow-primary">Dante</h1>
+<p class="text-primary font-medium tracking-wide text-sm">Music Campaign Strategist</p>
+<p class="text-on-surface-variant text-sm mt-3 leading-relaxed max-w-[85%]">"I orchestrate viral music campaigns with surgical precision."</p>
+</div>
+<!-- Status Card -->
+<div class="w-full glass-panel rounded-2xl p-4 flex items-center gap-4 border border-outline-variant/10">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="data_exploration">data_exploration</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Active Status</span>
+<span class="text-sm font-medium text-white">Generating DMP for Drake</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats & Revenue Bento Row -->
+<section class="px-6 grid grid-cols-2 gap-3 mt-4">
+<div class="bg-surface-container-low p-4 rounded-2xl flex flex-col justify-between min-h-[100px]">
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Weekly Tasks</span>
+<span class="text-3xl font-headline font-light tabular-nums text-white">124</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-2xl flex flex-col justify-between min-h-[100px]">
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Avg. Time</span>
+<span class="text-3xl font-headline font-light tabular-nums text-white">4.2<span class="text-sm ml-1 text-on-surface-variant">m</span></span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-2xl flex flex-col justify-between min-h-[100px]">
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Weekly Cost</span>
+<span class="text-3xl font-headline font-light tabular-nums text-white">$1.2<span class="text-sm ml-1 text-on-surface-variant">k</span></span>
+</div>
+<div class="bg-primary/5 border border-primary/10 p-4 rounded-2xl flex flex-col justify-between min-h-[100px]">
+<span class="text-[10px] uppercase tracking-wider text-primary font-bold">Pipeline Value</span>
+<span class="text-3xl font-headline font-bold tabular-nums text-primary text-glow-primary">$1.2M</span>
+</div>
+</section>
+<!-- Current Work Expandable -->
+<section class="px-6 mt-8">
+<h3 class="text-xs uppercase tracking-[0.2em] font-bold text-on-surface-variant mb-4">Current Workload</h3>
+<div class="glass-panel border border-outline-variant/10 rounded-2xl overflow-hidden">
+<div class="p-4 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="terminal">terminal</span>
+<span class="text-sm font-medium text-white">DMP_Analysis_V4.sh</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="expand_more">expand_more</span>
+</div>
+<div class="bg-surface-container-lowest p-4 font-mono text-[11px] leading-relaxed text-[#8B5CF6]/80 h-32 overflow-hidden border-t border-outline-variant/5">
+<div class="flex gap-2"><span class="text-on-surface-variant opacity-30">09:12:04</span><span>INIT_STREAM: Spotify_API_Fetch...</span></div>
+<div class="flex gap-2"><span class="text-on-surface-variant opacity-30">09:12:05</span><span>PARSING: User_Engagement_Metrics_Q3</span></div>
+<div class="flex gap-2"><span class="text-on-surface-variant opacity-30">09:12:06</span><span>CALC: Viral_Coefficient_Target (1.84)</span></div>
+<div class="flex gap-2"><span class="text-on-surface-variant opacity-30">09:12:07</span><span>OPTIMIZING: DSP_Placement_Logic...</span></div>
+<div class="flex gap-2"><span class="text-on-surface-variant opacity-30">09:12:08</span><span>RUNNING: Neural_Ad_Predictor_Active</span></div>
+</div>
+</div>
+</section>
+<!-- Recent Completions -->
+<section class="mt-8">
+<div class="px-6 flex justify-between items-center mb-4">
+<h3 class="text-xs uppercase tracking-[0.2em] font-bold text-on-surface-variant">Recent Completions</h3>
+<span class="text-[10px] font-bold text-primary">View All</span>
+</div>
+<div class="flex gap-4 overflow-x-auto px-6 pb-4 no-scrollbar">
+<!-- Completion Card 1 -->
+<div class="min-w-[280px] bg-surface-container-low rounded-2xl p-5 space-y-3">
+<div class="flex justify-between items-start">
+<div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-green-400 text-lg" data-icon="check_circle">check_circle</span>
+</div>
+<span class="text-[10px] tabular-nums text-on-surface-variant">2h ago</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-white">Hyper-Local Radio Buy</h4>
+<p class="text-xs text-on-surface-variant mt-1 leading-tight">Optimized 14 markets for "Certified Lover Boy" anniversary push.</p>
+</div>
+<div class="pt-2 border-t border-outline-variant/10 flex justify-between items-center">
+<span class="text-[10px] text-primary-container font-semibold">+18% ROAS</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="open_in_new">open_in_new</span>
+</div>
+</div>
+<!-- Completion Card 2 -->
+<div class="min-w-[280px] bg-surface-container-low rounded-2xl p-5 space-y-3">
+<div class="flex justify-between items-start">
+<div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-400 text-lg" data-icon="check_circle">check_circle</span>
+</div>
+<span class="text-[10px] tabular-nums text-on-surface-variant">5h ago</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-white">TikTok Sound Audit</h4>
+<p class="text-xs text-on-surface-variant mt-1 leading-tight">Identified 3 trending patterns in Latin America demographic.</p>
+</div>
+<div class="pt-2 border-t border-outline-variant/10 flex justify-between items-center">
+<span class="text-[10px] text-primary-container font-semibold">New Trend Lock</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="open_in_new">open_in_new</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Skills -->
+<section class="px-6 mt-8">
+<h3 class="text-xs uppercase tracking-[0.2em] font-bold text-on-surface-variant mb-4">Expertise</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-4 py-2 rounded-full bg-surface-container-high border border-outline-variant/10 text-[10px] font-bold uppercase tracking-wider text-on-surface">Strategy</span>
+<span class="px-4 py-2 rounded-full bg-surface-container-high border border-outline-variant/10 text-[10px] font-bold uppercase tracking-wider text-on-surface">Analytics</span>
+<span class="px-4 py-2 rounded-full bg-surface-container-high border border-outline-variant/10 text-[10px] font-bold uppercase tracking-wider text-on-surface">DSP Optimization</span>
+<span class="px-4 py-2 rounded-full bg-surface-container-high border border-outline-variant/10 text-[10px] font-bold uppercase tracking-wider text-on-surface">Viral Engine</span>
+</div>
+</section>
+<!-- Floating CTA -->
+<div class="fixed bottom-28 left-0 w-full px-6 z-40">
+<button class="w-full bg-primary text-on-primary py-5 rounded-full font-bold shadow-[0_20px_40px_-12px_rgba(194,193,255,0.3)] flex items-center justify-center gap-3 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+            Chat with Dante
+        </button>
+</div>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#111319]/90 backdrop-blur-2xl rounded-t-3xl tonal-shift">
+<div class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Chat</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#c2c1ff] bg-[#c2c1ff]/10 rounded-xl px-3 py-1 transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="smart_toy">smart_toy</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Agents</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="monitor_heart">monitor_heart</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">Health</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all">
+<span class="material-symbols-outlined mb-1" data-icon="more_horiz">more_horiz</span>
+<span class="font-['Inter'] text-[10px] uppercase tracking-[0.05em] font-medium">More</span>
+</div>
+</nav>
+</body></html>

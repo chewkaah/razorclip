@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RAZORCLIP | Agent Grid</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#1e1f26",
+              "on-background": "#e2e2eb",
+              "inverse-primary": "#4d4ad5",
+              "on-secondary-fixed": "#181b25",
+              "on-primary-fixed-variant": "#332dbc",
+              "error": "#ffb4ab",
+              "surface-container-lowest": "#0c0e14",
+              "tertiary-container": "#caa900",
+              "on-primary": "#1800a7",
+              "surface-variant": "#33343b",
+              "primary": "#c2c1ff",
+              "on-primary-fixed": "#0c006b",
+              "secondary-fixed-dim": "#c4c6d3",
+              "tertiary-fixed-dim": "#e9c400",
+              "on-secondary-container": "#b2b4c2",
+              "inverse-surface": "#e2e2eb",
+              "on-error-container": "#ffdad6",
+              "surface-tint": "#c2c1ff",
+              "secondary": "#c4c6d3",
+              "on-tertiary-fixed-variant": "#554600",
+              "tertiary-fixed": "#ffe171",
+              "outline-variant": "#464554",
+              "outline": "#918fa0",
+              "surface-container-low": "#191b22",
+              "on-surface-variant": "#c7c4d7",
+              "surface-dim": "#111319",
+              "surface-container-high": "#282a30",
+              "primary-fixed-dim": "#c2c1ff",
+              "on-tertiary-fixed": "#221b00",
+              "on-tertiary-container": "#4c3f00",
+              "tertiary": "#eac400",
+              "on-secondary": "#2d303b",
+              "on-error": "#690005",
+              "background": "#111319",
+              "secondary-fixed": "#e0e2f0",
+              "on-tertiary": "#3b2f00",
+              "on-secondary-fixed-variant": "#444652",
+              "primary-fixed": "#e2dfff",
+              "error-container": "#93000a",
+              "on-primary-container": "#f4f1ff",
+              "on-surface": "#e2e2eb",
+              "surface-bright": "#373940",
+              "surface": "#111319",
+              "secondary-container": "#444652",
+              "primary-container": "#5e5ce6",
+              "surface-container-highest": "#33343b",
+              "inverse-on-surface": "#2e3037"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .agent-card-glass {
+            background: rgba(51, 52, 59, 0.4);
+            backdrop-filter: blur(24px);
+        }
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+        .sparkline-gradient {
+            background: linear-gradient(90deg, transparent 0%, currentColor 50%, transparent 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30 min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-[#111319]/80 backdrop-blur-xl border-b border-[#c2c1ff]/15 shadow-[0_20px_40px_-12px_rgba(194,193,255,0.08)] fixed top-0 w-full z-50 flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#c2c1ff]" data-icon="terminal">terminal</span>
+<h1 class="font-['Inter'] text-xl font-thin tracking-[0.2em] text-[#c2c1ff]">RAZORCLIP</h1>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a tech professional in a dark studio setting with soft purple rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3GdJGoAUDmb-x0QjSfndNsdzhx4KZw7-QTiD1rwy4RjrvRUJldVGmpVrAIl-wVeHZoWkHMBsgjU6TciCZGRn-GODR5c4XA2jh7lVHWMsSZhMHwAatzqwZgtY8HINYKeMHB0nbsiNs6rPxTIOtASw7RVy7oVZClFfmzw8GQ_HBmYaTftgg6oqUweTd1dskOAE5APooAA7d7srM7xIHt5dhi46zDRGOp9DWk5Ezjv6SJe24vXCo7dVvcaGB3kU7lvCLOt9BkA1fwxY"/>
+</div>
+</header>
+<main class="pt-24 px-4 max-w-md mx-auto">
+<!-- Dashboard Header -->
+<div class="mb-8 flex justify-between items-end">
+<div>
+<p class="font-label text-xs tracking-[0.05em] text-on-surface-variant uppercase mb-1">Active Cluster</p>
+<h2 class="font-headline text-2xl font-light tracking-tight">Agent Grid</h2>
+</div>
+<div class="text-right">
+<p class="font-label text-[10px] tabular-nums text-primary">6 ONLINE</p>
+<p class="font-label text-[10px] tabular-nums text-on-surface-variant">0 ERRORS</p>
+</div>
+</div>
+<!-- 2x3 Agent Grid -->
+<div class="grid grid-cols-2 gap-4">
+<!-- Dante (Purple) -->
+<div class="agent-card-glass p-4 rounded-xl border border-white/5 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/5 to-transparent"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<div class="relative">
+<div class="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-[#8B5CF6] to-[#D8B4FE]">
+<img class="w-full h-full rounded-full object-cover" data-alt="Abstract digital artwork representing an AI entity with glowing purple architectural lines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5ei4I8kQE39MOTudfp-bApf-R201hpqrCr2aoZlF33MiWFsrgN5o7F6FSphDobyAHRrIWmh5EqpWYyg1pVk12vzjcFSs-2pdxxR9o2XA8oPPtceZIMbS5lN3Qg0cuOOiLXumjZdcyYVZLCH3DJmLgtaBphcAGd9NvN_0CK1Ih766auSGSJEv1klfnCDpW9ebccbDEBA73Bl-LK5W0hIgh0BucJPOR3mwJJVnMUNZX1tuakbFVKTqR4Fm1uKavW87H5Tel_1LcwHQ"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-[#8B5CF6] rounded-full border-2 border-surface-container-lowest animate-pulse"></div>
+</div>
+<span class="bg-[#8B5CF6]/20 text-[#D8B4FE] text-[10px] font-label px-2 py-0.5 rounded-full">3</span>
+</div>
+<h3 class="font-label text-sm text-on-surface font-bold tracking-tight">Dante</h3>
+<p class="font-label text-[9px] text-on-surface-variant uppercase mb-3">Logic Architect</p>
+<p class="text-[11px] text-on-surface-variant leading-tight truncate mb-4">Analyzing recursive neural patterns...</p>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-[#8B5CF6] to-[#D8B4FE] w-[65%]"></div>
+</div>
+</div>
+</div>
+<!-- Brent (Blue) -->
+<div class="agent-card-glass p-4 rounded-xl border border-white/5 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-[#3B82F6]/5 to-transparent"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<div class="relative">
+<div class="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-[#3B82F6] to-[#93C5FD]">
+<img class="w-full h-full rounded-full object-cover" data-alt="Fluid deep blue digital waves with microscopic light particles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWiREOojyZAYnTbj07K3R7hCOX2RZfgnah5IFouiWGj4b4qoGLLdyEtsEb7RqUsQKvJzFaNKfKbo57trQE-lRIaH_7wMQQ9Xhil9zUie916fLuMZV-yKKo0WqijBP0PTC4zJB9LpKmW-nWHRNYVP10sBC2eaZy1UbL1YPImo9ELlXel_m8S6_nRXWtT9nRWY8uPQciiBavI04YP4i-bCV8ji67t9CQmdcGy9uhgaRaRMoN00jTrKaxgMvjmXMd-cmAnlkt0sZo6hY"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-[#3B82F6] rounded-full border-2 border-surface-container-lowest"></div>
+</div>
+</div>
+<h3 class="font-label text-sm text-on-surface font-bold tracking-tight">Brent</h3>
+<p class="font-label text-[9px] text-on-surface-variant uppercase mb-3">Data Streamer</p>
+<p class="text-[11px] text-on-surface-variant leading-tight mb-4 italic">Idle</p>
+<div class="h-[1px] bg-on-surface-variant/20 w-full mb-4"></div>
+</div>
+</div>
+<!-- Rex (Green) -->
+<div class="agent-card-glass p-4 rounded-xl border border-white/5 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-[#10B981]/5 to-transparent"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<div class="relative">
+<div class="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-[#10B981] to-[#6EE7B7]">
+<img class="w-full h-full rounded-full object-cover" data-alt="Emerald green crystal-like structures glowing in a dark void" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu6Tp_2C2sGVg882cIgiqo2lpgttN0ySZD-K_SfF-Na7xdkoYYXKj0q6WagiiebS8P6doRPkXxz7ZVmN3bNfdvVS5lrLLrJpdBe0oOAWRNfJYFeSlSK4PQbfv0Pj6yGb-1mvmV37zy9oQtFb7guBkDVtpMh8XkgTha2rJdfevQMNyc2LABziPmLRNjCHfNrUxgU_vXI-CNaBG1uBpSas9u8_MZ-3_QiK2V5g9HrjEFBwM8zt-P_sX4xu8YNLykmeAAAs8DyzHKiBc"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-[#10B981] rounded-full border-2 border-surface-container-lowest animate-pulse"></div>
+</div>
+<span class="bg-[#10B981]/20 text-[#6EE7B7] text-[10px] font-label px-2 py-0.5 rounded-full">1</span>
+</div>
+<h3 class="font-label text-sm text-on-surface font-bold tracking-tight">Rex</h3>
+<p class="font-label text-[9px] text-on-surface-variant uppercase mb-3">Health Monitor</p>
+<p class="text-[11px] text-on-surface-variant leading-tight truncate mb-4">Syncing vital telemetry...</p>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-[#10B981] to-[#6EE7B7] w-[92%]"></div>
+</div>
+</div>
+</div>
+<!-- Scout (Orange) -->
+<div class="agent-card-glass p-4 rounded-xl border border-white/5 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-[#F59E0B]/5 to-transparent"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<div class="relative">
+<div class="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-[#F59E0B] to-[#FCD34D]">
+<img class="w-full h-full rounded-full object-cover" data-alt="Golden light flares and geometric shapes on a pitch black background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCS6yXtYbrzRyUBlyr8mHGoJ60p47k4MP1L3cPpnnTdLhuVIo-U0XugKWjTjxhRmWBqd7UvXT25qWEvz4gkcuACwayAteY7Lfd6-V9frDIGnq55DcX6Pvi-hLma4UpHYJpy1s-Z-QOQlt_dlHw46WNKtC_8KfJG-zWijUVd61gHF0Rk-sl7Ip9Edm1WS_P5pyyLBDFi-j4tk11pskuu7PFKhVBgV08Kwbu8M74KkaGUpbcQujYApxIZI7rTsrwrkjUHcW3bgHPmp34"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-error rounded-full border-2 border-surface-container-lowest"></div>
+</div>
+</div>
+<h3 class="font-label text-sm text-on-surface font-bold tracking-tight">Scout</h3>
+<p class="font-label text-[9px] text-on-surface-variant uppercase mb-3">Web Crawler</p>
+<p class="text-[11px] text-error leading-tight mb-4">Connection Timed Out</p>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-error w-[15%] opacity-40"></div>
+</div>
+</div>
+</div>
+<!-- Nova (Pink) -->
+<div class="agent-card-glass p-4 rounded-xl border border-white/5 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-[#EC4899]/5 to-transparent"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<div class="relative">
+<div class="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-[#EC4899] to-[#FBCFE8]">
+<img class="w-full h-full rounded-full object-cover" data-alt="Soft pink and magenta ethereal nebula clouds" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5bgeRRktZ1Q1YF_qJiRyfIwLZ07bU9hXCdS_Y92pE8wfCz9DXqTuzsvAJmBE64bkQjkRM1jsFHcInskS8h7YjAlhmRF4F4cNOtujihmeltaDaLO_7Q2zjACQ89OJ-B3gahXESW3LAuhQc1pID3ZOWYHSX6SkEA2ZVdWtXurNKduSZ25byZzYILGfAHF6PF6GtOZNBsick3UH4HqhnHWjeXVXEU_VqUsjMYCuM5QRGSQt16VSzq5miaH6LjkGBUYTjaowC2N8RA_A"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-[#EC4899] rounded-full border-2 border-surface-container-lowest animate-pulse"></div>
+</div>
+<span class="bg-[#EC4899]/20 text-[#FBCFE8] text-[10px] font-label px-2 py-0.5 rounded-full">12</span>
+</div>
+<h3 class="font-label text-sm text-on-surface font-bold tracking-tight">Nova</h3>
+<p class="font-label text-[9px] text-on-surface-variant uppercase mb-3">Creative Lead</p>
+<p class="text-[11px] text-on-surface-variant leading-tight truncate mb-4">Generating UI variants...</p>
+<div class="h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-[#EC4899] to-[#FBCFE8] w-[40%]"></div>
+</div>
+</div>
+</div>
+<!-- Victor (Gold) -->
+<div class="agent-card-glass p-4 rounded-xl border border-white/5 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-[#EAB308]/5 to-transparent"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<div class="relative">
+<div class="w-12 h-12 rounded-full p-0.5 bg-gradient-to-tr from-[#EAB308] to-[#FEF08A]">
+<img class="w-full h-full rounded-full object-cover" data-alt="Textured gold and amber organic forms with dramatic contrast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3KL0ce9SGPRL0QL-V2cdrpe8MiAz2UjZ6qtazQDq9iseTCyjUb8IpSst4Lf4n_Oxn_MkiQhtNUPT-00AT0jHGDne2m1g7BJ6fAObLQvayWBIbp8YbWlVVuUB8nvjug_8viQGR4GDp-Nc-g7D1knF2FcuStp5XUEhXVjwc6zXYRd-zeT66qyDUy-236hD4p9TL7qae5YIRnJkMA40_UFbaFefFXkxaCzKoYyY8FpyPddEPq9lwqN6Rswv5Y3JBvr5gWekjKDB_6QA"/>
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-[#EAB308] rounded-full border-2 border-surface-container-lowest"></div>
+</div>
+</div>
+<h3 class="font-label text-sm text-on-surface font-bold tracking-tight">Victor</h3>
+<p class="font-label text-[9px] text-on-surface-variant uppercase mb-3">Security Ops</p>
+<p class="text-[11px] text-on-surface-variant leading-tight mb-4 italic">Idle</p>
+<div class="h-[1px] bg-on-surface-variant/20 w-full mb-4"></div>
+</div>
+</div>
+</div>
+<!-- System Stats Footer -->
+<div class="mt-8 pt-6 border-t border-outline-variant/15">
+<div class="flex justify-between items-center mb-4">
+<span class="font-label text-[10px] tracking-widest text-on-surface-variant uppercase">Core Utilization</span>
+<span class="font-label text-[10px] tabular-nums text-primary">42.8%</span>
+</div>
+<div class="grid grid-cols-6 gap-1 h-8 items-end">
+<div class="bg-primary/20 h-3 rounded-sm"></div>
+<div class="bg-primary/40 h-5 rounded-sm"></div>
+<div class="bg-primary h-8 rounded-sm"></div>
+<div class="bg-primary/60 h-6 rounded-sm"></div>
+<div class="bg-primary/30 h-4 rounded-sm"></div>
+<div class="bg-primary/50 h-7 rounded-sm"></div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="bg-[#111319]/90 backdrop-blur-2xl border-t border-[#c2c1ff]/10 fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-2">
+<a class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home_max">home_max</span>
+<span class="font-['Inter'] text-[10px] tracking-[0.05em] font-medium uppercase">HOME</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-['Inter'] text-[10px] tracking-[0.05em] font-medium uppercase">CHAT</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c2c1ff] bg-[#c2c1ff]/10 rounded-xl px-4 py-1 active:scale-90 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="smart_toy">smart_toy</span>
+<span class="font-['Inter'] text-[10px] tracking-[0.05em] font-medium uppercase">AGENTS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="monitor_heart">monitor_heart</span>
+<span class="font-['Inter'] text-[10px] tracking-[0.05em] font-medium uppercase">HEALTH</span>
+</a>
+</nav>
+</body></html>

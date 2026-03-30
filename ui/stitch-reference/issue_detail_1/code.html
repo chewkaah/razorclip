@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Issue Detail | Kinetic Terminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-container": "#b2b4c2",
+              "inverse-primary": "#4d4ad5",
+              "surface-container": "#1e1f26",
+              "on-primary": "#1800a7",
+              "secondary-container": "#444652",
+              "on-error": "#690005",
+              "tertiary-fixed": "#ffe171",
+              "surface-container-low": "#191b22",
+              "on-secondary-fixed": "#181b25",
+              "surface-tint": "#c2c1ff",
+              "on-secondary-fixed-variant": "#444652",
+              "on-primary-fixed": "#0c006b",
+              "tertiary-fixed-dim": "#e9c400",
+              "tertiary-container": "#caa900",
+              "surface-bright": "#373940",
+              "primary-container": "#5e5ce6",
+              "surface-container-high": "#282a30",
+              "outline-variant": "#464554",
+              "on-primary-container": "#f4f1ff",
+              "background": "#111319",
+              "error-container": "#93000a",
+              "on-tertiary-fixed": "#221b00",
+              "primary-fixed": "#e2dfff",
+              "on-background": "#e2e2eb",
+              "on-secondary": "#2d303b",
+              "on-surface-variant": "#c7c4d7",
+              "tertiary": "#eac400",
+              "on-primary-fixed-variant": "#332dbc",
+              "surface-dim": "#111319",
+              "surface-container-lowest": "#0c0e14",
+              "on-tertiary": "#3b2f00",
+              "primary-fixed-dim": "#c2c1ff",
+              "outline": "#918fa0",
+              "on-tertiary-fixed-variant": "#554600",
+              "surface-variant": "#33343b",
+              "secondary": "#c4c6d3",
+              "error": "#ffb4ab",
+              "on-tertiary-container": "#4c3f00",
+              "secondary-fixed-dim": "#c4c6d3",
+              "surface-container-highest": "#33343b",
+              "inverse-surface": "#e2e2eb",
+              "on-surface": "#e2e2eb",
+              "secondary-fixed": "#e0e2f0",
+              "on-error-container": "#ffdad6",
+              "inverse-on-surface": "#2e3037",
+              "surface": "#111319",
+              "primary": "#c2c1ff"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"],
+              "mono": ["JetBrains Mono"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-panel {
+        background: rgba(51, 52, 59, 0.6);
+        backdrop-filter: blur(24px);
+      }
+      .terminal-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .terminal-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .terminal-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(194, 193, 255, 0.2);
+        border-radius: 10px;
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30 min-h-screen overflow-hidden">
+<!-- Top AppBar (from JSON) -->
+<header class="fixed top-0 w-full z-50 border-b border-[#c2c1ff]/15 bg-[#111319]/80 backdrop-blur-2xl flex justify-between items-center px-6 h-16 w-full shadow-[0_20px_40px_-12px_rgba(194,193,255,0.08)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#c2c1ff]">terminal</span>
+<h1 class="text-lg font-black tracking-[-0.05em] text-[#c2c1ff]">KINETIC_TERMINAL</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex gap-6 mr-6">
+<span class="font-['Inter'] tabular-nums tracking-tighter uppercase text-xs font-bold text-[#c7c4d7] hover:bg-[#c2c1ff]/10 transition-colors cursor-pointer px-2 py-1">AGENTS</span>
+<span class="font-['Inter'] tabular-nums tracking-tighter uppercase text-xs font-bold text-[#c2c1ff] hover:bg-[#c2c1ff]/10 transition-colors cursor-pointer px-2 py-1">ISSUES</span>
+<span class="font-['Inter'] tabular-nums tracking-tighter uppercase text-xs font-bold text-[#c7c4d7] hover:bg-[#c2c1ff]/10 transition-colors cursor-pointer px-2 py-1">TERMINAL</span>
+<span class="font-['Inter'] tabular-nums tracking-tighter uppercase text-xs font-bold text-[#c7c4d7] hover:bg-[#c2c1ff]/10 transition-colors cursor-pointer px-2 py-1">SYSTEM</span>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-primary/20 bg-surface-container-highest">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="professional portrait of a tech professional with clean lighting and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDA2onpWICYuzMlaJetacElMUJ9kAuDmDLz7VQBv7gMvMZHo_jKYCD_0tsWrue41WvcpkkskoIwKNBqdXXlNMuAw8A5cFA5piX7hC0P03cKpcl4GgGfeVw6P34jacldpfrKx5SrAxT0QmjYKQ0tScTTdQa44i7wGnvthXkQZ1Rit9pKxdjGftrsLk5Rvj05zmGLPzkMlTJeEwwkr0aes8CHChJt1jQBVrOrcJuW9Hp0Bka-ojR15ZCULQG8ZlJUGfnCP-9efrerBb8"/>
+</div>
+</div>
+</header>
+<!-- Main Content Background (Mocking the list behind the sheet) -->
+<main class="pt-20 px-6 max-w-7xl mx-auto opacity-20 pointer-events-none select-none">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="h-64 bg-surface-container rounded-xl"></div>
+<div class="h-64 bg-surface-container rounded-xl"></div>
+<div class="h-64 bg-surface-container rounded-xl"></div>
+</div>
+</main>
+<!-- Slide-up Sheet Overlay -->
+<div class="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm">
+<div class="w-full max-w-5xl h-[813px] glass-panel border-t border-x border-primary/10 rounded-t-[2rem] shadow-2xl flex flex-col overflow-hidden relative">
+<!-- Sheet Drag Handle / Header -->
+<div class="flex justify-center pt-4 pb-2 shrink-0">
+<div class="w-12 h-1.5 bg-on-surface-variant/20 rounded-full"></div>
+</div>
+<div class="flex-1 overflow-y-auto terminal-scrollbar px-6 md:px-12 pb-32">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-6 py-8">
+<div class="space-y-4 max-w-2xl">
+<div class="flex flex-wrap items-center gap-3">
+<span class="px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-[10px] font-bold tracking-widest font-label">ISSUE #KT-882</span>
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-highest text-tertiary rounded-full text-[10px] font-bold tracking-widest font-label">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                                IN-PROGRESS
+                            </div>
+<div class="flex items-center gap-1.5 px-3 py-1 bg-error-container/20 text-error border border-error/20 rounded-full text-[10px] font-bold tracking-widest font-label">
+<span class="material-symbols-outlined text-[14px]">priority_high</span>
+                                CRITICAL
+                            </div>
+</div>
+<h2 class="text-3xl md:text-5xl font-black tracking-tight text-on-surface leading-tight">Sync engine latency spikes in production_us_east_1</h2>
+<div class="flex items-center gap-6 pt-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-[#8B5CF6] p-0.5">
+<img alt="Agent Dante" class="w-full h-full rounded-full bg-surface" data-alt="vibrant 3d rendered avatar of a robotic entity with purple glowing neon accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPMfhj4N2A3r6IRNXlJ8SNol60SboHePwfMqYqcgUaTkyG81uUzieGi879jyDs3aHxt58-_z3Qj0u0pfCyLmQktNgv5izZNzXfQRSrM-2FGaUsJxfGc1UNCQrGXlnfteXkbh3NgrmNEurFZEhlKvhOU73xaoSmoDUUhJpXKSOjVBQJezvEDb1B5V9jLFPMyjnsV2UuAj0HnKYJGYfBCvvDOF9vPgneron__DmXcUu93y_SwQNcIx2HpW-p3lYyEOQIcYySF1psoYg"/>
+</div>
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">ASSIGNED AGENT</p>
+<p class="text-sm font-semibold text-primary">Dante.ai</p>
+</div>
+</div>
+<div class="h-8 w-px bg-outline-variant/30"></div>
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">CLIENT TAG</p>
+<p class="text-sm font-semibold text-on-surface">GlobalLink_Systems</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-3 md:w-48">
+<button class="w-full bg-primary text-on-primary h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_8px_20px_-4px_rgba(194,193,255,0.4)]">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+                            Approve
+                        </button>
+<button class="w-full bg-surface-variant/40 border border-outline-variant/20 text-on-surface h-12 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-surface-variant/60 transition-all">
+<span class="material-symbols-outlined text-[20px]">forum</span>
+                            Comment
+                        </button>
+</div>
+</div>
+<!-- Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-4">
+<!-- Left Column: Description & Thread -->
+<div class="lg:col-span-7 space-y-12">
+<section>
+<h3 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                Description
+                            </h3>
+<div class="prose prose-invert max-w-none text-on-surface-variant leading-relaxed space-y-4 text-sm md:text-base">
+<p>Automated telemetry has detected a sustained <strong class="text-on-surface">420ms increase</strong> in P99 latency across the primary sync engine. Initial heuristics point to a memory leak in the buffer serialization module.</p>
+<ul class="list-disc pl-5 space-y-2 marker:text-primary">
+<li>Impacted region: <code class="bg-surface-container-high px-1.5 py-0.5 rounded text-primary">us-east-1</code></li>
+<li>Throughput degraded by 12%</li>
+<li>Auto-scaling is failing to compensate due to cold-start overhead</li>
+</ul>
+<p>Dante is currently performing a heap-dump analysis and attempting to isolate the rogue process.</p>
+</div>
+</section>
+<section class="space-y-6">
+<h3 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                                Thread History
+                            </h3>
+<!-- Comment 1 -->
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full border border-primary/20 bg-surface-container overflow-hidden shrink-0">
+<img alt="Human Admin" class="w-full h-full object-cover" data-alt="close up of a professional digital interface designer with modern glasses and minimal style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbrvvsF2Dg-H-d--5yplPqjN4aeUrqNbWu2p33rtCaOvN83yGVDAMB2nDhrJ7eVU7mIy2Sb6PUOuQpssCqht5kdyJqhSsNuAqs3kw8gVcPwlFlBkJrAZnWW-zYlY1U0t0oIxH6bBW0xaR_yRHUa0HA18GE8OYCBLd0f6elsFnz8Gc26WwROIOO9s0tDm374i6kpgnhU4gvJEajueDPO2t7cNjwRf9vzxvFehXsYLoifjFCxRlMZLUz6ch2zbFM17dULy9qGKuVqsU"/>
+</div>
+<div class="flex-1 bg-surface-container-low p-5 rounded-2xl rounded-tl-none border border-outline-variant/10">
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-bold text-on-surface">Admin (You)</span>
+<span class="text-[10px] tabular-nums text-on-surface-variant">14:02:11</span>
+</div>
+<p class="text-sm text-on-surface-variant">Dante, prioritize the heap-dump. We need to know if this is a leak or just extreme GC pressure.</p>
+</div>
+</div>
+<!-- Comment 2 -->
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full border border-[#8B5CF6] bg-surface-container overflow-hidden shrink-0">
+<img alt="Dante.ai" class="w-full h-full object-cover" data-alt="robotic head with purple glowing core and metallic finish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2rwIRF-ddNCiaGpJ9XOKOISgS8nGVxpGpYYdYaTKV7vwMx3_zAGiVItGl4PdX0R5SPomTa-Q9PiFsxz9BTmMAwVjTDFs3NCdZFZfd7TNhKXfuUWYYrQHGIXMTTyC4Km2b8zN61mRxIWUaByzTK2rLWAEdgxRJNf8Zjq2wuvND6_-RuKpQcwtyRtYNoMyxpKRulSLVGVO0HJZL8B21fXU6YpMp0AGkJHVFN2Pg3b9ztMzcLCT6GvxUFuFEN6hPYuMY3TR98LGFqcA"/>
+</div>
+<div class="flex-1 bg-surface-container-low p-5 rounded-2xl rounded-tl-none border border-outline-variant/10 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#8B5CF6] to-[#D8B4FE]"></div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-sm font-bold text-[#c2c1ff]">Dante.ai</span>
+<span class="text-[10px] tabular-nums text-on-surface-variant">14:02:45</span>
+</div>
+<p class="text-sm text-on-surface-variant">Analysis complete. Isolated to <code class="text-[#c2c1ff]">buffer_manager.rs:412</code>. A circular reference is preventing the ARC from dropping segments. Requesting permission to hot-patch.</p>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Live Run Output -->
+<div class="lg:col-span-5">
+<div class="sticky top-0">
+<h3 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-6 flex items-center justify-between">
+<span class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-[#8B5CF6] rounded-full animate-pulse"></span>
+                                    Live Run Output
+                                </span>
+<span class="text-[10px] text-on-surface-variant font-mono">DANTE_PROCESS_772</span>
+</h3>
+<div class="bg-surface-container-lowest border border-outline-variant/20 rounded-2xl overflow-hidden shadow-inner">
+<!-- Terminal Header -->
+<div class="bg-surface-container-high px-4 py-2 flex items-center justify-between border-b border-outline-variant/10">
+<div class="flex gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-error/40"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-tertiary/40"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary/40"></div>
+</div>
+<span class="text-[10px] font-mono text-on-surface-variant/60 tracking-tighter">bash — node_cluster_01</span>
+</div>
+<!-- Terminal Body -->
+<div class="p-5 font-mono text-[12px] leading-relaxed h-[400px] overflow-y-auto terminal-scrollbar bg-[#0c0e14]">
+<p class="text-on-surface-variant/50 mb-1">KT-CLI v2.4.1 starting diagnostics...</p>
+<p class="text-[#c2c1ff] mb-1">[14:05:01] <span class="text-white">INFO:</span> Scanning memory clusters [A..F]</p>
+<p class="text-[#c2c1ff] mb-1">[14:05:03] <span class="text-white">INFO:</span> Buffer overflow threshold exceeded at 0x7FF01</p>
+<p class="text-error/80 mb-1">[14:05:04] <span class="text-error font-bold">WARN:</span> GC iteration #2 failed to reclaim 124MB</p>
+<p class="text-[#c2c1ff] mb-1">[14:05:10] <span class="text-white">INFO:</span> Tracing pointers in buffer_manager...</p>
+<p class="text-tertiary mb-1">&gt;&gt; Found cyclic dependency: Node(45) -&gt; Node(88) -&gt; Node(45)</p>
+<p class="text-[#c2c1ff] mb-1">[14:05:12] <span class="text-white">INFO:</span> Generating patch diff kt_patch_772.diff</p>
+<p class="text-on-surface-variant/50 animate-pulse mt-2">_</p>
+</div>
+</div>
+<div class="mt-8 space-y-4">
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">CONTEXTUAL ACTIONS</p>
+<div class="grid grid-cols-2 gap-3">
+<button class="bg-surface-container-high border border-outline-variant/20 p-4 rounded-xl flex flex-col items-center gap-2 hover:bg-surface-variant/40 transition-all text-on-surface">
+<span class="material-symbols-outlined">person_add</span>
+<span class="text-[10px] font-bold">Reassign</span>
+</button>
+<button class="bg-surface-container-high border border-outline-variant/20 p-4 rounded-xl flex flex-col items-center gap-2 hover:bg-surface-variant/40 transition-all text-error">
+<span class="material-symbols-outlined">cancel</span>
+<span class="text-[10px] font-bold">Close Issue</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer / Action Floating Bar -->
+<div class="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-lg px-6">
+<div class="glass-panel border border-primary/20 rounded-2xl p-4 flex items-center gap-4 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)]">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">attachment</span>
+</div>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-sm placeholder:text-on-surface-variant/40" placeholder="Type a message or command..." type="text"/>
+<button class="w-10 h-10 rounded-lg bg-primary text-on-primary flex items-center justify-center hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Navigation (from JSON) -->
+<nav class="fixed bottom-0 w-full z-50 pb-safe bg-[#111319]/90 backdrop-blur-3xl border-t border-[#c2c1ff]/10 flex justify-around items-center h-20 px-4 w-full md:hidden">
+<div class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all cursor-pointer">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-[0.05em] uppercase mt-1">AGENTS</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#c2c1ff] drop-shadow-[0_0_8px_rgba(194,193,255,0.5)] cursor-pointer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-[0.05em] uppercase mt-1">ISSUES</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all cursor-pointer">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-[0.05em] uppercase mt-1">TERMINAL</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#c7c4d7]/50 hover:text-[#c2c1ff] transition-all cursor-pointer">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-[0.05em] uppercase mt-1">SYSTEM</span>
+</div>
+</nav>
+</body></html>

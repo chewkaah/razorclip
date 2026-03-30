@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(194, 193, 255, 0.1);
+            border-radius: 10px;
+        }
+        body {
+            background-color: #111319;
+            color: #e2e2eb;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed-dim": "#c2c1ff",
+                        "on-tertiary-fixed": "#221b00",
+                        "tertiary": "#eac400",
+                        "outline": "#918fa0",
+                        "surface-tint": "#c2c1ff",
+                        "surface-container-high": "#282a30",
+                        "outline-variant": "#464554",
+                        "surface-variant": "#33343b",
+                        "surface-dim": "#111319",
+                        "on-primary-fixed-variant": "#332dbc",
+                        "surface": "#111319",
+                        "on-tertiary-container": "#4c3f00",
+                        "on-secondary-container": "#b2b4c2",
+                        "on-surface": "#e2e2eb",
+                        "on-error": "#690005",
+                        "on-secondary-fixed-variant": "#444652",
+                        "surface-container-highest": "#33343b",
+                        "on-tertiary": "#3b2f00",
+                        "secondary-fixed": "#e0e2f0",
+                        "on-background": "#e2e2eb",
+                        "secondary": "#c4c6d3",
+                        "tertiary-container": "#caa900",
+                        "on-secondary-fixed": "#181b25",
+                        "surface-bright": "#373940",
+                        "on-primary": "#1800a7",
+                        "primary": "#c2c1ff",
+                        "surface-container": "#1e1f26",
+                        "on-secondary": "#2d303b",
+                        "inverse-on-surface": "#2e3037",
+                        "background": "#111319",
+                        "on-primary-container": "#f4f1ff",
+                        "on-error-container": "#ffdad6",
+                        "error-container": "#93000a",
+                        "tertiary-fixed-dim": "#e9c400",
+                        "tertiary-fixed": "#ffe171",
+                        "primary-fixed": "#e2dfff",
+                        "on-primary-fixed": "#0c006b",
+                        "inverse-surface": "#e2e2eb",
+                        "error": "#ffb4ab",
+                        "surface-container-low": "#191b22",
+                        "secondary-container": "#444652",
+                        "surface-container-lowest": "#0c0e14",
+                        "on-surface-variant": "#c7c4d7",
+                        "inverse-primary": "#4d4ad5",
+                        "primary-container": "#5e5ce6",
+                        "secondary-fixed-dim": "#c4c6d3",
+                        "on-tertiary-fixed-variant": "#554600"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased overflow-hidden flex flex-col h-screen">
+<!-- Top App Bar -->
+<header class="bg-[#111319]/80 backdrop-blur-xl border-b border-[#c2c1ff]/15 fixed top-0 w-full z-50 flex items-center justify-between px-4 h-16 shadow-[0_20px_40px_-12px_rgba(194,193,255,0.08)]">
+<div class="flex items-center gap-3">
+<button class="text-[#c2c1ff] hover:bg-[#c2c1ff]/10 transition-colors active:scale-95 duration-200 ease-out p-1 rounded-full">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-[#c2c1ff] font-['Inter'] tracking-tight font-semibold tabular-nums">Ticket #4021</h1>
+</div>
+<button class="text-[#c2c1ff] hover:bg-[#c2c1ff]/10 transition-colors active:scale-95 duration-200 ease-out p-1 rounded-full">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</header>
+<main class="flex-1 overflow-y-auto custom-scrollbar pt-20 pb-24 px-4 space-y-6">
+<!-- Ticket Context Card -->
+<section class="bg-surface-container-low rounded-xl p-4 border border-outline-variant/10 shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] uppercase tracking-widest font-bold text-primary opacity-80">ACTIVE INCIDENT</span>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></div>
+<span class="text-[10px] uppercase font-bold text-on-surface-variant">In Progress</span>
+</div>
+</div>
+<h2 class="text-lg font-bold tracking-tight text-on-surface mb-3 leading-tight">Syncing Neural Core v2.1</h2>
+<div class="flex items-center gap-3">
+<div class="flex -space-x-2">
+<img class="w-6 h-6 rounded-full border-2 border-surface" data-alt="close-up avatar of dante ai agent with purple aesthetic glow and digital facial features" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW8QPS4vgoUyD1ZvQ0u4uH2x2S5CxFw2xu669FAQCG5iuSteuB7wN_SCswFmbQkj2ssJJRRe8IfvN8xwhu3QPbnNTeBShkwy8Hg90ivTzH0XQu8XjfZfJ6CbQYxYTSXo6BCuE4fG2zPMqK7yBa6hzePATkNVDQ_cw-5AqNqngjIZ3js40VJ2vhhFrkr_JgwG18BGi-Usi_YWvwCCJNgEp45jT0kS5Fc8XlF8gew0fZRjf5TIKgNg2z82e5O2nHj5Qab_LcviVTwSo"/>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-primary-container flex items-center justify-center text-[10px] font-bold text-on-primary">JD</div>
+</div>
+<div class="text-[11px] text-on-surface-variant flex gap-2 tabular-nums">
+<span>Assigned: <span class="text-primary">Dante</span></span>
+<span class="opacity-30">|</span>
+<span>Updated 4m ago</span>
+</div>
+</div>
+</section>
+<!-- Comment Feed -->
+<div class="space-y-6">
+<!-- AI Agent Comment: Dante -->
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full flex-shrink-0 border border-primary/20 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="digital avatar profile of dante agent with purple neon accents on dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlq2KKCG4j6L6rJPZYRPnkE6o6YF6X4J_4s5rI7CTKERp6LlnzRsu4-u_EzSxhOFrgWY6x0wje7E1FlYvW4V01cuxxWsMiv6wAXWBnjCs0vv8fLe6BOG7g-5wWwnJbfmf0XPbT0c3hFsTeR6oq2tUe_fVj1Yu_jhs9CbqqukVtcBNLBTGwHObHQjcY0o4XjvVbxapsv_m1FyScS6aBoqlMorBEsgUOOpSjEymVlamndpB8DS9WFBLUgOOdKNaC9Mx5MVmYw07BW9k"/>
+</div>
+<div class="flex-1 space-y-2">
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-on-surface uppercase tracking-wider">Dante</span>
+<span class="text-[10px] text-on-surface-variant/60 tabular-nums">10:42 AM</span>
+<div class="px-2 py-0.5 rounded-full bg-[#8B5CF6]/10 border border-[#8B5CF6]/20">
+<span class="text-[9px] font-bold text-[#D8B4FE] uppercase tracking-tighter">AGENT</span>
+</div>
+</div>
+<div class="bg-surface-container-high/60 backdrop-blur-md rounded-xl p-3 border-l-4 border-[#8B5CF6]">
+<p class="text-sm leading-relaxed text-on-surface-variant">
+                            Initial telemetry shows a 14% drift in the <span class="text-primary font-mono bg-primary/5 px-1 rounded">Neural Core</span> calibration. Initiating a sub-routine re-sync. Requesting approval for temporary throttle on Node 4.
+                        </p>
+</div>
+</div>
+</div>
+<!-- System Action Card -->
+<div class="mx-4">
+<div class="bg-surface-container-highest/40 border border-outline-variant/10 rounded-xl p-3 flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-[#8B5CF6]/10 flex items-center justify-center text-[#D8B4FE]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="flex-1">
+<p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">System Action</p>
+<p class="text-sm text-on-surface leading-tight">Dante requested approval for plan update</p>
+</div>
+<button class="bg-primary text-on-primary px-3 py-1.5 rounded-lg text-xs font-bold active:scale-95 transition-transform">
+                        Review
+                    </button>
+</div>
+</div>
+<!-- AI Agent Comment: Brent -->
+<div class="flex gap-3 ml-4">
+<div class="w-8 h-8 rounded-full flex-shrink-0 border border-secondary/20 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="digital avatar of brent agent with cool blue futuristic aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTCKytkqTYdsHhvyoI_wdeJ2oXMWlAyHuT5QSv4sENKKB9IgZXmNyNoBTqDNbDwQ-ujAxmlYFURNHw4CQ-LLYaCONWhJFiHc-sIlwp7I3h5ljZDqA5Ri0lNTzDCnGQWBjgUjwWpRpcQpcxdcKGN3PxHSAxKeXx0eW9Rvr0yLUOFixE-OkjHW5GmDB_xk80HgAwVjmKzyelosC5_xbX2OTkeS4CIJhYBN36bB2AuvsPVYGqZ1hGaFw8T3yufQN-7SnF9T6ZNlBRjeI"/>
+</div>
+<div class="flex-1 space-y-2">
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-on-surface uppercase tracking-wider">Brent</span>
+<span class="text-[10px] text-on-surface-variant/60 tabular-nums">10:45 AM</span>
+<div class="px-2 py-0.5 rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/20">
+<span class="text-[9px] font-bold text-[#93C5FD] uppercase tracking-tighter">SYSTEMS</span>
+</div>
+</div>
+<div class="bg-surface-container-high/60 backdrop-blur-md rounded-xl p-3 border-l-4 border-[#3B82F6]">
+<p class="text-sm leading-relaxed text-on-surface-variant">
+                            Node 4 capacity is currently at 88%. Throttling now might cause a cascading latency spike in the <span class="underline decoration-[#3B82F6]/40 underline-offset-4">Query Layer</span>. 
+                        </p>
+</div>
+</div>
+</div>
+<!-- User Comment -->
+<div class="flex flex-row-reverse gap-3">
+<div class="w-8 h-8 rounded-full flex-shrink-0 bg-primary-container flex items-center justify-center text-[11px] font-black text-on-primary">
+                    ME
+                </div>
+<div class="flex-1 space-y-2 text-right">
+<div class="flex items-center gap-2 justify-end">
+<span class="text-[10px] text-on-surface-variant/60 tabular-nums">10:48 AM</span>
+<span class="text-sm font-bold text-primary uppercase tracking-wider">Jordan D.</span>
+</div>
+<div class="bg-primary/10 backdrop-blur-md rounded-xl p-3 border border-primary/20 inline-block text-left max-w-[85%]">
+<p class="text-sm leading-relaxed text-primary-fixed-dim">
+                            Understood. @Brent can we reroute traffic through Node 7 temporarily while @Dante runs the sync?
+                        </p>
+</div>
+</div>
+</div>
+<!-- Threaded Reply from AI -->
+<div class="flex gap-3 ml-8 border-l border-outline-variant/20 pl-4">
+<div class="w-7 h-7 rounded-full flex-shrink-0 border border-primary/20 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="dante agent avatar small version" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWhHE7qLwA8ViQLjTVvNJQHBGZvIauMUNRhO77PpqoerFu63DztugMGFqDnPLQ-IbvyZ-95ZOXzRxyyvsA42Gnph4oGNHW_RUzjZH3rZFe_SnSdUurIS1yJx8jlyz3IIqWifZkoFl_c65Yu44d06fap-RIheA3e6HLbZ9fm8fxTuPQ8BcYs9bTJ1xsji7KgkJlcrhK9MWUI9LwpdW3VInCVa14tEeGqn3JgTa01fsHC1IBYkRFs97zHmFiD2kAOHkQoXsAHImghDE"/>
+</div>
+<div class="flex-1 space-y-2">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-on-surface uppercase tracking-wider">Dante</span>
+<span class="text-[10px] text-on-surface-variant/60 tabular-nums">Just now</span>
+</div>
+<div class="bg-surface-container-high/60 backdrop-blur-md rounded-xl p-3 border-l-4 border-[#8B5CF6]">
+<p class="text-sm leading-relaxed text-on-surface-variant italic">
+                            Analyzing Node 7 capacity... 62% available. Feasible. Initiating reroute now.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Chat Input Area -->
+<div class="fixed bottom-0 left-0 w-full bg-[#111319]/90 backdrop-blur-2xl border-t border-outline-variant/10 p-4 pb-8">
+<div class="max-w-screen-md mx-auto relative">
+<!-- Command Hints (Visible on focus usually, but here for UI design) -->
+<div class="absolute -top-12 left-0 flex gap-2 overflow-x-auto pb-2 scrollbar-hide no-scrollbar">
+<div class="bg-surface-container-highest px-3 py-1 rounded-full border border-primary/20 flex items-center gap-2">
+<span class="text-primary font-bold text-xs">/</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Summarize</span>
+</div>
+<div class="bg-surface-container-highest px-3 py-1 rounded-full border border-primary/20 flex items-center gap-2">
+<span class="text-primary font-bold text-xs">@</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Dante</span>
+</div>
+<div class="bg-surface-container-highest px-3 py-1 rounded-full border border-primary/20 flex items-center gap-2">
+<span class="text-primary font-bold text-xs">@</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Brent</span>
+</div>
+</div>
+<!-- Actual Input Field -->
+<div class="bg-surface-container-high rounded-2xl flex items-center px-4 py-2 border border-outline-variant/20 focus-within:border-primary/40 focus-within:shadow-[0_0_20px_rgba(194,193,255,0.1)] transition-all">
+<button class="text-on-surface-variant/60 hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+</button>
+<input class="bg-transparent border-none focus:ring-0 text-sm flex-1 text-on-surface placeholder:text-on-surface-variant/40 py-2 px-3" placeholder="Type @ to mention, / for commands..." type="text"/>
+<div class="flex items-center gap-3">
+<button class="text-on-surface-variant/60 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">alternate_email</span>
+</button>
+<button class="bg-primary text-on-primary w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-transform shadow-[0_4px_12px_rgba(194,193,255,0.3)]">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Hidden Navigation Shell Logic (Suppressed per task context of focused journey) -->
+</body></html>
