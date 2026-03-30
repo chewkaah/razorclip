@@ -7,3 +7,6 @@ export { AgentChip, AGENT_REGISTRY, type AgentSlug } from "./AgentChip";
 export { AgentAvatar } from "./AgentAvatar";
 export { MetricPill } from "./MetricPill";
 export { SectionHeader } from "./SectionHeader";
+export { MessageBubble } from "./MessageBubble";
+export { SystemActionCard } from "./SystemActionCard";
+export { LiveExecutionLog } from "./LiveExecutionLog";
