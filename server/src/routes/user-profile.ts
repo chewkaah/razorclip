@@ -1,5 +1,7 @@
 import { Router } from "express";
+import { eq } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
+import { authUsers } from "@paperclipai/db";
 import { assertBoard } from "./authz.js";
 import { userProfileService } from "../services/user-profile.js";
 
@@ -18,7 +20,9 @@ export function userProfileRoutes(db: Db) {
       res.status(401).json({ error: "Not authenticated" });
       return;
     }
-    const profile = await svc.getOrCreate(userId);
+    // Look up user name for auto-populating new profiles
+    const [user] = await db.select({ name: authUsers.name }).from(authUsers).where(eq(authUsers.id, userId)).limit(1);
+    const profile = await svc.getOrCreate(userId, user?.name);
     res.json(profile);
   });
 

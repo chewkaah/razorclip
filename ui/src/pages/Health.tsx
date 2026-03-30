@@ -11,8 +11,7 @@ import { biApi } from "../api/bi";
 export function Health() {
   const { setBreadcrumbs } = useBreadcrumbs();
   const { selectedCompanyId } = useCompany();
-  const { profile } = useUserProfile();
-  const userName = profile?.displayName || "there";
+  const { displayName: userName } = useUserProfile();
   useEffect(() => { setBreadcrumbs([{ label: "Business Health" }]); }, [setBreadcrumbs]);
 
   const { data: pulse, isLoading: pulseLoading } = useQuery({

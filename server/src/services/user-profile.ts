@@ -21,7 +21,7 @@ export function userProfileService(db: Db) {
   /**
    * Get profile for a user — creates a default one if it doesn't exist (upsert on read).
    */
-  async function getOrCreate(userId: string) {
+  async function getOrCreate(userId: string, userName?: string | null) {
     const existing = await db
       .select()
       .from(userProfiles)
@@ -40,7 +40,7 @@ export function userProfileService(db: Db) {
         id,
         userId,
         contextMd: "",
-        displayName: null,
+        displayName: userName?.split(" ")[0] ?? null, // Use first name from auth
         avatarUrl: null,
         timezone: null,
         preferences: {
