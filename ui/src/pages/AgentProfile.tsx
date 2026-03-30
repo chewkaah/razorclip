@@ -148,10 +148,9 @@ export function AgentProfile() {
             </div>
           </div>
           <div className="p-8">
-            <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Revenue Attribution</p>
+            <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Status</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-4xl font-extralight tracking-tight tabular-nums">$1.2M</span>
-              <span className="text-[10px] text-[--rc-primary]">ROI 314%</span>
+              <span className="text-4xl font-extralight tracking-tight capitalize">{agentData.status}</span>
             </div>
           </div>
         </div>
@@ -169,19 +168,15 @@ export function AgentProfile() {
             </div>
           </div>
           <div className="flex-1 bg-[--rc-surface-container-lowest] border border-[--rc-outline-variant]/10 rounded-xl p-6 font-mono text-[11px] leading-relaxed overflow-y-auto no-scrollbar shadow-inner">
-            <p className="mb-1" style={{ color: accentColor }}>[SYSTEM]: Initializing {name}.Core.v4.2.1...</p>
-            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:41:22 - Connecting to API services...</p>
-            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:41:23 - Authenticated. Node-ID: {name.toUpperCase()}_01</p>
-            <p className="text-[--rc-primary] mb-1">09:41:25 - Analyzing current task queue...</p>
-            <p className="text-[--rc-primary] mb-1">09:41:28 - Processing active workload</p>
-            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:41:32 - Fetching latest data...</p>
-            <p className="mb-1" style={{ color: accentColor }}>09:41:35 - Optimization complete</p>
-            <p className="text-[#eac400] mb-1">09:42:01 - WARNING: Threshold check triggered</p>
-            <p className="text-[--rc-primary] mb-1">09:42:03 - Adjusting parameters</p>
-            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:42:08 - Re-streaming buffer...</p>
-            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:42:15 - Sync pulse sent to [Victor_Agent_Primary]</p>
-            <p className="text-[--rc-primary]/80 mb-1">09:42:44 - SUCCESS: Alignment verified. 98.4% match.</p>
-            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:43:01 - Awaiting next directive...</p>
+            <p className="text-[--rc-on-surface-variant]/40 mb-1">[{new Date().toLocaleTimeString("en-US", { hour12: false })}] Agent {name} - Status: {agentData.status}</p>
+            <p className="text-[--rc-on-surface-variant]/40 mb-1">Adapter: {agentData.adapterType} | Model: {agentData.model || "default"}</p>
+            <p className="text-[--rc-on-surface-variant]/40 mb-1">Total runs: {totalRuns} | Last active: {agentData.lastHeartbeatAt ? new Date(agentData.lastHeartbeatAt).toLocaleString() : "never"}</p>
+            {recentRuns.length > 0 && recentRuns.slice(0, 3).map((run: any) => (
+              <p key={run.id} className={run.status === "completed" ? "text-emerald-400/70 mb-1" : "text-[#ffb4ab]/70 mb-1"}>
+                [{new Date(run.completedAt || run.createdAt).toLocaleTimeString("en-US", { hour12: false })}] Run {run.id.slice(0, 8)} — {run.status}
+              </p>
+            ))}
+            <p className="text-[--rc-on-surface-variant]/30 mb-1">Awaiting next directive...</p>
             <div className="flex items-center gap-2 animate-pulse mt-2" style={{ color: accentColor }}>
               <span>_</span>
             </div>

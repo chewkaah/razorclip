@@ -56,7 +56,7 @@ export function ApprovalQueue() {
         <div className="flex gap-4">
           <div className="glass-card px-4 py-2 rounded-xl flex items-center gap-3">
             <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant]">Est. Burn</span>
-            <span className="tabular-nums font-bold text-[--rc-primary]">$412.08</span>
+            <span className="tabular-nums font-bold text-[--rc-primary]">—</span>
           </div>
           <div className="glass-card px-4 py-2 rounded-xl flex items-center gap-3">
             <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant]">Queue Depth</span>

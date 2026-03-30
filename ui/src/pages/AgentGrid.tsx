@@ -291,31 +291,31 @@ export function AgentGrid() {
         })}
       </div>
 
-      {/* Footer Stats Banner — pixel-perfect from Stitch */}
+      {/* Footer Stats Banner — LIVE data */}
       <div className="mt-16 glass-card rounded-2xl p-8 border border-[--rc-outline-variant]/10 flex flex-wrap gap-12 items-center justify-between">
         <div className="flex gap-12">
           <div>
             <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] opacity-60 block mb-2">
-              Total Processing
+              Total Agents
             </span>
             <div className="text-2xl font-light tabular-nums">
-              1.42 <span className="text-sm text-[--rc-primary] opacity-70">PetaFLOPS</span>
+              {sorted.length}
             </div>
           </div>
           <div>
             <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] opacity-60 block mb-2">
-              Avg Latency
+              Online
             </span>
             <div className="text-2xl font-light tabular-nums">
-              12.4 <span className="text-sm text-[--rc-primary] opacity-70">ms</span>
+              {onlineCount} <span className="text-sm text-emerald-400 opacity-70">active</span>
             </div>
           </div>
           <div>
             <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] opacity-60 block mb-2">
-              Fleet Uptime
+              Error Rate
             </span>
             <div className="text-2xl font-light tabular-nums">
-              99.998 <span className="text-sm text-[--rc-primary] opacity-70">%</span>
+              {sorted.length > 0 ? Math.round((sorted.filter(a => a.status === "error").length / sorted.length) * 100) : 0} <span className="text-sm text-[--rc-on-surface-variant] opacity-70">%</span>
             </div>
           </div>
         </div>
