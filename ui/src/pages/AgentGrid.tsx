@@ -89,7 +89,7 @@ export function AgentGrid() {
   }
 
   return (
-    <div className="kt-page min-h-full pb-4 space-y-6 max-w-3xl mx-auto">
+    <div className="kt-page min-h-full pb-4 space-y-6 max-w-5xl mx-auto">
       {/* Header */}
       <section className="space-y-3">
         <div className="flex items-end justify-between">
@@ -156,15 +156,32 @@ export function AgentGrid() {
         </div>
       )}
 
-      {/* Cluster Utilization */}
+      {/* Footer Metrics Bar (desktop) */}
       {sorted.length > 0 && (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          <span className="text-[10px] uppercase tracking-wider text-kt-on-surface-variant/50">
-            Core Utilization
-          </span>
-          <span className="text-sm font-bold tabular-nums text-kt-on-surface-variant">
-            {onlineCount > 0 ? Math.round((onlineCount / sorted.length) * 100) : 0}%
-          </span>
+        <div className="glass-card rounded-2xl border border-white/5 p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex items-center gap-6 md:gap-10">
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-kt-on-surface-variant/50">Total Agents</p>
+              <p className="text-lg font-bold tabular-nums text-kt-on-surface">{sorted.length}</p>
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-kt-on-surface-variant/50">Core Utilization</p>
+              <p className="text-lg font-bold tabular-nums text-kt-on-surface">
+                {onlineCount > 0 ? Math.round((onlineCount / sorted.length) * 100) : 0}
+                <span className="text-sm text-kt-on-surface-variant/50">%</span>
+              </p>
+            </div>
+            <div className="hidden md:block">
+              <p className="text-[10px] uppercase tracking-wider text-kt-on-surface-variant/50">Error Rate</p>
+              <p className="text-lg font-bold tabular-nums text-kt-on-surface">
+                {errorCount > 0 ? Math.round((errorCount / sorted.length) * 100) : 0}
+                <span className="text-sm text-kt-on-surface-variant/50">%</span>
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider text-kt-on-surface-variant/30">
+            <span>Last synced: just now</span>
+          </div>
         </div>
       )}
     </div>
@@ -220,16 +237,53 @@ function AgentCardGrid({
           </p>
         </div>
 
-        {/* Current Task or Status */}
-        <p className="text-[11px] text-kt-on-surface-variant/60 truncate mt-auto">
-          {liveRun
-            ? `Running (${liveRun.liveCount} task${liveRun.liveCount > 1 ? "s" : ""})...`
-            : agent.status === "error"
-              ? "Connection Timed Out"
-              : agent.status === "idle" || agent.status === "active"
-                ? "Idle"
-                : agent.status}
-        </p>
+        {/* Task Snippet (desktop shows more detail) */}
+        <div className="mt-auto space-y-2">
+          {liveRun ? (
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[9px] uppercase tracking-wider text-kt-on-surface-variant/40">Task Snippet</span>
+                <span className="text-[10px] font-bold tabular-nums text-kt-primary">
+                  {liveRun.liveCount > 1 ? `${liveRun.liveCount} tasks` : "Running"}
+                </span>
+              </div>
+              <div className="w-full h-1 bg-kt-surface-container-highest rounded-full overflow-hidden">
+                <div className="h-full bg-gradient-to-r from-kt-primary-container to-kt-primary w-[60%] rounded-full animate-pulse" />
+              </div>
+            </div>
+          ) : (
+            <p className="text-[11px] text-kt-on-surface-variant/60 truncate">
+              {agent.status === "error"
+                ? "Connection Timed Out"
+                : agent.status === "idle" || agent.status === "active"
+                  ? "Idle"
+                  : agent.status}
+            </p>
+          )}
+
+          {/* 8W Activity sparkline (desktop) */}
+          <div className="hidden md:block">
+            <p className="text-[9px] uppercase tracking-wider text-kt-on-surface-variant/30 mb-1">8W Activity</p>
+            <div className="flex gap-0.5 h-4 items-end">
+              {[...Array(8)].map((_, i) => {
+                const h = isActive ? Math.random() * 80 + 20 : Math.random() * 30 + 5;
+                return (
+                  <div
+                    key={i}
+                    className="flex-1 rounded-sm transition-all"
+                    style={{
+                      height: `${h}%`,
+                      backgroundColor: isActive
+                        ? config?.color ?? "#c2c1ff"
+                        : "rgba(199, 196, 215, 0.15)",
+                      opacity: isActive ? 0.6 + (i / 8) * 0.4 : 0.3,
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
       </GlassCard>
     </Link>
   );

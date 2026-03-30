@@ -46,7 +46,7 @@ export function Home() {
   const activeAgents = agents?.filter((a: any) => a.status === "running" || a.status === "idle") ?? [];
 
   return (
-    <div className="kt-page min-h-full pb-4 space-y-6 max-w-2xl mx-auto">
+    <div className="kt-page min-h-full pb-4 space-y-6 max-w-5xl mx-auto">
       {/* Hero Greeting */}
       <section>
         <h1 className="text-3xl font-light tracking-tight text-kt-on-surface">
@@ -67,7 +67,7 @@ export function Home() {
             </span>
           }
         />
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <MetricPill label="Active Clients" value="—" trend={null} trendLabel="" />
           <MetricPill label="Weekly Revenue" value="—" trend={null} trendLabel="" />
           <MetricPill label="Weekly Burn" value="—" trend="stable" trendLabel="—" />
