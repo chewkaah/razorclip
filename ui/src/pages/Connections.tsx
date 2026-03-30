@@ -71,9 +71,9 @@ export function Connections() {
   const connectedCount = CONNECTIONS.filter((c) => c.status === "connected").length;
 
   return (
-    <div className="kt-page min-h-full pb-24 px-4 pt-4 space-y-8 max-w-3xl mx-auto">
+    <div className="kt-page min-h-full pb-4 space-y-6 max-w-3xl mx-auto">
       {/* Header */}
-      <section className="mt-2">
+      <section>
         <div className="flex items-center gap-3 mb-1">
           <Plug className="w-5 h-5 text-kt-primary" />
           <h1 className="text-2xl font-bold tracking-tight text-kt-on-surface">Connections</h1>
