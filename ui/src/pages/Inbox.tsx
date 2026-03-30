@@ -953,6 +953,18 @@ export function Inbox() {
 
   return (
     <div className="space-y-6">
+      {/* Razorclip header */}
+      <div>
+        <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] mb-2">
+          <span>Razorclip</span>
+          <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chevron_right</span>
+          <span className="text-[--rc-primary]">Inbox</span>
+        </nav>
+        <h2 className="text-3xl font-light tracking-tight text-[--rc-on-surface] mb-4">
+          Agent <span className="font-bold">Inbox</span>
+        </h2>
+      </div>
+
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-2">
           <Tabs value={tab} onValueChange={(value) => navigate(`/inbox/${value}`)}>
