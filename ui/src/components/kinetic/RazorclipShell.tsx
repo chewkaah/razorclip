@@ -159,6 +159,57 @@ function SidebarAgentList() {
   );
 }
 
+/* ── Mobile Bottom Nav ─────────────────────────────── */
+const mobileNavItems = [
+  { to: "/home", label: "Home", icon: "home" },
+  { to: "/chat", label: "Chat", icon: "chat_bubble" },
+  { to: "/agents/grid", label: "Agents", icon: "smart_toy" },
+  { to: "/health", label: "Health", icon: "monitor_heart" },
+  { to: "/inbox/mine", label: "More", icon: "more_horiz" },
+];
+
+function MobileBottomNav() {
+  return (
+    <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[--rc-surface]/90 backdrop-blur-2xl rounded-t-3xl md:hidden">
+      {mobileNavItems.map((item) => (
+        <NavLink
+          key={item.to}
+          to={item.to}
+          className={({ isActive }) =>
+            cn(
+              "flex flex-col items-center justify-center transition-all",
+              isActive
+                ? "text-[--rc-primary] bg-[--rc-primary]/10 rounded-xl px-3 py-1"
+                : "text-[--rc-on-surface-variant]/50",
+            )
+          }
+        >
+          <span className="material-symbols-outlined mb-0.5 text-xl" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>{item.icon}</span>
+          <span className="text-[10px] uppercase tracking-[0.05em] font-medium">{item.label}</span>
+        </NavLink>
+      ))}
+    </nav>
+  );
+}
+
+/* ── Mobile Top Bar ────────────────────────────────── */
+function MobileTopBar({ companyName }: { companyName: string }) {
+  return (
+    <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[--rc-surface]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_20px_40px_-12px_rgba(194,193,255,0.08)] md:hidden">
+      <div className="flex items-center gap-3">
+        <NavLink to="/profile" className="w-8 h-8 rounded-full overflow-hidden border border-[--rc-primary]/20 bg-[--rc-surface-container] flex items-center justify-center">
+          <span className="material-symbols-outlined text-sm text-[--rc-primary]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>account_circle</span>
+        </NavLink>
+        <span className="text-xl font-thin tracking-tighter text-[--rc-primary]">Razorclip</span>
+      </div>
+      <div className="flex items-center bg-white/5 px-3 py-1 rounded-full border border-white/5 active:scale-95 transition-all">
+        <span className="text-[10px] uppercase tracking-[0.05em] font-medium text-[--rc-on-surface-variant] mr-2">{companyName}</span>
+        <span className="material-symbols-outlined text-[14px] text-[--rc-primary]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>unfold_more</span>
+      </div>
+    </header>
+  );
+}
+
 /* ── Main Shell ──────────────────────────────────────── */
 export function RazorclipShell() {
   const { theme, toggleTheme } = useTheme();
@@ -168,8 +219,12 @@ export function RazorclipShell() {
 
   return (
     <div className="razorclip-shell bg-[--rc-surface] text-[--rc-on-surface] font-['Inter'] h-screen overflow-hidden selection:bg-[--rc-primary]/30">
-      {/* ─── Sidebar ─── */}
-      <aside className="fixed left-0 top-0 h-full flex flex-col py-6 bg-[--rc-sidebar-bg] backdrop-blur-3xl w-64 border-r border-[--rc-primary]/10 tabular-nums tracking-tight font-medium text-sm shadow-[20px_0_40px_-12px_rgba(194,193,255,0.05)] z-50">
+
+      {/* ─── Mobile Top Bar (< md) ─── */}
+      <MobileTopBar companyName={selectedCompany?.name ?? "Razorclip"} />
+
+      {/* ─── Desktop Sidebar (>= md) ─── */}
+      <aside className="hidden md:flex fixed left-0 top-0 h-full flex-col py-6 bg-[--rc-sidebar-bg] backdrop-blur-3xl w-64 border-r border-[--rc-primary]/10 tabular-nums tracking-tight font-medium text-sm shadow-[20px_0_40px_-12px_rgba(194,193,255,0.05)] z-50">
         {/* Brand + Company Switcher */}
         <div className="px-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
@@ -257,8 +312,8 @@ export function RazorclipShell() {
         </div>
       </aside>
 
-      {/* ─── Top bar ─── */}
-      <header className="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-8 z-40 bg-[--rc-topbar-bg] backdrop-blur-xl border-b border-[--rc-primary]/10 font-medium text-xs uppercase tracking-widest">
+      {/* ─── Desktop Top bar (>= md) ─── */}
+      <header className="hidden md:flex fixed top-0 right-0 left-64 h-16 justify-between items-center px-8 z-40 bg-[--rc-topbar-bg] backdrop-blur-xl border-b border-[--rc-primary]/10 font-medium text-xs uppercase tracking-widest">
         <div className="flex items-center gap-6">
           <div className="relative">
             <span
@@ -304,12 +359,17 @@ export function RazorclipShell() {
       </header>
 
       {/* ─── Main content ─── */}
-      <main className="ml-64 pt-24 pb-12 px-8 overflow-y-auto" style={{ height: "100vh" }}>
+      <main className="md:ml-64 pt-20 md:pt-24 pb-24 md:pb-12 px-4 md:px-8 overflow-y-auto" style={{ height: "100vh" }}>
         <Outlet />
       </main>
 
-      {/* Floating chat — persists across all pages */}
-      <FloatingChatBar />
+      {/* Mobile bottom nav (< md) */}
+      <MobileBottomNav />
+
+      {/* Floating chat — desktop only (mobile uses Chat tab) */}
+      <div className="hidden md:block">
+        <FloatingChatBar />
+      </div>
     </div>
   );
 }
