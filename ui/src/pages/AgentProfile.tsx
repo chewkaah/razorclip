@@ -14,6 +14,7 @@ import { queryKeys } from "../lib/queryKeys";
 import { cn, formatCents, relativeTime, agentUrl } from "../lib/utils";
 import { AGENT_REGISTRY, type AgentSlug } from "../components/kinetic/AgentChip";
 import { AGENT_ROLE_LABELS, type Agent } from "@paperclipai/shared";
+import { getAgentAvatar } from "../components/kinetic/agent-avatars";
 
 const roleLabels = AGENT_ROLE_LABELS as Record<string, string>;
 
@@ -22,9 +23,6 @@ function resolveSlug(name: string): AgentSlug | null {
   return s in AGENT_REGISTRY ? (s as AgentSlug) : null;
 }
 
-const PROFILE_AVATARS: Record<string, string> = {
-  dante: "https://lh3.googleusercontent.com/aida-public/AB6AXuC6RhnqdeMdr3US0jHlsCJLZHpSPb8e5GIHC6Dg2TV0xKHg91x0dZ5S25YaTxRhBoUXzpiS8I0KC55tcfSaVRk3vG7pcAhE741ztCuHuRaGd_-QMxbRzffy5uihTSTcwturS7Ug0hFXBd1c686tLXa07gKquULnnXZc2K8hv96dz5AibPG0tV9z0lpQYEUav9wzW_Lhc4Ib554azHx8ZoNDcD5Jm7-ow5CvmI3rwbRXr5oawf9G0CimcUoIq04cAwZ4SBcUJ04Sbtc",
-};
 
 export function AgentProfile() {
   const { agentId } = useParams<{ agentId: string }>();
@@ -59,7 +57,7 @@ export function AgentProfile() {
   const config = slug ? AGENT_REGISTRY[slug] : null;
   const accentColor = config?.color ?? "#c2c1ff";
   const accentLight = config?.colorLight ?? "#c7c4d7";
-  const avatarUrl = slug ? PROFILE_AVATARS[slug] : null;
+  const avatarUrl = getAgentAvatar(name);
   const totalCost = agentData?.totalSpendCents ? formatCents(agentData.totalSpendCents) : "$0.42";
   const totalRuns = (runs ?? []).length;
   const recentRuns = useMemo(() => (runs ?? []).filter((r: any) => r.status === "completed" || r.status === "failed").slice(0, 3), [runs]);

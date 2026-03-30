@@ -13,15 +13,8 @@ import { AGENT_REGISTRY, type AgentSlug } from "../components/kinetic/AgentChip"
 import { useUserProfile } from "../hooks/useUserProfile";
 import { biApi } from "../api/bi";
 import type { Agent, ActivityEvent } from "@paperclipai/shared";
+import { getAgentAvatar } from "../components/kinetic/agent-avatars";
 
-const AGENT_AVATARS: Record<string, string> = {
-  dante: "https://lh3.googleusercontent.com/aida-public/AB6AXuBLuriebWn3lMiulmrlkNqFjx0n8dj9_QaKveGF1dBdHOvh8fx0WmmBt8zkXk4cOsyan8p-bY3Dqanyk3nJvOJca1B9VZ0bVFRGKoKTtTGq6sYxQoseH0nxiWJxfG3qPBvi1E7Umg3A2mna9pYOvdY1D7CoytZXNqiNCLGc3X5f-j5sezt96Rgb4QKxvP7Mdn_F7PPvzp61ISnPBPfGymWlCUOLGoOC4kiTg3Y0ngTMoKv4yd7dgebhbvTiFwOQuL4eEwcDTlbL88c",
-  brent: "https://lh3.googleusercontent.com/aida-public/AB6AXuCSn-wk4OwSaDvgNuWaxjHcenXClEf5M4UG7PDZLXY6hy7x5RmSgdZYPcQbT2iqnx1PRYsPTSU1hCmwy-ORAb2h-SCq_rY40-iwuwoTRPQFGCEUlWtX1dgFObzJzbbwrkzXwtdLTdg6yVSVUB6xlIdF-eagI4X9ZWB2t_KJv3ON45sdjUmAs9vHfZmAZhVVCAOxXmZJ-bkmKAqGcfGzSgtq2JZME_f_GU0FdNAyKGLUdvrmgQV5mrlRHNPqXeragLijvTXAbCv24Ns",
-  rex: "https://lh3.googleusercontent.com/aida-public/AB6AXuAqWoFxgqgZ-jqHqwbJkFS4NgFIUFxz-VASyG4oss9fmTXutlR6_oWQ--qxAPgh5XmyLFOMWfgmnMwiKHWzeJaMWEqlT9DaMkVGU2pj7AR0IkTXyh4qYGaFXh5NnyzTex_w80alC1SdTM9mxqpoa2VpKu67_BiWvxEMkfajuawkFKQlJupExI7_dw56BUFEcqi6SO1KUzfKZut9-fRY1bKzUMXGnnejQ8lMh1t-SwnUcClhPCTlvsHzvYr_GBgEZcbJV1dBR9T3LyA",
-  scout: "https://lh3.googleusercontent.com/aida-public/AB6AXuA0Oi3HQrfP4mpbcl0gMtTis--FgNpRhPXb_hZnlWypWyHy5N6zTjIWqd1bRIefrswLMU0ZQfqHluP4M_cmvaqzT_uQEeKcj4KCb4xG4KkvGgVmFVDRuI8xOYxlHCUeUoyJ3e_1rWzI_sRFHZj0fyIgz9jY8EstoYelnidJpOFY3Il8ViAVMraeYgUSZesYmqCkmaA2qwmxj3-B-WrdmlwsP95bHaoKcy-Z2WsVllbHXMaCTAFcUVnne5G_ATa5uS1_cOI5voqBXu8",
-  nova: "https://lh3.googleusercontent.com/aida-public/AB6AXuAUhpMshB7axOeeuDWZC2ou7GUMGNpOiX6xwLXGz_TH-_OdQuk7FVVbk2RNN0sHpN0NUF-_0otbib8mx11D4GPgWEtYN_ZZw2q0O7TFCfITO7OcgyFvThVTKgiFU1P1zmW2Z-O2DSNjORtTv1Xg61kxN4IY-IEqIDGTtn80sCejetfrRmteYKqCw48x1D7EFE3Cu-IzcZbvXRzsjxD4dCUFs4yxdMDafQLOa8DNbw8S0PpQyC0E9jz5Nn0bdbAIOHW5jWXeRVwHDyQ",
-  victor: "https://lh3.googleusercontent.com/aida-public/AB6AXuBLeuwv6RmW-13TCLqBuzw5VecVR0ARie2zo7YqTR3QpR1I7qXATINWXMwp0FnszEqD0Y0rc16aFwBz7YbNzxtBBWyOpJPCq3q4qX0EnYRqcyxcDxLSVgh3jCP2Y1VllUkfv1a_rpSoLXm32Xv_-a8L2IQHzLvYkgbBrs6RbR90qd3bR6MNN_FG6QbMrW1RvJSqxn3GTdruof8JvDw9_kXOxiwWQ4v62f9lZbBSfGMbGoP2L_sghW6QSbk6xGGGlvdMK3jwmfirZhA",
-};
 
 const agentAvatarList: { slug: AgentSlug; gradient: string }[] = [
   { slug: "dante", gradient: "from-[#8B5CF6] to-[#D8B4FE]" },
@@ -91,7 +84,7 @@ export function Home() {
         text: (event as any).metadata?.description || (event as any).metadata?.commentBody || actionLabel,
         time: relativeTime(event.createdAt),
         tag: event.action.includes("completed") ? "SUCCESS" : "",
-        avatarUrl: slug ? AGENT_AVATARS[slug] : null,
+        avatarUrl: slug ? getAgentAvatar(slug) : null,
       };
     });
   }, [activityData, agentMap]);
@@ -170,7 +163,7 @@ export function Home() {
                 <div className={`relative p-1 rounded-full bg-gradient-to-br ${gradient}`}>
                   <div className="bg-[--rc-surface] rounded-full p-0.5">
                     <div className="w-14 h-14 rounded-full overflow-hidden">
-                      <img className="w-full h-full object-cover" src={AGENT_AVATARS[slug]} alt={config.label} />
+                      <img className="w-full h-full object-cover" src={getAgentAvatar(slug) ?? undefined} alt={config.label} />
                     </div>
                   </div>
                 </div>

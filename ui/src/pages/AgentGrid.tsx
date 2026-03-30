@@ -10,6 +10,7 @@ import { cn, agentUrl } from "../lib/utils";
 // Layout provided by RazorclipShell via router — no wrapper needed here
 import { AGENT_REGISTRY, type AgentSlug } from "../components/kinetic/AgentChip";
 import { AGENT_ROLE_LABELS, type Agent } from "@paperclipai/shared";
+import { getAgentAvatar } from "../components/kinetic/agent-avatars";
 
 const roleLabels = AGENT_ROLE_LABELS as Record<string, string>;
 
@@ -20,14 +21,6 @@ function resolveAgentSlug(name: string): AgentSlug | null {
 }
 
 /** Agent avatar URLs from the Stitch designs */
-const AGENT_AVATARS: Record<string, string> = {
-  dante: "https://lh3.googleusercontent.com/aida-public/AB6AXuBqvoi0EHWaiy8i52d4_0X5lgnNuw4z2rlyQl5_tYnyK4wlyNBVVoFZ9M3cdwRPT3kUKzFbs7y_rqu9tKrjV6GW0q48T3CaH4mdsZvxapDTw7ncKzGd6idmwFmFkvyPL7OTYSqxZoPBeckJxO-Ym3L0sblV2ze1j7qty1UCrJCGZXgY28qoJnl-bbkEjXe_u60mgqsYfU_8fdArJARX89Oo3MafT7r9gdS9eswn-olwtDQvZfni_YJ9qEaJKAkMx9LDYXPr6hIV-R8",
-  brent: "https://lh3.googleusercontent.com/aida-public/AB6AXuB-6dc4bSCdtwOZkPJoEdkGJliUXCKTmW2C3b7fj9iJiS2qUqsXf9tUgmmZWGLN_M6IztqrzbK9ddw7YhT7v9AsSKjmuiiAClCi6UoKoxhOWJChtFZ185dgbT_yEiMiiN5cUPPaHl35qV07Ti7cD5mCHm_JuToZUbUV7Lt4WQjK9TthcYIpDKR6jB_IP7w7d0N1IEGvCtlLlvaIoZSLlR7e483noksG9GdRJezkUzvUa-TwAXyY6fXiY7dT5ewGwTcS8wL02tFj68A",
-  rex: "https://lh3.googleusercontent.com/aida-public/AB6AXuDTQGnLMqY-cVKxaMqQZtyzm_D8QMIIXRbZjZH77UxkL90o1oi7DnmxCktg9G48JLJTj6XsCjar_k5PEYRf_Za3uGH1Pu-SYqSP1hd18B88f_aqBxa11oMq6A2jm5DrJDPzBbrxSbAzs5HUYaMIfs0vCCbXmRKVCgFNlcPlgG6H09Knx3YhDiniyYapOAldMHuiIoLDppFzVqG8Dc3ejnP-C92YLY20trzkt_wNQwy8kSDzZLVvPmDvW-LRsEFxRLlMHieWD1ds8NQ",
-  scout: "https://lh3.googleusercontent.com/aida-public/AB6AXuAQDeQEwxq0YTXR27crEOU8FHPxFNPObaxAI5MwVXYaFXvai0kre9G1z03NwFnRicslVYS3VK1_AUvxm38ryjN0MxLpVCXtLXUiBln4Jq5fYVMAUyHNTbm9ZnNTW5mTPsusmpRTfGrk5TYMAWTMMUyxjMtzkHAXchXiZtB8YMph3Dae8I0iNz5-JH2gwws3d0jSwKbGN56sBb4PCbxjhzV_uV3UcR_UKCUIY6oxUvJW3iPZf3zYgYc32Kv0xdikvSP_6rEbBpkruns",
-  nova: "https://lh3.googleusercontent.com/aida-public/AB6AXuB5o1uW6pRfT5j1FyaJEg29EWhRC0Cle488qaTpFv4At4Xv-PFoxVJqfLBv92InXzW1qhXFSRXqrCtWpjcO0DaotiOzDdCp-iX7Gkn5MVoZHR8S6W5WmYm73ri-wo1JVkMNNL5PtXiGINrqAx6hs9qAC47l2wg3lxN6MemgwKgo93QcU1Vpi3urGz__to7vZscbMhu7hrhxVbPHgl5GQpNfIgbxOAiNFP8pSg-ZgGBPn8OcXDdbAFG662ssBUcs2eyLHKkpc31QwRs",
-  victor: "https://lh3.googleusercontent.com/aida-public/AB6AXuBLwDMmrofQjczQJP5o6uTwyhHWLMdKUQ_BDhBQrr69El0od4L9aTmR8eo6aEdFzREvz6oOzaVO05TxmwRQ6HSqgaavhd4Qz-oJr1pH96QALgQg22IieGaq-36ezYNevAH27n18oAstM319kLbeOl1B3uZ2dzSdmNgY7aloWfEZsHxIBKk_RR4h3_4DoXh3AjjfhPKh4MELsk3h2bx_I7ACAthcrGF-T-a4wPgviCxDom8LKVWCggMxiyeRF23WSTMebrWLp7IfUos",
-};
 
 /** Status labels from Stitch designs */
 function getStatusLabel(status: string): { label: string; color: string; bgColor: string } {
@@ -130,7 +123,7 @@ export function AgentGrid() {
           const config = slug ? AGENT_REGISTRY[slug] : null;
           const accentColor = config?.color ?? "#c2c1ff";
           const accentLight = config?.colorLight ?? "#c7c4d7";
-          const avatarUrl = slug ? AGENT_AVATARS[slug] : null;
+          const avatarUrl = slug ? getAgentAvatar(agent.name) : null;
           const status = getStatusLabel(agent.status);
           const glowClass = getGlowClass(slug, agent.status);
           const liveCount = liveRunByAgent.get(agent.id) ?? 0;
@@ -141,7 +134,7 @@ export function AgentGrid() {
           return (
             <Link
               key={agent.id}
-              to={`${agentUrl(agent)}/profile`}
+              to={agentUrl(agent)}
               className="no-underline text-inherit"
             >
               <div
