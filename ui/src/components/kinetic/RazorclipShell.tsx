@@ -128,7 +128,7 @@ function SidebarAgentList() {
             return (
               <NavLink
                 key={agent.id}
-                to={`${agentUrl(agent)}/profile`}
+                to={agentUrl(agent)}
                 className={({ isActive: routeActive }) =>
                   cn(
                     "flex items-center gap-2.5 px-4 py-1.5 rounded-lg text-[12px] transition-colors duration-200",
@@ -303,7 +303,7 @@ export function RazorclipShell() {
       </header>
 
       {/* ─── Main content ─── */}
-      <main className="ml-64 pt-24 pb-12 px-8 min-h-screen">
+      <main className="ml-64 pt-24 pb-12 px-8 min-h-screen overflow-y-auto h-screen">
         <Outlet />
       </main>
     </div>

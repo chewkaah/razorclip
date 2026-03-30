@@ -9,16 +9,13 @@ import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { queryKeys } from "../lib/queryKeys";
 import { AGENT_REGISTRY, type AgentSlug } from "../components/kinetic/AgentChip";
 import type { Approval } from "@paperclipai/shared";
+import { getAgentAvatar } from "../components/kinetic/agent-avatars";
 
 function resolveSlug(name: string): AgentSlug | null {
   const s = name.toLowerCase().trim();
   return s in AGENT_REGISTRY ? (s as AgentSlug) : null;
 }
 
-const APPROVAL_AVATARS: Record<string, string> = {
-  dante: "https://lh3.googleusercontent.com/aida-public/AB6AXuA4CnmxXN3cbnMkPwq7xqTXPlih_mk-p61bHCyfcGPiY8ExbUaS8U2oYXYlWKj089Jdhe0W3CHMKmia3S__7kP9O_M7uDXp5cnscxBMIVj-GM3Tmiss56-EMpSja-A2ehUlpbfjtrE01K-5pQrCym2UI-ExZ9-h5eCcLNzwJE1-91ipgdTAutfD-W633YZGRUzN28mxnqwzwJqcE2hHC132_c-7AiOyg0MRltPQIaPl2vV66nZqGUaucmGJ_OhScwA-AkHdh-yyOTc",
-  brent: "https://lh3.googleusercontent.com/aida-public/AB6AXuBYo-0636EjXCSBp3TBlCrPcObjmhasDXV2MFFYvW2Xlx5jT9CQjCBpspBvpvZr4IlPpj41ujlJ12EKI9TiWI7EIlngJMKayMDszH0cGAwA7-krH2_Q0YMb6RBTBi00JKjIGC1u5v7VcUDNgbTOxxLhSsRqVLp8azbVlvlfAC31oPWweKRkiH3LhfBkXn1LYar9WBC6fnoAvzBFes56eu1b0rfwCM2XPFfCyLIC2_UVR25WKyCI_NMaJZczrwLH_Hft4AKQqG1Hx9I",
-};
 
 export function ApprovalQueue() {
   const { selectedCompanyId } = useCompany();
@@ -87,7 +84,7 @@ export function ApprovalQueue() {
           const accentLight = config?.colorLight ?? "#c7c4d7";
           const title = (p.title as string) ?? (p.summary as string) ?? `${approval.type} request`;
           const desc = (p.description as string) ?? (p.plan as string) ?? null;
-          const avatarUrl = slug ? APPROVAL_AVATARS[slug] : null;
+          const avatarUrl = slug ? getAgentAvatar(agentName) : null;
 
           return (
             <div key={approval.id} className="glass-card rounded-2xl flex flex-col p-6 hover:translate-y-[-4px] transition-all duration-300 group">
