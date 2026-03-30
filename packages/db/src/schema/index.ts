@@ -59,5 +59,6 @@ export { pluginLogs } from "./plugin_logs.js";
 export { chatThreads } from "./chat_threads.js";
 export { chatMessages } from "./chat_messages.js";
 export { connections, connectionSyncLogs } from "./connections.js";
+export { userProfiles } from "./user_profiles.js";
 export { biClients, biClientProjects } from "./bi_clients.js";
 export { biSnapshots, biAlerts } from "./bi_snapshots.js";

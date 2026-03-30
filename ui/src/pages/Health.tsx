@@ -3,9 +3,12 @@
  */
 import { useEffect } from "react";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
+import { useUserProfile } from "../hooks/useUserProfile";
 
 export function Health() {
   const { setBreadcrumbs } = useBreadcrumbs();
+  const { profile } = useUserProfile();
+  const userName = profile?.displayName || "there";
   useEffect(() => { setBreadcrumbs([{ label: "Business Health" }]); }, [setBreadcrumbs]);
 
   const greeting = (() => {
@@ -21,7 +24,7 @@ export function Health() {
       <section className="px-2">
         <p className="text-[10px] uppercase tracking-[0.15em] text-[--rc-on-surface-variant] font-medium">Founder's Morning Briefing</p>
         <h1 className="text-3xl font-light tracking-tight mt-1">
-          {greeting}, <span className="text-[--rc-primary] font-normal">Chuka</span>.
+          {greeting}, <span className="text-[--rc-primary] font-normal">{userName}</span>.
         </h1>
         <p className="text-sm text-[--rc-on-surface-variant] mt-2 font-light">
           Here is your weekly health pulse for {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric" })}.

@@ -11,6 +11,7 @@ import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { agentsApi } from "../api/agents";
 import { queryKeys } from "../lib/queryKeys";
 import { AGENT_REGISTRY, type AgentSlug } from "../components/kinetic/AgentChip";
+import { useUserProfile } from "../hooks/useUserProfile";
 
 /** Home page agent avatar images from Stitch */
 const HOME_AVATARS: Record<AgentSlug, string> = {
@@ -54,6 +55,9 @@ export function Home() {
     setBreadcrumbs([{ label: "Command Center" }]);
   }, [setBreadcrumbs]);
 
+  const { profile } = useUserProfile();
+  const userName = profile?.displayName || "there";
+
   const { data: agentList } = useQuery({
     queryKey: queryKeys.agents.list(selectedCompanyId!),
     queryFn: () => agentsApi.list(selectedCompanyId!),
@@ -74,7 +78,7 @@ export function Home() {
       {/* Hero Greeting — exact from Stitch */}
       <section className="mt-4">
         <h1 className="text-3xl font-light tracking-tight text-[--rc-on-surface]">
-          {greeting}, <span className="font-bold text-[--rc-primary]">Chuka</span>
+          {greeting}, <span className="font-bold text-[--rc-primary]">{userName}</span>
         </h1>
         <p className="text-[--rc-on-surface-variant] text-sm mt-1 tracking-wide uppercase">
           {new Date().toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })} • Command Center
