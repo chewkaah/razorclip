@@ -17,9 +17,9 @@ export function Health() {
   })();
 
   return (
-    <div className="kt-page min-h-full pb-24 px-4 pt-4 space-y-8 max-w-2xl mx-auto">
+    <div className="kt-page min-h-full pb-4 space-y-6 max-w-2xl mx-auto">
       {/* Hero */}
-      <section className="mt-2">
+      <section>
         <p className="text-[10px] uppercase tracking-[0.15em] text-kt-primary font-bold mb-1">
           Weekly Health Report
         </p>

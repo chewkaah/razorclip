@@ -34,7 +34,7 @@ export function MetricPill({
   return (
     <div
       className={cn(
-        "glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden",
+        "glass-card rounded-2xl p-3.5 border border-white/5 flex flex-col justify-between h-20 relative overflow-hidden",
         onClick && "cursor-pointer hover:bg-white/10 transition-all active:scale-[0.98]",
         className,
       )}

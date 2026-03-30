@@ -46,9 +46,9 @@ export function Home() {
   const activeAgents = agents?.filter((a: any) => a.status === "running" || a.status === "idle") ?? [];
 
   return (
-    <div className="kt-page min-h-full pb-24 px-4 pt-4 space-y-8 max-w-2xl mx-auto">
+    <div className="kt-page min-h-full pb-4 space-y-6 max-w-2xl mx-auto">
       {/* Hero Greeting */}
-      <section className="mt-2">
+      <section>
         <h1 className="text-3xl font-light tracking-tight text-kt-on-surface">
           {greeting}, <span className="font-bold text-kt-primary">Chuka</span>
         </h1>
@@ -91,7 +91,7 @@ export function Home() {
             </div>
           }
         />
-        <div className="flex gap-5 overflow-x-auto no-scrollbar pb-2 -mx-4 px-4">
+        <div className="flex gap-5 overflow-x-auto no-scrollbar pb-2">
           {(["dante", "brent", "rex", "scout", "nova", "victor"] as AgentSlug[]).map((slug) => (
             <AgentAvatar key={slug} agent={slug} size="md" showLabel />
           ))}

@@ -78,7 +78,7 @@ export function AgentGrid() {
 
   if (isLoading) {
     return (
-      <div className="kt-page min-h-full px-4 pt-4 pb-24 max-w-3xl mx-auto">
+      <div className="kt-page min-h-full pb-4 max-w-3xl mx-auto">
         <div className="animate-pulse space-y-4 mt-8">
           {[...Array(6)].map((_, i) => (
             <div key={i} className="glass-card rounded-2xl h-20 border border-white/5" />
@@ -89,29 +89,15 @@ export function AgentGrid() {
   }
 
   return (
-    <div className="kt-page min-h-full pb-24 px-4 pt-4 space-y-6 max-w-3xl mx-auto">
+    <div className="kt-page min-h-full pb-4 space-y-6 max-w-3xl mx-auto">
       {/* Header */}
-      <section className="mt-2 flex items-end justify-between">
-        <div>
-          <p className="text-[10px] uppercase tracking-[0.15em] text-kt-primary font-bold mb-1">
-            Active Cluster
-          </p>
-          <h1 className="text-3xl font-bold tracking-tight text-kt-on-surface">Agent Grid</h1>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5">
-            {onlineCount > 0 && (
-              <>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-semibold text-emerald-500">{onlineCount} ONLINE</span>
-              </>
-            )}
-            {errorCount > 0 && (
-              <>
-                <span className="w-1.5 h-1.5 rounded-full bg-kt-danger ml-2" />
-                <span className="text-[10px] font-semibold text-kt-danger">{errorCount} ERRORED</span>
-              </>
-            )}
+      <section className="space-y-3">
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.15em] text-kt-primary font-bold mb-1">
+              Active Cluster
+            </p>
+            <h1 className="text-2xl font-bold tracking-tight text-kt-on-surface">Agent Grid</h1>
           </div>
           {/* View toggle */}
           <div className="flex glass-card rounded-lg border border-white/5 overflow-hidden">
@@ -134,6 +120,21 @@ export function AgentGrid() {
               <List className="h-3.5 w-3.5" />
             </button>
           </div>
+        </div>
+        {/* Status counts */}
+        <div className="flex items-center gap-3">
+          {onlineCount > 0 && (
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-semibold text-emerald-500">{onlineCount} ONLINE</span>
+            </div>
+          )}
+          {errorCount > 0 && (
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-kt-danger" />
+              <span className="text-[10px] font-semibold text-kt-danger">{errorCount} ERRORED</span>
+            </div>
+          )}
         </div>
       </section>
 
