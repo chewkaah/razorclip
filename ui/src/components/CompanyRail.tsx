@@ -267,7 +267,7 @@ export function CompanyRail() {
   );
 
   return (
-    <div className="flex flex-col items-center w-[72px] shrink-0 h-full bg-background border-r border-border">
+    <div className="flex flex-col items-center w-[72px] shrink-0 h-full bg-[#0c0e14] border-r border-white/5">
       {/* Paperclip icon - aligned with top sections (implied line, no visible border) */}
       <div className="flex items-center justify-center h-12 w-full shrink-0">
         <Paperclip className="h-5 w-5 text-foreground" />
