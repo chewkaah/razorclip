@@ -3,7 +3,59 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ═══════════════════════════════════════════════════════
+   KINETIC TERMINAL — Razorclip V1 Design System
+   The Kinetic Terminal merges Bloomberg data density with
+   iMessage frosted aesthetics and Linear surgical precision.
+   ═══════════════════════════════════════════════════════ */
+
 @theme inline {
+  /* Kinetic Terminal: Surface tiers */
+  --color-kt-surface: #111319;
+  --color-kt-surface-dim: #111319;
+  --color-kt-surface-container-lowest: #0c0e14;
+  --color-kt-surface-container-low: #191b22;
+  --color-kt-surface-container: #1e1f26;
+  --color-kt-surface-container-high: #282a30;
+  --color-kt-surface-container-highest: #33343b;
+  --color-kt-surface-bright: #373940;
+  --color-kt-surface-variant: #33343b;
+
+  /* Kinetic Terminal: Primary accent (electric lavender) */
+  --color-kt-primary: #c2c1ff;
+  --color-kt-primary-container: #5e5ce6;
+  --color-kt-on-primary: #1800a7;
+
+  /* Kinetic Terminal: Text layers */
+  --color-kt-on-surface: #e2e2eb;
+  --color-kt-on-surface-variant: #c7c4d7;
+  --color-kt-outline: #918fa0;
+  --color-kt-outline-variant: #464554;
+
+  /* Kinetic Terminal: Semantic */
+  --color-kt-tertiary: #eac400;
+  --color-kt-error: #ffb4ab;
+
+  /* Kinetic Terminal: Agent accents */
+  --color-agent-dante: #8B5CF6;
+  --color-agent-dante-light: #D8B4FE;
+  --color-agent-brent: #3B82F6;
+  --color-agent-brent-light: #93C5FD;
+  --color-agent-rex: #10B981;
+  --color-agent-rex-light: #6EE7B7;
+  --color-agent-scout: #F59E0B;
+  --color-agent-scout-light: #FCD34D;
+  --color-agent-nova: #EC4899;
+  --color-agent-nova-light: #FBCFE8;
+  --color-agent-victor: #EAB308;
+  --color-agent-victor-light: #FEF08A;
+
+  /* Kinetic Terminal: Metric colors */
+  --color-kt-positive: #10B981;
+  --color-kt-warning: #F59E0B;
+  --color-kt-danger: #ffb4ab;
+
+  /* Original Paperclip theme tokens (preserved) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -180,6 +232,86 @@
 
 .dark *::-webkit-scrollbar-thumb:hover {
   background: oklch(0.5 0 0);
+}
+
+/* ═══════════════════════════════════════════════════════
+   KINETIC TERMINAL — Shared utility classes
+   ═══════════════════════════════════════════════════════ */
+
+/* Glass card: frosted glass surface for floating elements */
+.glass-card {
+  background: rgba(26, 29, 39, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.glass-card-subtle {
+  background: rgba(51, 52, 59, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* Agent glow effects */
+.agent-glow-dante { box-shadow: 0 0 15px rgba(139, 92, 246, 0.15); }
+.agent-glow-brent { box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); }
+.agent-glow-rex { box-shadow: 0 0 15px rgba(16, 185, 129, 0.15); }
+.agent-glow-scout { box-shadow: 0 0 15px rgba(245, 158, 11, 0.15); }
+.agent-glow-nova { box-shadow: 0 0 15px rgba(236, 72, 153, 0.15); }
+.agent-glow-victor { box-shadow: 0 0 15px rgba(234, 179, 8, 0.15); }
+
+/* Status dot glows */
+.status-glow-connected { box-shadow: 0 0 8px rgba(16, 185, 129, 0.6); }
+.status-glow-error { box-shadow: 0 0 8px rgba(255, 180, 171, 0.6); }
+.status-glow-pending { box-shadow: 0 0 8px rgba(245, 158, 11, 0.6); }
+
+/* Kinetic Terminal ambient shadow for floating elements */
+.kt-shadow {
+  box-shadow: 0 20px 40px -12px rgba(194, 193, 255, 0.08);
+}
+
+/* Ghost border — subtle borders that don't break the nocturnal immersion */
+.ghost-border {
+  border: 1px solid rgba(70, 69, 84, 0.15);
+}
+
+/* No-scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Tabular nums for all metrics */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Spring-physics-inspired transition (stiffness: 400, damping: 28) */
+.spring-transition {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Kinetic Terminal page background */
+.kt-page {
+  background-color: #111319;
+  color: #e2e2eb;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Agent status ring pulse */
+@keyframes kt-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.kt-pulse {
+  animation: kt-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Ambient card glow for active agents */
+@keyframes kt-ambient-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+.kt-ambient-glow {
+  animation: kt-ambient-glow 3s ease-in-out infinite;
 }
 
 /* Auto-hide scrollbar: always reserves space, thumb visible only on hover */

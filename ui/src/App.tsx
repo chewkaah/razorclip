@@ -42,6 +42,11 @@ import { BoardClaimPage } from "./pages/BoardClaim";
 import { CliAuthPage } from "./pages/CliAuth";
 import { InviteLandingPage } from "./pages/InviteLanding";
 import { Chat } from "./pages/Chat";
+import { Home } from "./pages/Home";
+import { Health } from "./pages/Health";
+import { Connections } from "./pages/Connections";
+import { AgentGrid } from "./pages/AgentGrid";
+import { ApprovalQueue } from "./pages/ApprovalQueue";
 import { NotFoundPage } from "./pages/NotFound";
 import { queryKeys } from "./lib/queryKeys";
 import { useCompany } from "./context/CompanyContext";
@@ -119,7 +124,10 @@ function CloudAccessGate() {
 function boardRoutes() {
   return (
     <>
-      <Route index element={<Navigate to="dashboard" replace />} />
+      <Route index element={<Navigate to="home" replace />} />
+      <Route path="home" element={<Home />} />
+      <Route path="health" element={<Health />} />
+      <Route path="connections" element={<Connections />} />
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="onboarding" element={<OnboardingRoutePage />} />
       <Route path="companies" element={<Companies />} />
@@ -132,6 +140,7 @@ function boardRoutes() {
       <Route path="plugins/:pluginId" element={<PluginPage />} />
       <Route path="org" element={<OrgChart />} />
       <Route path="agents" element={<Navigate to="/agents/all" replace />} />
+      <Route path="agents/grid" element={<AgentGrid />} />
       <Route path="agents/all" element={<Agents />} />
       <Route path="agents/active" element={<Agents />} />
       <Route path="agents/paused" element={<Agents />} />
@@ -159,7 +168,8 @@ function boardRoutes() {
       <Route path="execution-workspaces/:workspaceId" element={<ExecutionWorkspaceDetail />} />
       <Route path="goals" element={<Goals />} />
       <Route path="goals/:goalId" element={<GoalDetail />} />
-      <Route path="approvals" element={<Navigate to="/approvals/pending" replace />} />
+      <Route path="approvals" element={<Navigate to="/approvals/queue" replace />} />
+      <Route path="approvals/queue" element={<ApprovalQueue />} />
       <Route path="approvals/pending" element={<Approvals />} />
       <Route path="approvals/all" element={<Approvals />} />
       <Route path="approvals/:approvalId" element={<ApprovalDetail />} />

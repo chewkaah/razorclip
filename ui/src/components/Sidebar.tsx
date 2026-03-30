@@ -12,6 +12,9 @@ import {
   Repeat,
   Settings,
   MessageSquare,
+  House,
+  HeartPulse,
+  Plug,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { SidebarSection } from "./SidebarSection";
@@ -80,6 +83,7 @@ export function Sidebar() {
             <SquarePen className="h-4 w-4 shrink-0" />
             <span className="truncate">New Issue</span>
           </button>
+          <SidebarNavItem to="/home" label="Home" icon={House} />
           <SidebarNavItem to="/dashboard" label="Dashboard" icon={LayoutDashboard} liveCount={liveRunCount} />
           <SidebarNavItem to="/chat" label="Chat" icon={MessageSquare} />
           <SidebarNavItem
@@ -109,10 +113,15 @@ export function Sidebar() {
 
         <SidebarAgents />
 
+        <SidebarSection label="Business">
+          <SidebarNavItem to="/health" label="Health" icon={HeartPulse} />
+          <SidebarNavItem to="/connections" label="Connections" icon={Plug} />
+          <SidebarNavItem to="/costs" label="Costs" icon={DollarSign} />
+        </SidebarSection>
+
         <SidebarSection label="Company">
           <SidebarNavItem to="/org" label="Org" icon={Network} />
           <SidebarNavItem to="/skills" label="Skills" icon={Boxes} />
-          <SidebarNavItem to="/costs" label="Costs" icon={DollarSign} />
           <SidebarNavItem to="/activity" label="Activity" icon={History} />
           <SidebarNavItem to="/company/settings" label="Settings" icon={Settings} />
         </SidebarSection>
