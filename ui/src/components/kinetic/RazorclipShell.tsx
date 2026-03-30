@@ -20,6 +20,7 @@ import { cn, agentRouteRef, agentUrl } from "@/lib/utils";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import type { Agent } from "@paperclipai/shared";
 import { AGENT_REGISTRY, type AgentSlug } from "./AgentChip";
+import { FloatingChatBar } from "../chat/FloatingChatBar";
 
 function resolveSlug(name: string): AgentSlug | null {
   const s = name.toLowerCase().trim();
@@ -306,6 +307,9 @@ export function RazorclipShell() {
       <main className="ml-64 pt-24 pb-12 px-8 overflow-y-auto" style={{ height: "100vh" }}>
         <Outlet />
       </main>
+
+      {/* Floating chat — persists across all pages */}
+      <FloatingChatBar />
     </div>
   );
 }
