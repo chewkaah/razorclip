@@ -47,6 +47,7 @@ import { Health } from "./pages/Health";
 import { Connections } from "./pages/Connections";
 import { AgentGrid } from "./pages/AgentGrid";
 import { ApprovalQueue } from "./pages/ApprovalQueue";
+import { TicketThread } from "./pages/TicketThread";
 import { NotFoundPage } from "./pages/NotFound";
 import { queryKeys } from "./lib/queryKeys";
 import { useCompany } from "./context/CompanyContext";
@@ -163,6 +164,7 @@ function boardRoutes() {
       <Route path="issues/done" element={<Navigate to="/issues" replace />} />
       <Route path="issues/recent" element={<Navigate to="/issues" replace />} />
       <Route path="issues/:issueId" element={<IssueDetail />} />
+      <Route path="issues/:issueId/thread" element={<TicketThread />} />
       <Route path="routines" element={<Routines />} />
       <Route path="routines/:routineId" element={<RoutineDetail />} />
       <Route path="execution-workspaces/:workspaceId" element={<ExecutionWorkspaceDetail />} />
