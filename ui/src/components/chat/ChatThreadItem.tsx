@@ -1,5 +1,4 @@
 import type { ChatThread } from "@paperclipai/shared";
-import { cn } from "@/lib/utils";
 
 interface ChatThreadItemProps {
   thread: ChatThread;
@@ -14,26 +13,21 @@ function timeAgo(dateStr: string) {
   if (mins < 60) return `${mins}m`;
   const hours = Math.floor(mins / 60);
   if (hours < 24) return `${hours}h`;
-  const days = Math.floor(hours / 24);
-  return `${days}d`;
+  return `${Math.floor(hours / 24)}d`;
 }
 
 export function ChatThreadItem({ thread, isActive, onClick }: ChatThreadItemProps) {
   return (
     <button
       onClick={onClick}
-      className={cn(
-        "w-full text-left rounded-xl px-3 py-2.5 text-sm transition-all",
-        "hover:bg-white/5",
+      className={`w-full text-left rounded-xl px-3 py-2.5 text-sm transition-all ${
         isActive
-          ? "bg-kt-primary/10 border border-kt-primary/20 text-kt-on-surface font-medium"
-          : "text-kt-on-surface-variant border border-transparent",
-      )}
+          ? "bg-[#c2c1ff]/10 border border-[#c2c1ff]/20 text-[#e2e2eb] font-medium"
+          : "text-[#c7c4d7]/70 hover:bg-white/5 border border-transparent"
+      }`}
     >
       <div className="truncate text-[13px]">{thread.title}</div>
-      <div className="text-[10px] text-kt-on-surface-variant/40 mt-0.5 tabular-nums">
-        {timeAgo(thread.updatedAt)}
-      </div>
+      <div className="text-[10px] text-[#c7c4d7]/40 mt-0.5 tabular-nums">{timeAgo(thread.updatedAt)}</div>
     </button>
   );
 }

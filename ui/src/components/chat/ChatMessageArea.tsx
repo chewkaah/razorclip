@@ -1,3 +1,6 @@
+/**
+ * ChatMessageArea — from Stitch chat_interface main canvas
+ */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { chatApi } from "@/api/chat";
@@ -32,50 +35,24 @@ export function ChatMessageArea({ companyId, threadId }: ChatMessageAreaProps) {
   });
 
   const scrollToBottom = useCallback(() => {
-    if (isAtBottomRef.current) {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
+    if (isAtBottomRef.current) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  // Stream handler
   useChatStream({
     companyId,
     activeRunId,
-    onChunk: useCallback(
-      (text: string) => {
-        setStreamingContent((prev) => prev + text);
-        scrollToBottom();
-      },
-      [scrollToBottom],
-    ),
-    onComplete: useCallback(() => {
-      setActiveRunId(null);
-      setStreamingContent("");
-      refetchMessages();
-      queryClient.invalidateQueries({ queryKey: queryKeys.chat.threads(companyId) });
-    }, [refetchMessages, queryClient, companyId]),
-    onError: useCallback(
-      (error: string) => {
-        setActiveRunId(null);
-        setStreamingContent("");
-        refetchMessages();
-      },
-      [refetchMessages],
-    ),
+    onChunk: useCallback((text: string) => { setStreamingContent((prev) => prev + text); scrollToBottom(); }, [scrollToBottom]),
+    onComplete: useCallback(() => { setActiveRunId(null); setStreamingContent(""); refetchMessages(); queryClient.invalidateQueries({ queryKey: queryKeys.chat.threads(companyId) }); }, [refetchMessages, queryClient, companyId]),
+    onError: useCallback(() => { setActiveRunId(null); setStreamingContent(""); refetchMessages(); }, [refetchMessages]),
   });
 
-  // Scroll on new messages
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, scrollToBottom]);
+  useEffect(() => { scrollToBottom(); }, [messages, scrollToBottom]);
 
   const handleSubmit = async () => {
     const content = inputValue.trim();
     if (!content || isSubmitting) return;
-
     setInputValue("");
     setIsSubmitting(true);
-
     try {
       const result = await chatApi.sendMessage(threadId, { content });
       setActiveRunId(result.runId);
@@ -94,43 +71,26 @@ export function ChatMessageArea({ companyId, threadId }: ChatMessageAreaProps) {
   };
 
   return (
-    <div className="flex flex-col h-full kt-page">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-kt-surface/80 backdrop-blur-xl min-h-[3rem]">
-        <h2 className="text-sm font-semibold text-kt-on-surface truncate tracking-tight">
+    <div className="flex flex-col h-full bg-[#111319]">
+      {/* Header — from Stitch */}
+      <div className="flex items-center justify-between px-6 py-3 border-b border-white/5 bg-[#111319]/80 backdrop-blur-xl min-h-[3rem]">
+        <h2 className="text-sm font-semibold text-[#e2e2eb] truncate tracking-tight">
           {thread?.title ?? "Chat"}
         </h2>
         {thread && (
-          <ChatAdapterSelector
-            threadId={threadId}
-            adapterType={thread.adapterType}
-            model={thread.model}
-            companyId={companyId}
-          />
+          <ChatAdapterSelector threadId={threadId} adapterType={thread.adapterType} model={thread.model} companyId={companyId} />
         )}
       </div>
 
-      {/* Messages */}
-      <div
-        className="flex-1 overflow-y-auto px-4 py-4 no-scrollbar"
-        onScroll={handleScroll}
-      >
-        <ChatMessageList
-          messages={messages ?? []}
-          streamingContent={streamingContent}
-          isStreaming={!!activeRunId}
-        />
+      {/* Messages — full canvas from Stitch */}
+      <div className="flex-1 overflow-y-auto px-4 py-4 no-scrollbar" onScroll={handleScroll}>
+        <ChatMessageList messages={messages ?? []} streamingContent={streamingContent} isStreaming={!!activeRunId} />
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
-      <div className="p-4 pb-6 bg-kt-surface/90 backdrop-blur-2xl border-t border-kt-outline-variant/10">
-        <ChatInput
-          value={inputValue}
-          onChange={setInputValue}
-          onSubmit={handleSubmit}
-          disabled={isSubmitting || !!activeRunId}
-        />
+      {/* Input — from Stitch */}
+      <div className="px-4 pb-6 pt-3 bg-[#111319]/90 backdrop-blur-2xl border-t border-[#464554]/10">
+        <ChatInput value={inputValue} onChange={setInputValue} onSubmit={handleSubmit} disabled={isSubmitting || !!activeRunId} />
       </div>
     </div>
   );
