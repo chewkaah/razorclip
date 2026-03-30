@@ -168,7 +168,7 @@ export function Dashboard() {
       return (
         <EmptyState
           icon={LayoutDashboard}
-          message="Welcome to Paperclip. Set up your first company and agent to get started."
+          message="Welcome to Razorclip. Set up your first company and agent to get started."
           action="Get Started"
           onAction={openOnboarding}
         />
@@ -187,6 +187,20 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Razorclip header */}
+      <div className="flex justify-between items-end">
+        <div>
+          <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] mb-2">
+            <span>Razorclip</span>
+            <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chevron_right</span>
+            <span className="text-[--rc-primary]">Dashboard</span>
+          </nav>
+          <h2 className="text-3xl font-light tracking-tight text-[--rc-on-surface]">
+            Agent <span className="font-bold">Dashboard</span>
+          </h2>
+        </div>
+      </div>
+
       {error && <p className="text-sm text-destructive">{error.message}</p>}
 
       {hasNoAgents && (
