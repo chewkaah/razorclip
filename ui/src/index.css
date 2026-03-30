@@ -364,6 +364,139 @@
   .dark h1[class*="font-semibold"] {
     letter-spacing: -0.02em;
   }
+
+  /* ═══════════════════════════════════════════════════════
+     RAZORCLIP — Paperclip page overrides
+     Make Issues, Inbox, Dashboard, etc. look like Razorclip
+     without rewriting 3000+ lines of components
+     ═══════════════════════════════════════════════════════ */
+
+  /* Issues list — restyle the table/list view */
+  .razorclip-shell [class*="border-border"] {
+    border-color: var(--rc-glass-border) !important;
+  }
+
+  /* Search inputs in issues/inbox */
+  .razorclip-shell input[type="text"],
+  .razorclip-shell input[type="search"],
+  .razorclip-shell input[placeholder*="Search"],
+  .razorclip-shell input[placeholder*="search"] {
+    background: var(--rc-surface-container-low) !important;
+    border-color: var(--rc-glass-border) !important;
+    border-radius: 0.75rem !important;
+  }
+
+  .razorclip-shell input:focus {
+    border-color: rgba(194, 193, 255, 0.4) !important;
+    box-shadow: 0 0 20px rgba(194, 193, 255, 0.08) !important;
+  }
+
+  /* Issue rows — rounded, glass hover */
+  .razorclip-shell a[href*="/issues/"] {
+    border-radius: 0.5rem;
+    transition: all 0.15s;
+  }
+
+  .razorclip-shell a[href*="/issues/"]:hover {
+    background: var(--rc-glass-bg) !important;
+  }
+
+  /* Buttons throughout Paperclip pages */
+  .razorclip-shell button {
+    border-radius: 0.75rem;
+  }
+
+  .razorclip-shell [data-slot="button"] {
+    border-radius: 0.75rem !important;
+  }
+
+  /* All borders should be ghost borders */
+  .razorclip-shell [class*="border-b"],
+  .razorclip-shell [class*="border-t"],
+  .razorclip-shell [class*="border-r"],
+  .razorclip-shell [class*="border-l"] {
+    border-color: var(--rc-glass-border) !important;
+  }
+
+  /* Metric cards in dashboard */
+  .razorclip-shell [class*="bg-card"] {
+    background: var(--rc-glass-bg) !important;
+    backdrop-filter: blur(16px);
+    border-radius: 1rem !important;
+  }
+
+  /* The new issue button / primary actions */
+  .razorclip-shell [class*="bg-primary"]:not(input):not(textarea) {
+    border-radius: 0.75rem !important;
+  }
+
+  /* Priority/status badges — pill shape everywhere */
+  .razorclip-shell span[class*="rounded-full"][class*="text-xs"],
+  .razorclip-shell span[class*="rounded-full"][class*="text-\\[10px\\]"] {
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
+  }
+
+  /* Inbox sidebar items */
+  .razorclip-shell nav a[class*="py-2"] {
+    border-radius: 0.5rem;
+  }
+
+  /* Section headers in issues/inbox */
+  .razorclip-shell h1,
+  .razorclip-shell h2,
+  .razorclip-shell h3 {
+    letter-spacing: -0.01em;
+  }
+
+  /* Charts in dashboard — rounded containers */
+  .razorclip-shell [class*="rounded-lg"][class*="border"] {
+    border-radius: 1rem !important;
+    border-color: var(--rc-glass-border) !important;
+  }
+
+  /* Agent detail tabs */
+  .razorclip-shell [role="tablist"] {
+    background: var(--rc-glass-bg) !important;
+    border-radius: 0.75rem !important;
+    border: 1px solid var(--rc-glass-border) !important;
+    padding: 3px !important;
+    backdrop-filter: blur(12px);
+  }
+
+  .razorclip-shell [role="tab"] {
+    border-radius: 0.5rem !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    font-weight: 600 !important;
+  }
+
+  .razorclip-shell [role="tab"][data-state="active"] {
+    background: rgba(194, 193, 255, 0.1) !important;
+    color: var(--rc-primary) !important;
+  }
+
+  /* Collapsible sections */
+  .razorclip-shell [data-state="open"] > div,
+  .razorclip-shell [data-state="closed"] > div {
+    border-radius: 0.75rem;
+  }
+
+  /* Empty states */
+  .razorclip-shell [class*="EmptyState"] {
+    border-radius: 1rem;
+  }
+
+  /* Markdown content areas */
+  .razorclip-shell .prose {
+    color: var(--rc-on-surface-variant);
+  }
+
+  .razorclip-shell .prose strong {
+    color: var(--rc-on-surface);
+  }
   /* Prevent double-tap-to-zoom on interactive elements for mobile */
   a,
   button,
