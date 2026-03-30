@@ -70,9 +70,9 @@ export function AgentProfile() {
   if (!agentData) return <p className="text-[--rc-on-surface-variant]">Agent not found</p>;
 
   return (
-    <div className="-m-8 flex gap-0 h-[calc(100vh-4rem)]">
+    <div className="-m-4 md:-m-8 flex flex-col md:flex-row gap-0 md:h-[calc(100vh-4rem)]">
       {/* Left Column: Hero Profile — from Stitch */}
-      <section className="w-[380px] h-full border-r border-[--rc-outline-variant]/10 flex flex-col p-8 overflow-y-auto shrink-0">
+      <section className="w-full md:w-[380px] md:h-full border-r border-[--rc-outline-variant]/10 flex flex-col p-8 overflow-y-auto shrink-0">
         {/* Avatar with status ring */}
         <div className="relative group mb-10">
           <div className="w-48 h-48 mx-auto relative">
@@ -130,7 +130,7 @@ export function AgentProfile() {
       {/* Middle Column: Performance + Terminal — from Stitch */}
       <section className="flex-1 bg-[--rc-surface-container-lowest]/30 flex flex-col min-w-0">
         {/* Stats Row */}
-        <div className="grid grid-cols-3 gap-0 border-b border-[--rc-outline-variant]/10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-b border-[--rc-outline-variant]/10">
           <div className="p-8 border-r border-[--rc-outline-variant]/10">
             <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Tasks Orchestrated</p>
             <div className="flex items-baseline gap-2">
@@ -183,7 +183,7 @@ export function AgentProfile() {
       </section>
 
       {/* Right Column: History + CTA — from Stitch */}
-      <section className="w-[340px] h-full border-l border-[--rc-outline-variant]/10 flex flex-col bg-[--rc-surface-container-lowest]/50 shrink-0">
+      <section className="w-full md:w-[340px] md:h-full border-l border-[--rc-outline-variant]/10 flex flex-col bg-[--rc-surface-container-lowest]/50 shrink-0">
         <div className="p-8 flex-1 overflow-y-auto no-scrollbar">
           <h3 className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold opacity-60 mb-6">Recent Completions</h3>
           <div className="space-y-4">

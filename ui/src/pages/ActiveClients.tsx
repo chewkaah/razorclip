@@ -25,7 +25,7 @@ export function ActiveClients() {
   if (isLoading) {
     return (
       <div className="flex h-[calc(100vh-4rem)] -m-8">
-        <div className="w-80 border-r border-[--rc-outline-variant]/10 p-6">
+        <div className="w-full md:w-80 border-b md:border-b-0 md:border-r border-[--rc-outline-variant]/10 p-6">
           <div className="animate-pulse space-y-3">
             <div className="glass-card rounded-xl h-16" />
             <div className="glass-card rounded-xl h-16" />
@@ -60,9 +60,9 @@ export function ActiveClients() {
   }
 
   return (
-    <div className="-m-8 flex h-[calc(100vh-4rem)] overflow-hidden">
+    <div className="-m-4 md:-m-8 flex flex-col md:flex-row md:h-[calc(100vh-4rem)] overflow-hidden">
       {/* Left: Client List — LIVE */}
-      <section className="w-80 border-r border-[--rc-outline-variant]/10 bg-[--rc-surface-container-lowest]/50 flex flex-col shrink-0">
+      <section className="w-full md:w-80 border-b md:border-b-0 md:border-r border-[--rc-outline-variant]/10 bg-[--rc-surface-container-lowest]/50 flex flex-col shrink-0">
         <div className="p-6 border-b border-[--rc-outline-variant]/5">
           <h3 className="text-[10px] uppercase tracking-[0.2em] font-bold text-[--rc-on-surface-variant] flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-[--rc-primary] animate-pulse" />
