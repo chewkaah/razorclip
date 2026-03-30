@@ -51,6 +51,7 @@ import { ApprovalQueue } from "./pages/ApprovalQueue";
 import { TicketThread } from "./pages/TicketThread";
 import { AgentProfile } from "./pages/AgentProfile";
 import { IssueThread } from "./pages/IssueThread";
+import { ActiveClients } from "./pages/ActiveClients";
 import { NotFoundPage } from "./pages/NotFound";
 import { queryKeys } from "./lib/queryKeys";
 import { useCompany } from "./context/CompanyContext";
@@ -132,6 +133,7 @@ function boardRoutes() {
       <Route path="home" element={<Home />} />
       <Route path="health" element={<Health />} />
       <Route path="connections" element={<Connections />} />
+      <Route path="clients" element={<ActiveClients />} />
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="onboarding" element={<OnboardingRoutePage />} />
       <Route path="companies" element={<Companies />} />
