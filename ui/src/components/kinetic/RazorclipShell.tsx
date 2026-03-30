@@ -234,14 +234,14 @@ export function RazorclipShell() {
           >
             terminal
           </button>
-          <div className="h-8 w-8 rounded-full bg-[--rc-surface-container-high] border border-[--rc-outline-variant]/20 flex items-center justify-center">
+          <NavLink to="/profile" className="h-8 w-8 rounded-full bg-[--rc-surface-container-high] border border-[--rc-outline-variant]/20 flex items-center justify-center hover:border-[--rc-primary]/30 transition-all">
             <span
               className="material-symbols-outlined text-sm"
               style={{ fontVariationSettings: "'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24" }}
             >
               account_circle
             </span>
-          </div>
+          </NavLink>
         </div>
       </header>
 

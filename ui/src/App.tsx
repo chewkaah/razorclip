@@ -52,6 +52,7 @@ import { TicketThread } from "./pages/TicketThread";
 import { AgentProfile } from "./pages/AgentProfile";
 import { IssueThread } from "./pages/IssueThread";
 import { ActiveClients } from "./pages/ActiveClients";
+import { UserProfilePage } from "./pages/UserProfile";
 import { NotFoundPage } from "./pages/NotFound";
 import { queryKeys } from "./lib/queryKeys";
 import { useCompany } from "./context/CompanyContext";
@@ -134,6 +135,7 @@ function boardRoutes() {
       <Route path="health" element={<Health />} />
       <Route path="connections" element={<Connections />} />
       <Route path="clients" element={<ActiveClients />} />
+      <Route path="profile" element={<UserProfilePage />} />
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="onboarding" element={<OnboardingRoutePage />} />
       <Route path="companies" element={<Companies />} />
