@@ -59,7 +59,7 @@ export function IssueThread() {
   const prefix = `${(issue as any).issuePrefix ?? "RC"}-${(issue as any).issueNumber ?? issueId?.slice(0, 4)}`;
 
   return (
-    <div className="-m-8 h-[calc(100vh-4rem)] grid grid-cols-[320px_1fr_380px] divide-x divide-[#464554]/10">
+    <div className="-m-8 h-[calc(100vh-4rem)] flex flex-col md:grid md:grid-cols-[320px_1fr_380px] divide-x divide-[#464554]/10">
       {/* Column 1: Active Issues List — from Stitch */}
       <section className="flex flex-col bg-[--rc-surface-container-low] overflow-y-auto no-scrollbar">
         <div className="p-4 border-b border-[--rc-outline-variant]/10 flex justify-between items-center">
@@ -131,7 +131,7 @@ export function IssueThread() {
         {/* Content */}
         <div className="flex-1 overflow-y-auto no-scrollbar p-8 space-y-8">
           {/* Meta Grid — from Stitch */}
-          <div className="grid grid-cols-4 gap-4 p-4 rounded-xl bg-[--rc-surface-container-lowest] border border-[--rc-outline-variant]/10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 rounded-xl bg-[--rc-surface-container-lowest] border border-[--rc-outline-variant]/10">
             <div>
               <p className="text-[10px] text-[--rc-on-surface-variant] uppercase mb-1">Status</p>
               <div className="flex items-center gap-2">
