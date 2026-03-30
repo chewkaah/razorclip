@@ -94,10 +94,10 @@ export function ChatMessageArea({ companyId, threadId }: ChatMessageAreaProps) {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full kt-page">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2 border-b min-h-[3rem]">
-        <h2 className="text-sm font-medium truncate">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-kt-surface/80 backdrop-blur-xl min-h-[3rem]">
+        <h2 className="text-sm font-semibold text-kt-on-surface truncate tracking-tight">
           {thread?.title ?? "Chat"}
         </h2>
         {thread && (
@@ -111,7 +111,10 @@ export function ChatMessageArea({ companyId, threadId }: ChatMessageAreaProps) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4" onScroll={handleScroll}>
+      <div
+        className="flex-1 overflow-y-auto px-4 py-4 no-scrollbar"
+        onScroll={handleScroll}
+      >
         <ChatMessageList
           messages={messages ?? []}
           streamingContent={streamingContent}
@@ -121,7 +124,7 @@ export function ChatMessageArea({ companyId, threadId }: ChatMessageAreaProps) {
       </div>
 
       {/* Input */}
-      <div className="border-t p-4">
+      <div className="p-4 pb-6 bg-kt-surface/90 backdrop-blur-2xl border-t border-kt-outline-variant/10">
         <ChatInput
           value={inputValue}
           onChange={setInputValue}
