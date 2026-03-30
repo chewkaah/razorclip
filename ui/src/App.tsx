@@ -48,6 +48,8 @@ import { Connections } from "./pages/Connections";
 import { AgentGrid } from "./pages/AgentGrid";
 import { ApprovalQueue } from "./pages/ApprovalQueue";
 import { TicketThread } from "./pages/TicketThread";
+import { AgentProfile } from "./pages/AgentProfile";
+import { IssueThread } from "./pages/IssueThread";
 import { NotFoundPage } from "./pages/NotFound";
 import { queryKeys } from "./lib/queryKeys";
 import { useCompany } from "./context/CompanyContext";
@@ -148,6 +150,7 @@ function boardRoutes() {
       <Route path="agents/error" element={<Agents />} />
       <Route path="agents/new" element={<NewAgent />} />
       <Route path="agents/:agentId" element={<AgentDetail />} />
+      <Route path="agents/:agentId/profile" element={<AgentProfile />} />
       <Route path="agents/:agentId/:tab" element={<AgentDetail />} />
       <Route path="agents/:agentId/runs/:runId" element={<AgentDetail />} />
       <Route path="projects" element={<Projects />} />
@@ -165,6 +168,7 @@ function boardRoutes() {
       <Route path="issues/recent" element={<Navigate to="/issues" replace />} />
       <Route path="issues/:issueId" element={<IssueDetail />} />
       <Route path="issues/:issueId/thread" element={<TicketThread />} />
+      <Route path="issues/:issueId/thread-view" element={<IssueThread />} />
       <Route path="routines" element={<Routines />} />
       <Route path="routines/:routineId" element={<RoutineDetail />} />
       <Route path="execution-workspaces/:workspaceId" element={<ExecutionWorkspaceDetail />} />
