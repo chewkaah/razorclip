@@ -1,4 +1,4 @@
-CREATE TABLE "bi_client_projects" (
+CREATE TABLE IF NOT EXISTS "bi_client_projects" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"client_id" uuid NOT NULL,
 	"name" text NOT NULL,
@@ -10,7 +10,8 @@ CREATE TABLE "bi_client_projects" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "bi_clients" (
+
+CREATE TABLE IF NOT EXISTS "bi_clients" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"company_id" uuid NOT NULL,
 	"name" text NOT NULL,
@@ -26,7 +27,8 @@ CREATE TABLE "bi_clients" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "bi_alerts" (
+
+CREATE TABLE IF NOT EXISTS "bi_alerts" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"company_id" uuid NOT NULL,
 	"source_type" text NOT NULL,
@@ -39,7 +41,8 @@ CREATE TABLE "bi_alerts" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "bi_snapshots" (
+
+CREATE TABLE IF NOT EXISTS "bi_snapshots" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"company_id" uuid NOT NULL,
 	"source_type" text NOT NULL,
@@ -49,32 +52,8 @@ CREATE TABLE "bi_snapshots" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "chat_messages" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"thread_id" uuid NOT NULL,
-	"company_id" uuid NOT NULL,
-	"role" text NOT NULL,
-	"content" text DEFAULT '' NOT NULL,
-	"run_id" uuid,
-	"is_streaming" boolean DEFAULT false NOT NULL,
-	"error" text,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "chat_threads" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"company_id" uuid NOT NULL,
-	"user_id" text,
-	"title" text DEFAULT 'New Thread' NOT NULL,
-	"adapter_type" text DEFAULT 'claude_local' NOT NULL,
-	"adapter_config" jsonb DEFAULT '{}'::jsonb NOT NULL,
-	"model" text,
-	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "connection_sync_logs" (
+
+CREATE TABLE IF NOT EXISTS "connection_sync_logs" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"connection_id" uuid NOT NULL,
 	"company_id" uuid NOT NULL,
@@ -87,7 +66,8 @@ CREATE TABLE "connection_sync_logs" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "connections" (
+
+CREATE TABLE IF NOT EXISTS "connections" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"company_id" uuid NOT NULL,
 	"slug" text NOT NULL,
@@ -111,7 +91,8 @@ CREATE TABLE "connections" (
 	CONSTRAINT "connections_company_slug_uniq" UNIQUE("company_id","slug")
 );
 --> statement-breakpoint
-CREATE TABLE "user_profiles" (
+
+CREATE TABLE IF NOT EXISTS "user_profiles" (
 	"id" text PRIMARY KEY NOT NULL,
 	"user_id" text NOT NULL,
 	"context_md" text DEFAULT '' NOT NULL,
@@ -124,28 +105,39 @@ CREATE TABLE "user_profiles" (
 	CONSTRAINT "user_profiles_user_id_unique" UNIQUE("user_id")
 );
 --> statement-breakpoint
+
 ALTER TABLE "bi_client_projects" ADD CONSTRAINT "bi_client_projects_client_id_bi_clients_id_fk" FOREIGN KEY ("client_id") REFERENCES "public"."bi_clients"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+
 ALTER TABLE "bi_clients" ADD CONSTRAINT "bi_clients_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+
 ALTER TABLE "bi_alerts" ADD CONSTRAINT "bi_alerts_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+
 ALTER TABLE "bi_snapshots" ADD CONSTRAINT "bi_snapshots_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "chat_messages" ADD CONSTRAINT "chat_messages_thread_id_chat_threads_id_fk" FOREIGN KEY ("thread_id") REFERENCES "public"."chat_threads"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "chat_messages" ADD CONSTRAINT "chat_messages_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "chat_threads" ADD CONSTRAINT "chat_threads_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+
 ALTER TABLE "connection_sync_logs" ADD CONSTRAINT "connection_sync_logs_connection_id_connections_id_fk" FOREIGN KEY ("connection_id") REFERENCES "public"."connections"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+
 ALTER TABLE "connection_sync_logs" ADD CONSTRAINT "connection_sync_logs_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+
 ALTER TABLE "connections" ADD CONSTRAINT "connections_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+
 ALTER TABLE "user_profiles" ADD CONSTRAINT "user_profiles_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-CREATE INDEX "bi_client_projects_client_idx" ON "bi_client_projects" USING btree ("client_id");--> statement-breakpoint
-CREATE INDEX "bi_clients_company_idx" ON "bi_clients" USING btree ("company_id");--> statement-breakpoint
-CREATE INDEX "bi_clients_company_status_idx" ON "bi_clients" USING btree ("company_id","status");--> statement-breakpoint
-CREATE INDEX "bi_alerts_company_idx" ON "bi_alerts" USING btree ("company_id");--> statement-breakpoint
-CREATE INDEX "bi_alerts_company_unack_idx" ON "bi_alerts" USING btree ("company_id","acknowledged");--> statement-breakpoint
-CREATE INDEX "bi_snapshots_company_source_idx" ON "bi_snapshots" USING btree ("company_id","source_type");--> statement-breakpoint
-CREATE INDEX "bi_snapshots_company_period_idx" ON "bi_snapshots" USING btree ("company_id","period","period_start");--> statement-breakpoint
-CREATE INDEX "chat_messages_thread_created_idx" ON "chat_messages" USING btree ("thread_id","created_at");--> statement-breakpoint
-CREATE INDEX "chat_messages_company_run_idx" ON "chat_messages" USING btree ("company_id","run_id");--> statement-breakpoint
-CREATE INDEX "chat_threads_company_user_idx" ON "chat_threads" USING btree ("company_id","user_id");--> statement-breakpoint
-CREATE INDEX "chat_threads_company_created_idx" ON "chat_threads" USING btree ("company_id","created_at");--> statement-breakpoint
-CREATE INDEX "sync_logs_connection_started_idx" ON "connection_sync_logs" USING btree ("connection_id","started_at");--> statement-breakpoint
-CREATE INDEX "connections_company_category_idx" ON "connections" USING btree ("company_id","category");--> statement-breakpoint
-CREATE INDEX "connections_company_status_idx" ON "connections" USING btree ("company_id","status");
+
+CREATE INDEX IF NOT EXISTS "bi_client_projects_client_idx" ON "bi_client_projects" USING btree ("client_id");--> statement-breakpoint
+
+CREATE INDEX IF NOT EXISTS "bi_clients_company_idx" ON "bi_clients" USING btree ("company_id");--> statement-breakpoint
+
+CREATE INDEX IF NOT EXISTS "bi_clients_company_status_idx" ON "bi_clients" USING btree ("company_id","status");--> statement-breakpoint
+
+CREATE INDEX IF NOT EXISTS "bi_alerts_company_idx" ON "bi_alerts" USING btree ("company_id");--> statement-breakpoint
+
+CREATE INDEX IF NOT EXISTS "bi_alerts_company_unack_idx" ON "bi_alerts" USING btree ("company_id","acknowledged");--> statement-breakpoint
+
+CREATE INDEX IF NOT EXISTS "bi_snapshots_company_source_idx" ON "bi_snapshots" USING btree ("company_id","source_type");--> statement-breakpoint
+
+CREATE INDEX IF NOT EXISTS "bi_snapshots_company_period_idx" ON "bi_snapshots" USING btree ("company_id","period","period_start");--> statement-breakpoint
+
+CREATE INDEX IF NOT EXISTS "sync_logs_connection_started_idx" ON "connection_sync_logs" USING btree ("connection_id","started_at");--> statement-breakpoint
+
+CREATE INDEX IF NOT EXISTS "connections_company_category_idx" ON "connections" USING btree ("company_id","category");--> statement-breakpoint
+
+CREATE INDEX IF NOT EXISTS "connections_company_status_idx" ON "connections" USING btree ("company_id","status");
