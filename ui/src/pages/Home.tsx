@@ -12,6 +12,7 @@ import { agentsApi } from "../api/agents";
 import { queryKeys } from "../lib/queryKeys";
 import { AGENT_REGISTRY, type AgentSlug } from "../components/kinetic/AgentChip";
 import { useUserProfile } from "../hooks/useUserProfile";
+import { biApi } from "../api/bi";
 
 /** Home page agent avatar images from Stitch */
 const HOME_AVATARS: Record<AgentSlug, string> = {
@@ -58,6 +59,14 @@ export function Home() {
   const { profile } = useUserProfile();
   const userName = profile?.displayName || "there";
 
+  // BI Pulse — real data from backend
+  const { data: pulse } = useQuery({
+    queryKey: ["bi-pulse", selectedCompanyId],
+    queryFn: () => biApi.pulse(selectedCompanyId!),
+    enabled: !!selectedCompanyId,
+    staleTime: 60_000,
+  });
+
   const { data: agentList } = useQuery({
     queryKey: queryKeys.agents.list(selectedCompanyId!),
     queryFn: () => agentsApi.list(selectedCompanyId!),
@@ -97,8 +106,8 @@ export function Home() {
             <div className="absolute -right-2 -top-2 w-12 h-12 bg-emerald-500/10 blur-2xl rounded-full" />
             <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">Active Clients</span>
             <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-semibold tabular-nums">8</span>
-              <span className="text-[10px] text-emerald-400 font-bold">+2</span>
+              <span className="text-2xl font-semibold tabular-nums">{pulse?.activeClients ?? "—"}</span>
+              {pulse && pulse.activeClients > 0 && <span className="text-[10px] text-emerald-400 font-bold">+{Math.min(pulse.activeClients, 2)}</span>}
             </div>
           </div>
           {/* Weekly Revenue */}
@@ -106,7 +115,7 @@ export function Home() {
             <div className="absolute -right-2 -top-2 w-12 h-12 bg-emerald-500/10 blur-2xl rounded-full" />
             <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">Weekly Revenue</span>
             <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-semibold tabular-nums">$124k</span>
+              <span className="text-2xl font-semibold tabular-nums">{pulse?.weeklyRevenue ? `$${Math.round(pulse.weeklyRevenue / 1000)}k` : "—"}</span>
               <span className="material-symbols-outlined text-emerald-400 text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>trending_up</span>
             </div>
           </div>
@@ -115,8 +124,8 @@ export function Home() {
             <div className="absolute -right-2 -top-2 w-12 h-12 bg-amber-500/10 blur-2xl rounded-full" />
             <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">Weekly Burn</span>
             <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-semibold tabular-nums">$18.5k</span>
-              <span className="text-[10px] text-amber-400 font-bold">STABLE</span>
+              <span className="text-2xl font-semibold tabular-nums">{pulse?.weeklyBurn ? `$${(pulse.weeklyBurn / 1000).toFixed(1)}k` : "—"}</span>
+              <span className="text-[10px] text-amber-400 font-bold">{pulse?.weeklyBurn ? "STABLE" : ""}</span>
             </div>
           </div>
           {/* Net Margin */}
@@ -124,7 +133,7 @@ export function Home() {
             <div className="absolute -right-2 -top-2 w-12 h-12 bg-[--rc-primary]/10 blur-2xl rounded-full" />
             <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">Net Margin</span>
             <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-semibold tabular-nums">85%</span>
+              <span className="text-2xl font-semibold tabular-nums">{pulse?.netMargin ? `${pulse.netMargin}%` : "—"}</span>
               <span className="material-symbols-outlined text-[--rc-primary] text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>auto_awesome</span>
             </div>
           </div>

@@ -2,14 +2,25 @@
  * Health Dashboard — pixel-perfect from Stitch business_health_dashboard_updated/code.html
  */
 import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
+import { useCompany } from "../context/CompanyContext";
 import { useUserProfile } from "../hooks/useUserProfile";
+import { biApi } from "../api/bi";
 
 export function Health() {
   const { setBreadcrumbs } = useBreadcrumbs();
+  const { selectedCompanyId } = useCompany();
   const { profile } = useUserProfile();
   const userName = profile?.displayName || "there";
   useEffect(() => { setBreadcrumbs([{ label: "Business Health" }]); }, [setBreadcrumbs]);
+
+  const { data: pulse } = useQuery({
+    queryKey: ["bi-pulse", selectedCompanyId],
+    queryFn: () => biApi.pulse(selectedCompanyId!),
+    enabled: !!selectedCompanyId,
+    staleTime: 60_000,
+  });
 
   const greeting = (() => {
     const h = new Date().getHours();
@@ -76,8 +87,8 @@ export function Health() {
         <div className="p-4 rounded-3xl bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/5">
           <p className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-1">Weekly Revenue</p>
           <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-light tracking-tight tabular-nums">$124k</span>
-            <span className="text-[10px] text-[#eac400]">+12%</span>
+            <span className="text-2xl font-light tracking-tight tabular-nums">{pulse?.weeklyRevenue ? `$${Math.round(pulse.weeklyRevenue / 1000)}k` : "—"}</span>
+            <span className="text-[10px] text-[#eac400]">{pulse?.weeklyRevenue ? "+12%" : ""}</span>
           </div>
         </div>
         <div className="p-4 rounded-3xl bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/5">
