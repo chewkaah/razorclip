@@ -41,26 +41,26 @@ export function ApprovalQueue() {
       {/* Breadcrumbs & Header — from Stitch */}
       <div className="mb-10 flex justify-between items-end">
         <div>
-          <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[#c7c4d7] mb-2">
+          <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] mb-2">
             <span>Razorclip</span>
             <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chevron_right</span>
-            <span className="text-[#c2c1ff]">Approval Queue</span>
+            <span className="text-[--rc-primary]">Approval Queue</span>
           </nav>
-          <h2 className="text-4xl font-light tracking-tight text-[#e2e2eb]">
+          <h2 className="text-4xl font-light tracking-tight text-[--rc-on-surface]">
             Pending <span className="font-bold">Authorizations</span>
           </h2>
-          <p className="text-[#c7c4d7] mt-2 max-w-lg font-medium text-sm">
+          <p className="text-[--rc-on-surface-variant] mt-2 max-w-lg font-medium text-sm">
             Reviewing {pending.length} actions from autonomous agents across the production stack.
           </p>
         </div>
         <div className="flex gap-4">
           <div className="glass-card px-4 py-2 rounded-xl flex items-center gap-3">
-            <span className="text-[10px] uppercase tracking-widest text-[#c7c4d7]">Est. Burn</span>
-            <span className="tabular-nums font-bold text-[#c2c1ff]">$412.08</span>
+            <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant]">Est. Burn</span>
+            <span className="tabular-nums font-bold text-[--rc-primary]">$412.08</span>
           </div>
           <div className="glass-card px-4 py-2 rounded-xl flex items-center gap-3">
-            <span className="text-[10px] uppercase tracking-widest text-[#c7c4d7]">Queue Depth</span>
-            <span className="tabular-nums font-bold text-[#c2c1ff]">{pending.length}</span>
+            <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant]">Queue Depth</span>
+            <span className="tabular-nums font-bold text-[--rc-primary]">{pending.length}</span>
           </div>
         </div>
       </div>
@@ -71,8 +71,8 @@ export function ApprovalQueue() {
           <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
             <span className="material-symbols-outlined text-3xl text-emerald-400" style={{ fontVariationSettings: "'FILL' 1, 'wght' 300" }}>check_circle</span>
           </div>
-          <h3 className="text-2xl font-bold text-[#e2e2eb] mb-2">All Clear</h3>
-          <p className="text-[#c7c4d7]">No pending authorizations</p>
+          <h3 className="text-2xl font-bold text-[--rc-on-surface] mb-2">All Clear</h3>
+          <p className="text-[--rc-on-surface-variant]">No pending authorizations</p>
         </div>
       )}
 
@@ -95,7 +95,7 @@ export function ApprovalQueue() {
               <div className="flex justify-between items-start mb-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full p-[2px]" style={{ background: `linear-gradient(to bottom right, ${accentColor}, ${accentLight})`, boxShadow: `0 0 30px -5px ${accentColor}30` }}>
-                    <div className="w-full h-full rounded-full bg-[#1e1f26] flex items-center justify-center overflow-hidden">
+                    <div className="w-full h-full rounded-full bg-[--rc-surface-container] flex items-center justify-center overflow-hidden">
                       {avatarUrl ? (
                         <img alt={agentName} src={avatarUrl} className="w-full h-full object-cover" />
                       ) : (
@@ -104,29 +104,29 @@ export function ApprovalQueue() {
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#e2e2eb]">{agentName}</h3>
-                    <span className="text-[10px] uppercase tracking-widest text-[#c7c4d7] py-0.5 px-2 bg-[#282a30] rounded-full border border-[#464554]/20">
+                    <h3 className="font-bold text-[--rc-on-surface]">{agentName}</h3>
+                    <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] py-0.5 px-2 bg-[--rc-surface-container-high] rounded-full border border-[--rc-outline-variant]/20">
                       {approval.type}
                     </span>
                   </div>
                 </div>
                 <div className="flex flex-col items-end">
-                  <span className="tabular-nums text-xs font-semibold text-[#c2c1ff]">~$— API</span>
-                  <span className="text-[10px] text-[#c7c4d7] uppercase">Cost Impact</span>
+                  <span className="tabular-nums text-xs font-semibold text-[--rc-primary]">~$— API</span>
+                  <span className="text-[10px] text-[--rc-on-surface-variant] uppercase">Cost Impact</span>
                 </div>
               </div>
 
               {/* Requested Action */}
               <div className="mb-4">
-                <p className="text-xs uppercase tracking-widest text-[#c7c4d7] mb-2 font-bold">Requested Action</p>
+                <p className="text-xs uppercase tracking-widest text-[--rc-on-surface-variant] mb-2 font-bold">Requested Action</p>
                 <p className="text-sm font-medium leading-relaxed">{title}</p>
               </div>
 
               {/* Context */}
               {desc && (
-                <div className="bg-[#0c0e14]/50 rounded-xl p-4 mb-6 border border-[#464554]/10">
-                  <span className="text-[10px] uppercase tracking-widest text-[#c7c4d7] block mb-2">Context Summary</span>
-                  <p className="text-[11px] text-[#c7c4d7] leading-relaxed line-clamp-3">{desc}</p>
+                <div className="bg-[--rc-surface-container-lowest]/50 rounded-xl p-4 mb-6 border border-[--rc-outline-variant]/10">
+                  <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] block mb-2">Context Summary</span>
+                  <p className="text-[11px] text-[--rc-on-surface-variant] leading-relaxed line-clamp-3">{desc}</p>
                 </div>
               )}
 
@@ -141,10 +141,10 @@ export function ApprovalQueue() {
                   <span className="text-[10px] uppercase font-bold tracking-tighter tabular-nums">—% Signal</span>
                 </div>
                 <div className="flex gap-2">
-                  <button className="w-10 h-10 rounded-xl border border-[#464554]/20 flex items-center justify-center hover:bg-[#ffb4ab]/10 hover:text-[#ffb4ab] transition-all active:scale-90">
+                  <button className="w-10 h-10 rounded-xl border border-[--rc-outline-variant]/20 flex items-center justify-center hover:bg-[#ffb4ab]/10 hover:text-[#ffb4ab] transition-all active:scale-90">
                     <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>close</span>
                   </button>
-                  <button className="px-4 py-2 rounded-xl bg-[#c2c1ff] text-[#1800a7] text-[10px] font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-[#c2c1ff]/10">
+                  <button className="px-4 py-2 rounded-xl bg-[--rc-primary] text-[--rc-on-primary] text-[10px] font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-[#c2c1ff]/10">
                     Approve
                   </button>
                 </div>

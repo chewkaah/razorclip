@@ -94,41 +94,65 @@
   --radius-xl: 1.25rem;
 }
 
+/* ═══════════════════════════════════════════════════════
+   RAZORCLIP — Light Mode
+   Inverted palette with the same accent colors.
+   ═══════════════════════════════════════════════════════ */
 :root {
   color-scheme: light;
   --radius: 0.75rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: #f8f8fc;
+  --foreground: #1a1a2e;
+  --card: #ffffff;
+  --card-foreground: #1a1a2e;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a2e;
+  --primary: #4d4ad5;             /* deeper lavender for contrast on light */
+  --primary-foreground: #ffffff;
+  --secondary: #f0f0f6;
+  --secondary-foreground: #1a1a2e;
+  --muted: #f0f0f6;
+  --muted-foreground: #6b6b8a;
+  --accent: #f0f0f6;
+  --accent-foreground: #1a1a2e;
+  --destructive: #dc3545;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.08);
+  --input: rgba(0, 0, 0, 0.08);
+  --ring: #4d4ad5;
+  --chart-1: #8B5CF6;
+  --chart-2: #10B981;
+  --chart-3: #F59E0B;
+  --chart-4: #EC4899;
+  --chart-5: #3B82F6;
+  --sidebar: #f4f4f8;
+  --sidebar-foreground: #1a1a2e;
+  --sidebar-primary: #4d4ad5;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ebebf2;
+  --sidebar-accent-foreground: #1a1a2e;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-ring: #4d4ad5;
+
+  /* Razorclip semantic colors — light variants */
+  --rc-surface: #f8f8fc;
+  --rc-surface-dim: #f0f0f6;
+  --rc-surface-container-lowest: #ffffff;
+  --rc-surface-container-low: #f4f4f8;
+  --rc-surface-container: #ebebf2;
+  --rc-surface-container-high: #e2e2ec;
+  --rc-surface-container-highest: #d8d8e4;
+  --rc-on-surface: #1a1a2e;
+  --rc-on-surface-variant: #6b6b8a;
+  --rc-primary: #4d4ad5;
+  --rc-primary-light: #c2c1ff;
+  --rc-on-primary: #ffffff;
+  --rc-outline: #9e9eb8;
+  --rc-outline-variant: #c8c8da;
+  --rc-glass-bg: rgba(255, 255, 255, 0.7);
+  --rc-glass-border: rgba(0, 0, 0, 0.06);
+  --rc-sidebar-bg: #f4f4f8;
+  --rc-topbar-bg: rgba(248, 248, 252, 0.8);
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -169,6 +193,26 @@
   --sidebar-accent-foreground: #e2e2eb;
   --sidebar-border: rgba(255, 255, 255, 0.06);  /* ghost border */
   --sidebar-ring: #5e5ce6;
+
+  /* Razorclip semantic colors — dark variants */
+  --rc-surface: #111319;
+  --rc-surface-dim: #111319;
+  --rc-surface-container-lowest: #0c0e14;
+  --rc-surface-container-low: #191b22;
+  --rc-surface-container: #1e1f26;
+  --rc-surface-container-high: #282a30;
+  --rc-surface-container-highest: #33343b;
+  --rc-on-surface: #e2e2eb;
+  --rc-on-surface-variant: #c7c4d7;
+  --rc-primary: #c2c1ff;
+  --rc-primary-light: #e2dfff;
+  --rc-on-primary: #1800a7;
+  --rc-outline: #918fa0;
+  --rc-outline-variant: #464554;
+  --rc-glass-bg: rgba(26, 29, 39, 0.6);
+  --rc-glass-border: rgba(255, 255, 255, 0.05);
+  --rc-sidebar-bg: rgba(17, 19, 25, 0.8);
+  --rc-topbar-bg: rgba(17, 19, 25, 0.6);
 }
 
 @layer base {
@@ -372,15 +416,16 @@
 
 /* Glass card: frosted glass surface for floating elements */
 .glass-card {
-  background: rgba(26, 29, 39, 0.6);
+  background: var(--rc-glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 }
 
 .glass-card-subtle {
-  background: rgba(51, 52, 59, 0.4);
+  background: var(--rc-glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  opacity: 0.8;
 }
 
 /* Agent glow effects */
@@ -444,6 +489,75 @@
 }
 .kt-ambient-glow {
   animation: kt-ambient-glow 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RAZORCLIP — Light mode content color overrides
+   Forces hardcoded dark hex colors to swap in light mode.
+   This is a bridge until pages use CSS variables directly.
+   ═══════════════════════════════════════════════════════ */
+
+/* Light mode glass card */
+:root .glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+.dark .glass-card {
+  background: rgba(26, 29, 39, 0.6);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ═══════════════════════════════════════════════════════
+   RAZORCLIP — Light mode color remapping
+   In light mode, remap the hardcoded Razorclip dark colors
+   to their light equivalents via style attribute overrides.
+   ═══════════════════════════════════════════════════════ */
+
+/* Light mode page background */
+html:not(.dark) body {
+  background-color: #f8f8fc !important;
+  color: #1a1a2e !important;
+}
+
+/* Light mode: remap the main content area background from RazorclipShell */
+html:not(.dark) main {
+  color: #1a1a2e;
+}
+
+/* Agent glow effects — softer in light mode */
+html:not(.dark) .agent-glow-dante { box-shadow: 0 4px 20px -5px rgba(139, 92, 246, 0.12); }
+html:not(.dark) .agent-glow-brent { box-shadow: 0 4px 20px -5px rgba(59, 130, 246, 0.12); }
+html:not(.dark) .agent-glow-rex { box-shadow: 0 4px 20px -5px rgba(16, 185, 129, 0.12); }
+html:not(.dark) .agent-glow-scout { box-shadow: 0 4px 20px -5px rgba(245, 158, 11, 0.12); }
+html:not(.dark) .agent-glow-nova { box-shadow: 0 4px 20px -5px rgba(236, 72, 153, 0.12); }
+html:not(.dark) .agent-glow-victor { box-shadow: 0 4px 20px -5px rgba(234, 179, 8, 0.12); }
+
+/* Light mode active glow effects */
+html:not(.dark) .active-glow-purple { box-shadow: 0 4px 25px -5px rgba(139, 92, 246, 0.15); }
+html:not(.dark) .active-glow-blue { box-shadow: 0 4px 25px -5px rgba(59, 130, 246, 0.15); }
+html:not(.dark) .active-glow-green { box-shadow: 0 4px 25px -5px rgba(16, 185, 129, 0.15); }
+html:not(.dark) .active-glow-orange { box-shadow: 0 4px 25px -5px rgba(245, 158, 11, 0.15); }
+
+/* Light mode status glows */
+html:not(.dark) .status-glow-connected { box-shadow: 0 0 6px rgba(16, 185, 129, 0.3); }
+html:not(.dark) .status-glow-error { box-shadow: 0 0 6px rgba(220, 53, 69, 0.3); }
+html:not(.dark) .status-glow-pending { box-shadow: 0 0 6px rgba(245, 158, 11, 0.3); }
+
+/* Light mode ambient shadow */
+html:not(.dark) .kt-shadow {
+  box-shadow: 0 10px 30px -8px rgba(77, 74, 213, 0.08);
+}
+
+/* Light mode scrollbars */
+html:not(.dark) *::-webkit-scrollbar-track {
+  background: #f0f0f6;
+}
+html:not(.dark) *::-webkit-scrollbar-thumb {
+  background: #d8d8e4;
+  border-radius: 4px;
+}
+html:not(.dark) *::-webkit-scrollbar-thumb:hover {
+  background: #c8c8da;
 }
 
 /* Auto-hide scrollbar: always reserves space, thumb visible only on hover */

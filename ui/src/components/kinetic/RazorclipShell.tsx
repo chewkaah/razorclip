@@ -11,6 +11,7 @@ import { type ReactNode, useState, useMemo } from "react";
 import { NavLink, useLocation, Outlet } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
 import { useCompany } from "@/context/CompanyContext";
+import { useTheme } from "@/context/ThemeContext";
 import { agentsApi } from "@/api/agents";
 import { heartbeatsApi } from "@/api/heartbeats";
 import { queryKeys } from "@/lib/queryKeys";
@@ -64,8 +65,8 @@ function SideLink({ to, icon, label }: { to: string; icon: string; label: string
         cn(
           "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors duration-200",
           isActive
-            ? "text-[#c2c1ff] bg-[#c2c1ff]/10 font-semibold border-r-2 border-[#c2c1ff]"
-            : "text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5",
+            ? "text-[--rc-primary] bg-[--rc-primary]/10 font-semibold border-r-2 border-[--rc-primary]"
+            : "text-[--rc-on-surface-variant] hover:text-[--rc-on-surface] hover:bg-[--rc-primary]/5",
         )
       }
     >
@@ -108,11 +109,11 @@ function SidebarAgentList() {
     <div className="px-3 mt-2">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1 w-full px-1 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-[#c7c4d7]/40 hover:text-[#c7c4d7]/70 transition-colors"
+        className="flex items-center gap-1 w-full px-1 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-[--rc-on-surface-variant]/40 hover:text-[--rc-on-surface-variant]/70 transition-colors"
       >
         {open ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
         <span>Agents</span>
-        <span className="ml-auto tabular-nums text-[#c2c1ff]/40">{visible.length}</span>
+        <span className="ml-auto tabular-nums text-[--rc-primary]/40">{visible.length}</span>
       </button>
       {open && (
         <div className="mt-1 space-y-0.5 max-h-48 overflow-y-auto no-scrollbar">
@@ -131,8 +132,8 @@ function SidebarAgentList() {
                   cn(
                     "flex items-center gap-2.5 px-4 py-1.5 rounded-lg text-[12px] transition-colors duration-200",
                     routeActive
-                      ? "text-[#e2e2eb] bg-[#c2c1ff]/8"
-                      : "text-[#c7c4d7]/70 hover:text-[#e2e2eb] hover:bg-white/3",
+                      ? "text-[--rc-on-surface] bg-[--rc-primary]/8"
+                      : "text-[--rc-on-surface-variant]/70 hover:text-[--rc-on-surface] hover:bg-[--rc-primary]/3",
                   )
                 }
               >
@@ -158,14 +159,16 @@ function SidebarAgentList() {
 
 /* ── Main Shell ──────────────────────────────────────── */
 export function RazorclipShell() {
+  const { theme, toggleTheme } = useTheme();
+
   return (
-    <div className="bg-[#111319] text-[#e2e2eb] font-['Inter'] min-h-screen selection:bg-[#c2c1ff]/30">
+    <div className="bg-[--rc-surface] text-[--rc-on-surface] font-['Inter'] min-h-screen selection:bg-[--rc-primary]/30">
       {/* ─── Sidebar ─── */}
-      <aside className="fixed left-0 top-0 h-full flex flex-col py-6 bg-[#111319]/80 backdrop-blur-3xl w-64 border-r border-[#c2c1ff]/10 tabular-nums tracking-tight font-medium text-sm shadow-[20px_0_40px_-12px_rgba(194,193,255,0.05)] z-50">
+      <aside className="fixed left-0 top-0 h-full flex flex-col py-6 bg-[--rc-sidebar-bg] backdrop-blur-3xl w-64 border-r border-[--rc-primary]/10 tabular-nums tracking-tight font-medium text-sm shadow-[20px_0_40px_-12px_rgba(194,193,255,0.05)] z-50">
         {/* Brand */}
         <div className="px-6 mb-8">
-          <h1 className="text-xl font-thin tracking-tighter text-[#c2c1ff] uppercase">Razorclip</h1>
-          <p className="text-[10px] text-[#c7c4d7] tracking-[0.2em] uppercase opacity-60">
+          <h1 className="text-xl font-thin tracking-tighter text-[--rc-primary] uppercase">Razorclip</h1>
+          <p className="text-[10px] text-[--rc-on-surface-variant] tracking-[0.2em] uppercase opacity-60">
             Agent Command Center
           </p>
         </div>
@@ -181,36 +184,44 @@ export function RazorclipShell() {
         </nav>
 
         {/* Bottom nav */}
-        <div className="px-3 pt-4 border-t border-[#464554]/10 space-y-1">
+        <div className="px-3 pt-4 border-t border-[--rc-outline-variant]/10 space-y-1">
           {bottomNav.map((item) => (
             <SideLink key={item.to} {...item} />
           ))}
+          {/* Theme toggle */}
+          <button
+            onClick={toggleTheme}
+            className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[--rc-on-surface-variant] hover:text-[--rc-on-surface] hover:bg-[--rc-primary]/5 transition-colors duration-200 w-full"
+          >
+            <MI icon={theme === "dark" ? "light_mode" : "dark_mode"} />
+            <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+          </button>
         </div>
       </aside>
 
       {/* ─── Top bar ─── */}
-      <header className="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-8 z-40 bg-[#111319]/60 backdrop-blur-xl border-b border-[#c2c1ff]/10 font-medium text-xs uppercase tracking-widest">
+      <header className="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-8 z-40 bg-[--rc-topbar-bg] backdrop-blur-xl border-b border-[--rc-primary]/10 font-medium text-xs uppercase tracking-widest">
         <div className="flex items-center gap-6">
           <div className="relative">
             <span
-              className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#c7c4d7] text-sm"
+              className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[--rc-on-surface-variant] text-sm"
               style={{ fontVariationSettings: "'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24" }}
             >
               search
             </span>
             <input
-              className="bg-transparent border-none focus:ring-0 focus:outline-none text-[10px] w-64 pl-10 text-[#e2e2eb] placeholder:text-[#c7c4d7]/40"
+              className="bg-transparent border-none focus:ring-0 focus:outline-none text-[10px] w-64 pl-10 text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40"
               placeholder="CMD + K TO SEARCH..."
               type="text"
             />
           </div>
           <nav className="hidden md:flex gap-8">
-            <a className="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all cursor-pointer">System Status</a>
-            <a className="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all cursor-pointer">Network</a>
-            <a className="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all cursor-pointer">Logs</a>
+            <a className="text-[--rc-on-surface-variant] hover:text-[--rc-primary] transition-all cursor-pointer">System Status</a>
+            <a className="text-[--rc-on-surface-variant] hover:text-[--rc-primary] transition-all cursor-pointer">Network</a>
+            <a className="text-[--rc-on-surface-variant] hover:text-[--rc-primary] transition-all cursor-pointer">Logs</a>
           </nav>
         </div>
-        <div className="flex items-center gap-4 text-[#c2c1ff]">
+        <div className="flex items-center gap-4 text-[--rc-primary]">
           <button
             className="material-symbols-outlined p-2 scale-95 active:opacity-80 transition-all"
             style={{ fontVariationSettings: "'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24" }}
@@ -223,7 +234,7 @@ export function RazorclipShell() {
           >
             terminal
           </button>
-          <div className="h-8 w-8 rounded-full bg-[#282a30] border border-[#464554]/20 flex items-center justify-center">
+          <div className="h-8 w-8 rounded-full bg-[--rc-surface-container-high] border border-[--rc-outline-variant]/20 flex items-center justify-center">
             <span
               className="material-symbols-outlined text-sm"
               style={{ fontVariationSettings: "'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24" }}

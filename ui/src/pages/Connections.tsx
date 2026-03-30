@@ -52,15 +52,15 @@ export function Connections() {
       {/* Header — Stitch style */}
       <div className="flex justify-between items-end">
         <div>
-          <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[#c7c4d7] mb-2">
+          <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] mb-2">
             <span>Razorclip</span>
             <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chevron_right</span>
-            <span className="text-[#c2c1ff]">Connections</span>
+            <span className="text-[--rc-primary]">Connections</span>
           </nav>
-          <h2 className="text-4xl font-light tracking-tight text-[#e2e2eb]">
+          <h2 className="text-4xl font-light tracking-tight text-[--rc-on-surface]">
             Manage <span className="font-bold">Connections</span>
           </h2>
-          <p className="text-[#c7c4d7] mt-2 text-sm font-medium">
+          <p className="text-[--rc-on-surface-variant] mt-2 text-sm font-medium">
             {connectedCount} of {CONNECTIONS.length} connected • MCPs, OAuth, and API keys
           </p>
         </div>
@@ -68,11 +68,11 @@ export function Connections() {
 
       {/* Search */}
       <div className="relative">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#c7c4d7] text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>search</span>
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[--rc-on-surface-variant] text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>search</span>
         <input
           type="text" placeholder="Search connections..."
           value={search} onChange={e => setSearch(e.target.value)}
-          className="w-full bg-[#191b22] border border-[#464554]/20 rounded-xl pl-11 pr-4 py-3 text-sm text-[#e2e2eb] placeholder:text-[#c7c4d7]/40 focus:outline-none focus:border-[#c2c1ff]/40 focus:ring-1 focus:ring-[#c2c1ff]/20 transition-all"
+          className="w-full bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/20 rounded-xl pl-11 pr-4 py-3 text-sm text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40 focus:outline-none focus:border-[#c2c1ff]/40 focus:ring-1 focus:ring-[#c2c1ff]/20 transition-all"
         />
       </div>
 
@@ -80,31 +80,31 @@ export function Connections() {
       {Object.entries(groups).map(([category, conns]) => (
         <section key={category} className="space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[#c7c4d7]">{category}</h3>
-            <span className="text-[10px] tabular-nums text-[#c7c4d7]/50">
+            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[--rc-on-surface-variant]">{category}</h3>
+            <span className="text-[10px] tabular-nums text-[--rc-on-surface-variant]/50">
               {conns.filter(c => c.status === "connected").length}/{conns.length}
             </span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {conns.map(conn => (
-              <div key={conn.slug} className="glass-card rounded-xl p-5 border border-[#464554]/10 hover:translate-y-[-2px] transition-all duration-300 group cursor-pointer hover:border-[#c2c1ff]/20">
+              <div key={conn.slug} className="glass-card rounded-xl p-5 border border-[--rc-outline-variant]/10 hover:translate-y-[-2px] transition-all duration-300 group cursor-pointer hover:border-[#c2c1ff]/20">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[#282a30] flex items-center justify-center border border-[#464554]/20 shrink-0">
-                    <span className="material-symbols-outlined text-[#c2c1ff] text-lg" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>{conn.icon}</span>
+                  <div className="w-10 h-10 rounded-lg bg-[--rc-surface-container-high] flex items-center justify-center border border-[--rc-outline-variant]/20 shrink-0">
+                    <span className="material-symbols-outlined text-[--rc-primary] text-lg" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>{conn.icon}</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="text-sm font-semibold text-[#e2e2eb]">{conn.name}</h4>
+                      <h4 className="text-sm font-semibold text-[--rc-on-surface]">{conn.name}</h4>
                       <span className={`w-2 h-2 rounded-full ${conn.status === "connected" ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : conn.status === "error" ? "bg-[#ffb4ab] shadow-[0_0_8px_rgba(255,180,171,0.5)]" : "bg-[#464554]"}`} />
                     </div>
-                    <p className="text-[11px] text-[#c7c4d7]/60 leading-relaxed">{conn.description}</p>
+                    <p className="text-[11px] text-[--rc-on-surface-variant]/60 leading-relaxed">{conn.description}</p>
                   </div>
                 </div>
                 <div className="mt-4 flex justify-end">
                   {conn.status === "connected" ? (
                     <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Connected</span>
                   ) : (
-                    <button className="px-3 py-1.5 rounded-lg bg-[#c2c1ff]/10 text-[#c2c1ff] text-[10px] font-bold uppercase tracking-widest hover:bg-[#c2c1ff]/20 transition-all">
+                    <button className="px-3 py-1.5 rounded-lg bg-[--rc-primary]/10 text-[--rc-primary] text-[10px] font-bold uppercase tracking-widest hover:bg-[--rc-primary]/20 transition-all">
                       Configure
                     </button>
                   )}
