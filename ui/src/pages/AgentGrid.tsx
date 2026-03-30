@@ -100,8 +100,8 @@ export function AgentGrid() {
       {/* Header Section — pixel-perfect from Stitch */}
       <div className="flex justify-between items-end mb-12">
         <div>
-          <h2 className="text-4xl font-light tracking-tight text-[#e2e2eb] mb-1">Active Agents</h2>
-          <div className="flex items-center gap-3 text-[#c7c4d7] text-[10px] uppercase tracking-[0.2em]">
+          <h2 className="text-4xl font-light tracking-tight text-[--rc-on-surface] mb-1">Active Agents</h2>
+          <div className="flex items-center gap-3 text-[--rc-on-surface-variant] text-[10px] uppercase tracking-[0.2em]">
             <span className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
               {onlineCount} Systems Nominal
@@ -112,7 +112,7 @@ export function AgentGrid() {
             </span>
           </div>
         </div>
-        <button className="group flex items-center gap-2 px-5 py-2.5 bg-[#282a30] hover:bg-[#33343b] border border-[#464554]/10 rounded-xl transition-all duration-300">
+        <button className="group flex items-center gap-2 px-5 py-2.5 bg-[--rc-surface-container-high] hover:bg-[--rc-surface-container-highest] border border-[--rc-outline-variant]/10 rounded-xl transition-all duration-300">
           <span
             className="material-symbols-outlined text-lg group-hover:rotate-180 transition-transform duration-500"
             style={{ fontVariationSettings: "'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24" }}
@@ -146,7 +146,7 @@ export function AgentGrid() {
             >
               <div
                 className={cn(
-                  "glass-card group p-6 rounded-xl border border-[#464554]/10 transition-all duration-500 hover:scale-[1.02] relative overflow-hidden",
+                  "glass-card group p-6 rounded-xl border border-[--rc-outline-variant]/10 transition-all duration-500 hover:scale-[1.02] relative overflow-hidden",
                   glowClass,
                 )}
               >
@@ -170,7 +170,7 @@ export function AgentGrid() {
                       {avatarUrl ? (
                         <img
                           alt={`${agent.name} Avatar`}
-                          className="w-full h-full rounded-full bg-[#191b22]"
+                          className="w-full h-full rounded-full bg-[--rc-surface-container-low]"
                           src={avatarUrl}
                         />
                       ) : (
@@ -201,7 +201,7 @@ export function AgentGrid() {
                         "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold tabular-nums border",
                         isError
                           ? "bg-[#ffb4ab]/20 text-[#ffb4ab] border-[#ffb4ab]/30"
-                          : "bg-[#c2c1ff]/20 text-[#c2c1ff] border-[#c2c1ff]/30",
+                          : "bg-[--rc-primary]/20 text-[--rc-primary] border-[#c2c1ff]/30",
                       )}
                     >
                       {liveCount || (isError ? "!" : "0")}
@@ -211,8 +211,8 @@ export function AgentGrid() {
 
                 {/* Name + Role */}
                 <div className="mb-6">
-                  <h3 className="text-xl font-semibold text-[#e2e2eb]">{agent.name}</h3>
-                  <p className="text-xs text-[#c7c4d7] uppercase tracking-widest opacity-70">
+                  <h3 className="text-xl font-semibold text-[--rc-on-surface]">{agent.name}</h3>
+                  <p className="text-xs text-[--rc-on-surface-variant] uppercase tracking-widest opacity-70">
                     {agent.title || roleLabels[agent.role] || agent.role}
                   </p>
                 </div>
@@ -224,11 +224,11 @@ export function AgentGrid() {
                       "p-3 rounded-lg",
                       isError
                         ? "bg-[#93000a]/10 border border-[#ffb4ab]/20"
-                        : "bg-[#0c0e14]/50",
+                        : "bg-[--rc-surface-container-lowest]/50",
                     )}
                   >
                     <div className="flex justify-between items-center mb-2">
-                      <span className={cn("text-[10px] uppercase", isError ? "text-[#ffb4ab]" : "text-[#c7c4d7]")}>
+                      <span className={cn("text-[10px] uppercase", isError ? "text-[#ffb4ab]" : "text-[--rc-on-surface-variant]")}>
                         {isError ? "Critical Failure" : "Task Snippet"}
                       </span>
                       <span
@@ -238,7 +238,7 @@ export function AgentGrid() {
                         {taskProgress}%
                       </span>
                     </div>
-                    <p className={cn("text-xs mb-3 line-clamp-1", isError ? "text-[#ffb4ab]/80" : "text-[#e2e2eb]/80")}>
+                    <p className={cn("text-xs mb-3 line-clamp-1", isError ? "text-[#ffb4ab]/80" : "text-[--rc-on-surface]/80")}>
                       {isError
                         ? "Connection timed out"
                         : isActive
@@ -260,7 +260,7 @@ export function AgentGrid() {
 
                   {/* 8W Activity Sparkline */}
                   <div>
-                    <span className="text-[10px] uppercase text-[#c7c4d7] mb-2 block">8w Activity</span>
+                    <span className="text-[10px] uppercase text-[--rc-on-surface-variant] mb-2 block">8w Activity</span>
                     <div className="flex items-end gap-1 h-8">
                       {[...Array(8)].map((_, i) => {
                         const h = isActive
@@ -292,34 +292,34 @@ export function AgentGrid() {
       </div>
 
       {/* Footer Stats Banner — pixel-perfect from Stitch */}
-      <div className="mt-16 glass-card rounded-2xl p-8 border border-[#464554]/10 flex flex-wrap gap-12 items-center justify-between">
+      <div className="mt-16 glass-card rounded-2xl p-8 border border-[--rc-outline-variant]/10 flex flex-wrap gap-12 items-center justify-between">
         <div className="flex gap-12">
           <div>
-            <span className="text-[10px] uppercase tracking-widest text-[#c7c4d7] opacity-60 block mb-2">
+            <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] opacity-60 block mb-2">
               Total Processing
             </span>
             <div className="text-2xl font-light tabular-nums">
-              1.42 <span className="text-sm text-[#c2c1ff] opacity-70">PetaFLOPS</span>
+              1.42 <span className="text-sm text-[--rc-primary] opacity-70">PetaFLOPS</span>
             </div>
           </div>
           <div>
-            <span className="text-[10px] uppercase tracking-widest text-[#c7c4d7] opacity-60 block mb-2">
+            <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] opacity-60 block mb-2">
               Avg Latency
             </span>
             <div className="text-2xl font-light tabular-nums">
-              12.4 <span className="text-sm text-[#c2c1ff] opacity-70">ms</span>
+              12.4 <span className="text-sm text-[--rc-primary] opacity-70">ms</span>
             </div>
           </div>
           <div>
-            <span className="text-[10px] uppercase tracking-widest text-[#c7c4d7] opacity-60 block mb-2">
+            <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] opacity-60 block mb-2">
               Fleet Uptime
             </span>
             <div className="text-2xl font-light tabular-nums">
-              99.998 <span className="text-sm text-[#c2c1ff] opacity-70">%</span>
+              99.998 <span className="text-sm text-[--rc-primary] opacity-70">%</span>
             </div>
           </div>
         </div>
-        <button className="px-6 py-3 bg-[#c2c1ff] text-[#1800a7] font-semibold rounded-xl text-xs uppercase tracking-widest transition-transform hover:scale-105 active:scale-95">
+        <button className="px-6 py-3 bg-[--rc-primary] text-[--rc-on-primary] font-semibold rounded-xl text-xs uppercase tracking-widest transition-transform hover:scale-105 active:scale-95">
           Deploy New Agent
         </button>
       </div>

@@ -69,12 +69,12 @@ export function AgentProfile() {
   }, [agentData, setBreadcrumbs]);
 
   if (isLoading) return <div className="animate-pulse h-96 glass-card rounded-xl" />;
-  if (!agentData) return <p className="text-[#c7c4d7]">Agent not found</p>;
+  if (!agentData) return <p className="text-[--rc-on-surface-variant]">Agent not found</p>;
 
   return (
     <div className="-m-8 flex gap-0 h-[calc(100vh-4rem)]">
       {/* Left Column: Hero Profile — from Stitch */}
-      <section className="w-[380px] h-full border-r border-[#464554]/10 flex flex-col p-8 overflow-y-auto shrink-0">
+      <section className="w-[380px] h-full border-r border-[--rc-outline-variant]/10 flex flex-col p-8 overflow-y-auto shrink-0">
         {/* Avatar with status ring */}
         <div className="relative group mb-10">
           <div className="w-48 h-48 mx-auto relative">
@@ -84,7 +84,7 @@ export function AgentProfile() {
             {avatarUrl ? (
               <img className="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all duration-700 p-4 relative z-10" src={avatarUrl} alt={name} />
             ) : (
-              <div className="w-full h-full rounded-full flex items-center justify-center p-4 relative z-10 bg-[#191b22] text-4xl font-light" style={{ color: accentColor }}>{name[0]}</div>
+              <div className="w-full h-full rounded-full flex items-center justify-center p-4 relative z-10 bg-[--rc-surface-container-low] text-4xl font-light" style={{ color: accentColor }}>{name[0]}</div>
             )}
             <div className="absolute bottom-4 right-4 w-5 h-5 rounded-full border-4 border-[#111319] z-20 shadow-[0_0_15px_rgba(139,92,246,0.6)]" style={{ background: `linear-gradient(to top right, ${accentColor}, ${accentLight})` }} />
           </div>
@@ -93,7 +93,7 @@ export function AgentProfile() {
         <div className="space-y-6">
           {/* Name + Role */}
           <div className="text-center">
-            <h1 className="text-4xl font-extralight tracking-tighter text-[#e2e2eb] uppercase mb-1">{name}</h1>
+            <h1 className="text-4xl font-extralight tracking-tighter text-[--rc-on-surface] uppercase mb-1">{name}</h1>
             <div className="inline-flex items-center px-3 py-1 rounded-full border" style={{ backgroundColor: `${accentColor}10`, borderColor: `${accentColor}20` }}>
               <span className="text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: accentLight }}>{agentData.title || roleLabels[agentData.role] || agentData.role}</span>
             </div>
@@ -101,17 +101,17 @@ export function AgentProfile() {
 
           {/* Personality */}
           <div className="space-y-4">
-            <h3 className="text-[#c7c4d7] uppercase tracking-widest text-[10px] font-bold opacity-60">Personality Profile</h3>
-            <p className="text-sm leading-relaxed text-[#c7c4d7] font-light">
+            <h3 className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold opacity-60">Personality Profile</h3>
+            <p className="text-sm leading-relaxed text-[--rc-on-surface-variant] font-light">
               Analytical yet expressive. Specialized in trend forecasting and strategic operations for complex multi-agent workflows.
             </p>
             <div className="grid grid-cols-2 gap-2 pt-2">
-              <div className="bg-[#191b22] px-3 py-2 rounded-lg">
-                <p className="text-[9px] uppercase tracking-wider text-[#918fa0] mb-1">Adapter</p>
+              <div className="bg-[--rc-surface-container-low] px-3 py-2 rounded-lg">
+                <p className="text-[9px] uppercase tracking-wider text-[--rc-outline] mb-1">Adapter</p>
                 <p className="text-xs font-medium">{agentData.adapterType}</p>
               </div>
-              <div className="bg-[#191b22] px-3 py-2 rounded-lg">
-                <p className="text-[9px] uppercase tracking-wider text-[#918fa0] mb-1">Status</p>
+              <div className="bg-[--rc-surface-container-low] px-3 py-2 rounded-lg">
+                <p className="text-[9px] uppercase tracking-wider text-[--rc-outline] mb-1">Status</p>
                 <p className="text-xs font-medium capitalize">{agentData.status}</p>
               </div>
             </div>
@@ -119,10 +119,10 @@ export function AgentProfile() {
 
           {/* Skills */}
           <div className="pt-8 space-y-4">
-            <h3 className="text-[#c7c4d7] uppercase tracking-widest text-[10px] font-bold opacity-60">Neural Core Skills</h3>
+            <h3 className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold opacity-60">Neural Core Skills</h3>
             <div className="flex flex-wrap gap-2">
               {(agentData.title || name).split(/[,&\-]/).map((s: string, i: number) => (
-                <span key={i} className="px-3 py-1 bg-[#282a30] rounded-full text-[10px] font-medium border border-[#464554]/30">{s.trim()}</span>
+                <span key={i} className="px-3 py-1 bg-[--rc-surface-container-high] rounded-full text-[10px] font-medium border border-[--rc-outline-variant]/30">{s.trim()}</span>
               ))}
             </div>
           </div>
@@ -130,28 +130,28 @@ export function AgentProfile() {
       </section>
 
       {/* Middle Column: Performance + Terminal — from Stitch */}
-      <section className="flex-1 bg-[#0c0e14]/30 flex flex-col min-w-0">
+      <section className="flex-1 bg-[--rc-surface-container-lowest]/30 flex flex-col min-w-0">
         {/* Stats Row */}
-        <div className="grid grid-cols-3 gap-0 border-b border-[#464554]/10">
-          <div className="p-8 border-r border-[#464554]/10">
-            <p className="text-[#c7c4d7] uppercase tracking-widest text-[10px] font-bold mb-2">Tasks Orchestrated</p>
+        <div className="grid grid-cols-3 gap-0 border-b border-[--rc-outline-variant]/10">
+          <div className="p-8 border-r border-[--rc-outline-variant]/10">
+            <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Tasks Orchestrated</p>
             <div className="flex items-baseline gap-2">
               <span className="text-4xl font-extralight tracking-tight tabular-nums">{totalRuns.toLocaleString()}</span>
-              <span className="text-[10px] text-[#c2c1ff]">+12.4%</span>
+              <span className="text-[10px] text-[--rc-primary]">+12.4%</span>
             </div>
           </div>
-          <div className="p-8 border-r border-[#464554]/10">
-            <p className="text-[#c7c4d7] uppercase tracking-widest text-[10px] font-bold mb-2">Cost Optimization</p>
+          <div className="p-8 border-r border-[--rc-outline-variant]/10">
+            <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Cost Optimization</p>
             <div className="flex items-baseline gap-2">
               <span className="text-4xl font-extralight tracking-tight tabular-nums">{totalCost}</span>
-              <span className="text-[10px] text-[#918fa0]">total</span>
+              <span className="text-[10px] text-[--rc-outline]">total</span>
             </div>
           </div>
           <div className="p-8">
-            <p className="text-[#c7c4d7] uppercase tracking-widest text-[10px] font-bold mb-2">Revenue Attribution</p>
+            <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Revenue Attribution</p>
             <div className="flex items-baseline gap-2">
               <span className="text-4xl font-extralight tracking-tight tabular-nums">$1.2M</span>
-              <span className="text-[10px] text-[#c2c1ff]">ROI 314%</span>
+              <span className="text-[10px] text-[--rc-primary]">ROI 314%</span>
             </div>
           </div>
         </div>
@@ -160,28 +160,28 @@ export function AgentProfile() {
         <div className="flex-1 flex flex-col p-8 gap-4 overflow-hidden">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="material-symbols-outlined text-[#c2c1ff] text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>terminal</span>
+              <span className="material-symbols-outlined text-[--rc-primary] text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>terminal</span>
               <h2 className="uppercase tracking-[0.2em] text-[11px] font-bold">Live Neural Stream</h2>
             </div>
             <div className="flex gap-2 items-center">
               <div className="w-2 h-2 rounded-full bg-[#ffb4ab] animate-pulse" />
-              <span className="text-[9px] uppercase tracking-widest text-[#918fa0]">Live Execution</span>
+              <span className="text-[9px] uppercase tracking-widest text-[--rc-outline]">Live Execution</span>
             </div>
           </div>
-          <div className="flex-1 bg-[#0c0e14] border border-[#464554]/10 rounded-xl p-6 font-mono text-[11px] leading-relaxed overflow-y-auto no-scrollbar shadow-inner">
+          <div className="flex-1 bg-[--rc-surface-container-lowest] border border-[--rc-outline-variant]/10 rounded-xl p-6 font-mono text-[11px] leading-relaxed overflow-y-auto no-scrollbar shadow-inner">
             <p className="mb-1" style={{ color: accentColor }}>[SYSTEM]: Initializing {name}.Core.v4.2.1...</p>
-            <p className="text-[#c7c4d7]/40 mb-1">09:41:22 - Connecting to API services...</p>
-            <p className="text-[#c7c4d7]/40 mb-1">09:41:23 - Authenticated. Node-ID: {name.toUpperCase()}_01</p>
-            <p className="text-[#c2c1ff] mb-1">09:41:25 - Analyzing current task queue...</p>
-            <p className="text-[#c2c1ff] mb-1">09:41:28 - Processing active workload</p>
-            <p className="text-[#c7c4d7]/40 mb-1">09:41:32 - Fetching latest data...</p>
+            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:41:22 - Connecting to API services...</p>
+            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:41:23 - Authenticated. Node-ID: {name.toUpperCase()}_01</p>
+            <p className="text-[--rc-primary] mb-1">09:41:25 - Analyzing current task queue...</p>
+            <p className="text-[--rc-primary] mb-1">09:41:28 - Processing active workload</p>
+            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:41:32 - Fetching latest data...</p>
             <p className="mb-1" style={{ color: accentColor }}>09:41:35 - Optimization complete</p>
             <p className="text-[#eac400] mb-1">09:42:01 - WARNING: Threshold check triggered</p>
-            <p className="text-[#c2c1ff] mb-1">09:42:03 - Adjusting parameters</p>
-            <p className="text-[#c7c4d7]/40 mb-1">09:42:08 - Re-streaming buffer...</p>
-            <p className="text-[#c7c4d7]/40 mb-1">09:42:15 - Sync pulse sent to [Victor_Agent_Primary]</p>
-            <p className="text-[#c2c1ff]/80 mb-1">09:42:44 - SUCCESS: Alignment verified. 98.4% match.</p>
-            <p className="text-[#c7c4d7]/40 mb-1">09:43:01 - Awaiting next directive...</p>
+            <p className="text-[--rc-primary] mb-1">09:42:03 - Adjusting parameters</p>
+            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:42:08 - Re-streaming buffer...</p>
+            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:42:15 - Sync pulse sent to [Victor_Agent_Primary]</p>
+            <p className="text-[--rc-primary]/80 mb-1">09:42:44 - SUCCESS: Alignment verified. 98.4% match.</p>
+            <p className="text-[--rc-on-surface-variant]/40 mb-1">09:43:01 - Awaiting next directive...</p>
             <div className="flex items-center gap-2 animate-pulse mt-2" style={{ color: accentColor }}>
               <span>_</span>
             </div>
@@ -190,35 +190,35 @@ export function AgentProfile() {
       </section>
 
       {/* Right Column: History + CTA — from Stitch */}
-      <section className="w-[340px] h-full border-l border-[#464554]/10 flex flex-col bg-[#0c0e14]/50 shrink-0">
+      <section className="w-[340px] h-full border-l border-[--rc-outline-variant]/10 flex flex-col bg-[--rc-surface-container-lowest]/50 shrink-0">
         <div className="p-8 flex-1 overflow-y-auto no-scrollbar">
-          <h3 className="text-[#c7c4d7] uppercase tracking-widest text-[10px] font-bold opacity-60 mb-6">Recent Completions</h3>
+          <h3 className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold opacity-60 mb-6">Recent Completions</h3>
           <div className="space-y-4">
             {recentRuns.length > 0 ? recentRuns.map((run: any) => (
-              <div key={run.id} className="group bg-[#191b22]/50 hover:bg-[#282a30] transition-all p-4 rounded-xl border border-[#464554]/10 hover:border-[#c2c1ff]/20">
+              <div key={run.id} className="group bg-[--rc-surface-container-low]/50 hover:bg-[--rc-surface-container-high] transition-all p-4 rounded-xl border border-[--rc-outline-variant]/10 hover:border-[#c2c1ff]/20">
                 <div className="flex justify-between items-start mb-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#c2c1ff]">{run.status === "completed" ? "Deployment" : "Error"}</span>
-                  <span className="text-[9px] tabular-nums text-[#918fa0]">{relativeTime(run.completedAt || run.createdAt)}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[--rc-primary]">{run.status === "completed" ? "Deployment" : "Error"}</span>
+                  <span className="text-[9px] tabular-nums text-[--rc-outline]">{relativeTime(run.completedAt || run.createdAt)}</span>
                 </div>
                 <p className="text-xs font-medium mb-1">Run {run.id.slice(0, 8)}</p>
-                <p className="text-[11px] text-[#c7c4d7] leading-tight mb-3">Task execution {run.status}</p>
+                <p className="text-[11px] text-[--rc-on-surface-variant] leading-tight mb-3">Task execution {run.status}</p>
                 <div className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[14px] text-[#c2c1ff]" style={{ fontVariationSettings: "'FILL' 1, 'wght' 300" }}>
+                  <span className="material-symbols-outlined text-[14px] text-[--rc-primary]" style={{ fontVariationSettings: "'FILL' 1, 'wght' 300" }}>
                     {run.status === "completed" ? "check_circle" : "cancel"}
                   </span>
-                  <span className="text-[9px] uppercase font-bold tracking-widest text-[#918fa0]">{run.status}</span>
+                  <span className="text-[9px] uppercase font-bold tracking-widest text-[--rc-outline]">{run.status}</span>
                 </div>
               </div>
             )) : (
-              <p className="text-xs text-[#c7c4d7]/40">No recent completions</p>
+              <p className="text-xs text-[--rc-on-surface-variant]/40">No recent completions</p>
             )}
           </div>
 
           {/* System Insight */}
-          <div className="mt-10 pt-8 border-t border-[#464554]/10">
+          <div className="mt-10 pt-8 border-t border-[--rc-outline-variant]/10">
             <div className="p-6 rounded-2xl border" style={{ background: `linear-gradient(to bottom right, ${accentColor}20, transparent)`, borderColor: `${accentColor}30` }}>
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] mb-2" style={{ color: accentLight }}>System Insight</p>
-              <p className="text-xs text-[#e2e2eb] italic leading-relaxed">
+              <p className="text-xs text-[--rc-on-surface] italic leading-relaxed">
                 "{name}'s efficiency is currently at peak levels. Consider delegating high-variance tasks to maximize output."
               </p>
             </div>
@@ -226,10 +226,10 @@ export function AgentProfile() {
         </div>
 
         {/* Chat CTA — from Stitch */}
-        <div className="p-8 bg-[#191b22]/30 backdrop-blur-md">
+        <div className="p-8 bg-[--rc-surface-container-low]/30 backdrop-blur-md">
           <Link
             to="/chat"
-            className="no-underline w-full bg-[#c2c1ff] hover:bg-[#e2dfff] text-[#1800a7] font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-3 group shadow-[0_20px_40px_-12px_rgba(194,193,255,0.2)]"
+            className="no-underline w-full bg-[--rc-primary] hover:bg-[#e2dfff] text-[--rc-on-primary] font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-3 group shadow-[0_20px_40px_-12px_rgba(194,193,255,0.2)]"
           >
             <span className="material-symbols-outlined group-hover:rotate-12 transition-transform" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chat_bubble</span>
             <span className="uppercase tracking-widest text-xs">Chat with {name}</span>

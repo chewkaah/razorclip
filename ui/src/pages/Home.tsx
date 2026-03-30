@@ -73,10 +73,10 @@ export function Home() {
     <div className="space-y-8 max-w-4xl">
       {/* Hero Greeting — exact from Stitch */}
       <section className="mt-4">
-        <h1 className="text-3xl font-light tracking-tight text-[#e2e2eb]">
-          {greeting}, <span className="font-bold text-[#c2c1ff]">Chuka</span>
+        <h1 className="text-3xl font-light tracking-tight text-[--rc-on-surface]">
+          {greeting}, <span className="font-bold text-[--rc-primary]">Chuka</span>
         </h1>
-        <p className="text-[#c7c4d7] text-sm mt-1 tracking-wide uppercase">
+        <p className="text-[--rc-on-surface-variant] text-sm mt-1 tracking-wide uppercase">
           {new Date().toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" })} • Command Center
         </p>
       </section>
@@ -84,14 +84,14 @@ export function Home() {
       {/* Business Pulse — exact from Stitch */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-[0.1em] text-[#c7c4d7]">Business Pulse</h2>
-          <span className="text-[10px] text-[#c2c1ff]/60 font-medium tabular-nums uppercase">Real-time • Weekly</span>
+          <h2 className="text-xs font-bold uppercase tracking-[0.1em] text-[--rc-on-surface-variant]">Business Pulse</h2>
+          <span className="text-[10px] text-[--rc-primary]/60 font-medium tabular-nums uppercase">Real-time • Weekly</span>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {/* Active Clients */}
           <div className="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden">
             <div className="absolute -right-2 -top-2 w-12 h-12 bg-emerald-500/10 blur-2xl rounded-full" />
-            <span className="text-[10px] font-medium text-[#c7c4d7] uppercase tracking-wider">Active Clients</span>
+            <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">Active Clients</span>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-semibold tabular-nums">8</span>
               <span className="text-[10px] text-emerald-400 font-bold">+2</span>
@@ -100,7 +100,7 @@ export function Home() {
           {/* Weekly Revenue */}
           <div className="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden">
             <div className="absolute -right-2 -top-2 w-12 h-12 bg-emerald-500/10 blur-2xl rounded-full" />
-            <span className="text-[10px] font-medium text-[#c7c4d7] uppercase tracking-wider">Weekly Revenue</span>
+            <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">Weekly Revenue</span>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-semibold tabular-nums">$124k</span>
               <span className="material-symbols-outlined text-emerald-400 text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>trending_up</span>
@@ -109,7 +109,7 @@ export function Home() {
           {/* Weekly Burn */}
           <div className="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden">
             <div className="absolute -right-2 -top-2 w-12 h-12 bg-amber-500/10 blur-2xl rounded-full" />
-            <span className="text-[10px] font-medium text-[#c7c4d7] uppercase tracking-wider">Weekly Burn</span>
+            <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">Weekly Burn</span>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-semibold tabular-nums">$18.5k</span>
               <span className="text-[10px] text-amber-400 font-bold">STABLE</span>
@@ -117,11 +117,11 @@ export function Home() {
           </div>
           {/* Net Margin */}
           <div className="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden">
-            <div className="absolute -right-2 -top-2 w-12 h-12 bg-[#c2c1ff]/10 blur-2xl rounded-full" />
-            <span className="text-[10px] font-medium text-[#c7c4d7] uppercase tracking-wider">Net Margin</span>
+            <div className="absolute -right-2 -top-2 w-12 h-12 bg-[--rc-primary]/10 blur-2xl rounded-full" />
+            <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">Net Margin</span>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-semibold tabular-nums">85%</span>
-              <span className="material-symbols-outlined text-[#c2c1ff] text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>auto_awesome</span>
+              <span className="material-symbols-outlined text-[--rc-primary] text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>auto_awesome</span>
             </div>
           </div>
         </div>
@@ -130,7 +130,7 @@ export function Home() {
       {/* Syncing Agents — exact from Stitch */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-[0.1em] text-[#c7c4d7]">Syncing Agents</h2>
+          <h2 className="text-xs font-bold uppercase tracking-[0.1em] text-[--rc-on-surface-variant]">Syncing Agents</h2>
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-[10px] font-semibold text-emerald-500">{onlineCount || 6} ONLINE</span>
@@ -142,7 +142,7 @@ export function Home() {
             return (
               <div key={slug} className="flex flex-col items-center gap-2 shrink-0">
                 <div className={`relative p-1 rounded-full bg-gradient-to-br ${gradient}`}>
-                  <div className="bg-[#111319] rounded-full p-0.5">
+                  <div className="bg-[--rc-surface] rounded-full p-0.5">
                     <div className="w-14 h-14 rounded-full overflow-hidden">
                       <img className="w-full h-full object-cover" src={HOME_AVATARS[slug]} alt={config.label} />
                     </div>
@@ -160,8 +160,8 @@ export function Home() {
       {/* Live Activity Feed — exact from Stitch */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-[0.1em] text-[#c7c4d7]">Live Activity</h2>
-          <span className="material-symbols-outlined text-[#c2c1ff] text-lg" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>reorder</span>
+          <h2 className="text-xs font-bold uppercase tracking-[0.1em] text-[--rc-on-surface-variant]">Live Activity</h2>
+          <span className="material-symbols-outlined text-[--rc-primary] text-lg" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>reorder</span>
         </div>
         <div className="space-y-3">
           {activityFeed.map((item, i) => (
@@ -174,15 +174,15 @@ export function Home() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-start">
-                  <p className="text-[13px] text-[#e2e2eb] leading-snug">
+                  <p className="text-[13px] text-[--rc-on-surface] leading-snug">
                     <span className="font-bold" style={{ color: item.color }}>{item.agent.charAt(0).toUpperCase() + item.agent.slice(1)}:</span>{" "}
                     {item.text}
                   </p>
-                  <span className="text-[10px] text-[#c7c4d7] font-medium tabular-nums ml-2">{item.time}</span>
+                  <span className="text-[10px] text-[--rc-on-surface-variant] font-medium tabular-nums ml-2">{item.time}</span>
                 </div>
                 {item.tag && (
                   <div className="mt-2 flex gap-2">
-                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-tighter border ${item.tagColor || "bg-white/5 border-white/5 text-[#c7c4d7]"}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-tighter border ${item.tagColor || "bg-white/5 border-white/5 text-[--rc-on-surface-variant]"}`}>
                       {item.tag}
                     </span>
                   </div>
