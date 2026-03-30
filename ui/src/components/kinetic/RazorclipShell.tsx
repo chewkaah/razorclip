@@ -45,11 +45,14 @@ const mainNav = [
   { to: "/routines", label: "Routines", icon: "sync" },
   { to: "/goals", label: "Goals", icon: "target" },
   { to: "/agents/grid", label: "Agents", icon: "smart_toy" },
+  { to: "/clients", label: "Clients", icon: "group" },
+  { to: "/approvals/queue", label: "Approvals", icon: "verified" },
 ];
 
 const bottomNav = [
-  { to: "/connections", label: "Settings", icon: "settings" },
   { to: "/health", label: "Health", icon: "monitor_heart" },
+  { to: "/connections", label: "Connections", icon: "cable" },
+  { to: "/company/settings", label: "Settings", icon: "settings" },
 ];
 
 /* ── Sidebar Link ────────────────────────────────────── */
