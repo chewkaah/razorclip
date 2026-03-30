@@ -202,7 +202,7 @@ function AgentCardGrid({
   const isError = agent.status === "error";
 
   return (
-    <Link to={agentUrl(agent)} className="no-underline text-inherit">
+    <Link to={`${agentUrl(agent)}/profile`} className="no-underline text-inherit">
       <GlassCard
         variant="interactive"
         className={cn(
@@ -303,7 +303,7 @@ function AgentCardList({
   const isError = agent.status === "error";
 
   return (
-    <Link to={agentUrl(agent)} className="no-underline text-inherit">
+    <Link to={`${agentUrl(agent)}/profile`} className="no-underline text-inherit">
       <GlassCard
         variant="interactive"
         className="p-4 flex items-center gap-4"

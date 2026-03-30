@@ -142,9 +142,9 @@ function boardRoutes() {
       <Route path="settings/*" element={<LegacySettingsRedirect />} />
       <Route path="plugins/:pluginId" element={<PluginPage />} />
       <Route path="org" element={<OrgChart />} />
-      <Route path="agents" element={<Navigate to="/agents/all" replace />} />
+      <Route path="agents" element={<Navigate to="/agents/grid" replace />} />
       <Route path="agents/grid" element={<AgentGrid />} />
-      <Route path="agents/all" element={<Agents />} />
+      <Route path="agents/all" element={<Agents />} /> {/* legacy */}
       <Route path="agents/active" element={<Agents />} />
       <Route path="agents/paused" element={<Agents />} />
       <Route path="agents/error" element={<Agents />} />

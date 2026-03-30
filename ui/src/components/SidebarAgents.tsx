@@ -104,7 +104,7 @@ export function SidebarAgents() {
             return (
               <NavLink
                 key={agent.id}
-                to={activeTab ? `${agentUrl(agent)}/${activeTab}` : agentUrl(agent)}
+                to={`${agentUrl(agent)}/profile`}
                 onClick={() => {
                   if (isMobile) setSidebarOpen(false);
                 }}
