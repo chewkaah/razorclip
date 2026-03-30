@@ -8,10 +8,11 @@
  * Branding: "Razorclip" (not War Room, not Kinetic Terminal, not Paperclip)
  */
 import { type ReactNode, useState, useMemo } from "react";
-import { NavLink, useLocation, Outlet } from "@/lib/router";
+import { NavLink, useLocation, useNavigate, Outlet } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
 import { useCompany } from "@/context/CompanyContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useDialog } from "@/context/DialogContext";
 import { agentsApi } from "@/api/agents";
 import { heartbeatsApi } from "@/api/heartbeats";
 import { queryKeys } from "@/lib/queryKeys";
@@ -160,17 +161,73 @@ function SidebarAgentList() {
 /* ── Main Shell ──────────────────────────────────────── */
 export function RazorclipShell() {
   const { theme, toggleTheme } = useTheme();
+  const { companies, selectedCompany, setSelectedCompanyId } = useCompany();
+  const { openOnboarding } = useDialog();
+  const [showCompanySwitcher, setShowCompanySwitcher] = useState(false);
 
   return (
     <div className="bg-[--rc-surface] text-[--rc-on-surface] font-['Inter'] min-h-screen selection:bg-[--rc-primary]/30">
       {/* ─── Sidebar ─── */}
       <aside className="fixed left-0 top-0 h-full flex flex-col py-6 bg-[--rc-sidebar-bg] backdrop-blur-3xl w-64 border-r border-[--rc-primary]/10 tabular-nums tracking-tight font-medium text-sm shadow-[20px_0_40px_-12px_rgba(194,193,255,0.05)] z-50">
-        {/* Brand */}
-        <div className="px-6 mb-8">
-          <h1 className="text-xl font-thin tracking-tighter text-[--rc-primary] uppercase">Razorclip</h1>
-          <p className="text-[10px] text-[--rc-on-surface-variant] tracking-[0.2em] uppercase opacity-60">
-            Agent Command Center
-          </p>
+        {/* Brand + Company Switcher */}
+        <div className="px-6 mb-6">
+          <div className="flex items-center gap-3 mb-2">
+            {selectedCompany?.brandColor && (
+              <div
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0"
+                style={{ backgroundColor: selectedCompany.brandColor }}
+              >
+                {selectedCompany.name?.[0] ?? "R"}
+              </div>
+            )}
+            <h1 className="text-xl font-thin tracking-tighter text-[--rc-primary] uppercase">Razorclip</h1>
+          </div>
+          <button
+            onClick={() => setShowCompanySwitcher(!showCompanySwitcher)}
+            className="flex items-center gap-2 mt-2 w-full px-2 py-1.5 rounded-lg hover:bg-[--rc-primary]/5 transition-colors"
+          >
+            {selectedCompany?.brandColor && (
+              <div className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: selectedCompany.brandColor }} />
+            )}
+            <span className="text-[10px] text-[--rc-on-surface-variant] tracking-[0.15em] uppercase truncate flex-1 text-left">
+              {selectedCompany?.name ?? "Select company"}
+            </span>
+            <MI icon="unfold_more" className="!text-xs text-[--rc-on-surface-variant]/50" />
+          </button>
+
+          {/* Company dropdown */}
+          {showCompanySwitcher && (
+            <div className="mt-1 bg-[--rc-surface-container] border border-[--rc-outline-variant]/10 rounded-xl p-1 space-y-0.5">
+              {companies.map((company) => (
+                <button
+                  key={company.id}
+                  onClick={() => {
+                    setSelectedCompanyId(company.id);
+                    setShowCompanySwitcher(false);
+                    window.location.href = `/${company.issuePrefix}/home`;
+                  }}
+                  className={cn(
+                    "flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs transition-colors",
+                    company.id === selectedCompany?.id
+                      ? "bg-[--rc-primary]/10 text-[--rc-primary]"
+                      : "text-[--rc-on-surface-variant] hover:bg-[--rc-primary]/5",
+                  )}
+                >
+                  {company.brandColor && (
+                    <div className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ backgroundColor: company.brandColor }} />
+                  )}
+                  <span className="truncate">{company.name}</span>
+                </button>
+              ))}
+              <button
+                onClick={() => { openOnboarding(); setShowCompanySwitcher(false); }}
+                className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs text-[--rc-on-surface-variant]/50 hover:text-[--rc-primary] hover:bg-[--rc-primary]/5 transition-colors"
+              >
+                <MI icon="add" className="!text-sm" />
+                <span>New Company</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Main nav */}
