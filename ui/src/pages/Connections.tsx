@@ -34,24 +34,39 @@ interface ConnectionSlot {
 }
 
 const PREDEFINED_SLOTS: ConnectionSlot[] = [
-  { slug: "gmail", displayName: "Gmail", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", description: "Email read, search, and drafts", icon: "mail" },
-  { slug: "google-calendar", displayName: "Google Calendar", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", description: "Events, scheduling, free time", icon: "calendar_month" },
-  { slug: "apollo", displayName: "Apollo.io", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", description: "Contact search, enrichment, campaigns", icon: "person_search" },
-  { slug: "fireflies", displayName: "Fireflies.ai", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", description: "Meeting transcripts and summaries", icon: "mic" },
-  { slug: "linear", displayName: "Linear", category: "Project Management", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", description: "Issues, projects, and cycles", icon: "linear_scale" },
-  { slug: "notion", displayName: "Notion", category: "Project Management", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", description: "Databases, pages, CRM, pipeline", icon: "edit_note" },
-  { slug: "vercel", displayName: "Vercel", category: "Dev & Deploy", connectionType: "mcp_server", authMechanism: "bearer_token", status: "disconnected", description: "Deployments, projects, and logs", icon: "cloud_upload" },
-  { slug: "stripe-mcp", displayName: "Stripe", category: "Dev & Deploy", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", description: "Products, prices, subscriptions", icon: "credit_card" },
-  { slug: "canva", displayName: "Canva", category: "Creative", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", description: "Design generation and brand kits", icon: "palette" },
+  // Communication & CRM — CONNECTED via MCP
+  { slug: "gmail", displayName: "Gmail", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "oauth2", status: "connected", description: "Email read, search, and drafts", icon: "mail" },
+  { slug: "google-calendar", displayName: "Google Calendar", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "oauth2", status: "connected", description: "Events, scheduling, free time", icon: "calendar_month" },
+  { slug: "apollo", displayName: "Apollo.io", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "api_key", status: "connected", description: "Contact search, enrichment, campaigns", icon: "person_search" },
+  { slug: "fireflies", displayName: "Fireflies.ai", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "api_key", status: "connected", description: "Meeting transcripts and summaries", icon: "mic" },
+  // Project Management — CONNECTED via MCP
+  { slug: "linear", displayName: "Linear", category: "Project Management", connectionType: "mcp_server", authMechanism: "oauth2", status: "connected", description: "Issues, projects, and cycles", icon: "linear_scale" },
+  { slug: "notion", displayName: "Notion", category: "Project Management", connectionType: "mcp_server", authMechanism: "oauth2", status: "connected", description: "Databases, pages, CRM, pipeline", icon: "edit_note" },
+  { slug: "obsidian", displayName: "Obsidian", category: "Project Management", connectionType: "mcp_server", authMechanism: "local", status: "connected", description: "Knowledge base vault read/write", icon: "book" },
+  // Dev & Deploy — CONNECTED via MCP
+  { slug: "vercel", displayName: "Vercel", category: "Dev & Deploy", connectionType: "mcp_server", authMechanism: "bearer_token", status: "connected", description: "Deployments, projects, logs, domains", icon: "cloud_upload" },
+  { slug: "stripe-mcp", displayName: "Stripe", category: "Dev & Deploy", connectionType: "mcp_server", authMechanism: "api_key", status: "connected", description: "Products, prices, subscriptions, payments", icon: "credit_card" },
+  { slug: "chrome-devtools", displayName: "Chrome DevTools", category: "Dev & Deploy", connectionType: "mcp_server", authMechanism: "local", status: "connected", description: "Browser automation, screenshots, debugging", icon: "code" },
+  // Creative — CONNECTED via MCP
+  { slug: "canva", displayName: "Canva", category: "Creative", connectionType: "mcp_server", authMechanism: "oauth2", status: "connected", description: "Design generation, editing, brand kits, exports", icon: "palette" },
+  // AI & Media
+  { slug: "fal", displayName: "FAL.ai", category: "AI & Media", connectionType: "api_key", authMechanism: "api_key", status: "disconnected", description: "Image generation, video, audio AI models", icon: "auto_awesome" },
+  { slug: "symphony", displayName: "Symphony", category: "AI & Media", connectionType: "mcp_server", authMechanism: "api_key", status: "connected", description: "Music marketing campaigns and analytics", icon: "music_note" },
+  // Infrastructure
+  { slug: "scheduled-tasks", displayName: "Scheduled Tasks", category: "Infrastructure", connectionType: "mcp_server", authMechanism: "local", status: "connected", description: "Cron-style scheduled agent tasks", icon: "schedule" },
+  { slug: "mcp-registry", displayName: "MCP Registry", category: "Infrastructure", connectionType: "mcp_server", authMechanism: "local", status: "connected", description: "Search and discover MCP connectors", icon: "hub" },
+  { slug: "inmotion", displayName: "InMotion", category: "Infrastructure", connectionType: "api_key", authMechanism: "api_key", status: "disconnected", description: "Web hosting, domains, server management", icon: "dns" },
+  // Financial (BI)
   { slug: "stripe-bi", displayName: "Stripe (Financial)", category: "Financial", connectionType: "bi_integration", authMechanism: "api_key", status: "disconnected", description: "Revenue, MRR, churn, payments", icon: "payments" },
   { slug: "mercury", displayName: "Mercury", category: "Financial", connectionType: "bi_integration", authMechanism: "api_key", status: "disconnected", description: "Banking, cash position, runway", icon: "account_balance" },
+  // Analytics
   { slug: "vercel-analytics", displayName: "Vercel Analytics", category: "Analytics", connectionType: "bi_integration", authMechanism: "bearer_token", status: "disconnected", description: "Website traffic for Vercel sites", icon: "analytics" },
   { slug: "ga4", displayName: "Google Analytics 4", category: "Analytics", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", description: "Traffic, conversions, audience", icon: "monitoring" },
+  // Social
   { slug: "linkedin", displayName: "LinkedIn", category: "Social", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", description: "Profile views, posts, SSI, followers", icon: "share" },
   { slug: "instagram", displayName: "Instagram", category: "Social", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", description: "Reach, engagement, followers", icon: "photo_camera" },
   { slug: "twitter-x", displayName: "Twitter / X", category: "Social", connectionType: "bi_integration", authMechanism: "bearer_token", status: "disconnected", description: "Impressions, mentions, followers", icon: "tag" },
   { slug: "tiktok", displayName: "TikTok", category: "Social", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", description: "Views, engagement, followers", icon: "movie" },
-  { slug: "symphony", displayName: "Symphony", category: "Music SaaS", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", description: "Music marketing campaigns and analytics", icon: "music_note" },
 ];
 
 function groupByCategory(slots: ConnectionSlot[]): Record<string, ConnectionSlot[]> {
