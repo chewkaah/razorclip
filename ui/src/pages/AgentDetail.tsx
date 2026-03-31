@@ -804,21 +804,22 @@ export function AgentDetail() {
   const showConfigActionBar = (activeView === "configuration" || activeView === "instructions") && (configDirty || configSaving);
 
   return (
-    <div className={cn("space-y-6", isMobile && showConfigActionBar && "pb-24")}>
-      {/* Header */}
-      <div className="flex items-center justify-between gap-2">
+    <div className={cn("space-y-6 rc-agent-detail", isMobile && showConfigActionBar && "pb-24")}>
+      {/* Header — Kinetic Terminal styled */}
+      <div className="glass-card rounded-2xl border border-[--rc-outline-variant]/10 p-5 md:p-6">
+        <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-3 min-w-0">
           <AgentIconPicker
             value={agent.icon}
             onChange={(icon) => updateIcon.mutate(icon)}
           >
-            <button className="shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-accent hover:bg-accent/80 transition-colors">
+            <button className="shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-[--rc-surface-container-high] hover:bg-[--rc-primary]/10 border border-[--rc-outline-variant]/10 transition-colors">
               <AgentIcon icon={agent.icon} className="h-6 w-6" />
             </button>
           </AgentIconPicker>
           <div className="min-w-0">
-            <h2 className="text-2xl font-bold truncate">{agent.name}</h2>
-            <p className="text-sm text-muted-foreground truncate">
+            <h2 className="text-2xl font-semibold tracking-tight text-[--rc-on-surface] truncate">{agent.name}</h2>
+            <p className="text-xs text-[--rc-on-surface-variant] uppercase tracking-widest truncate">
               {roleLabels[agent.role] ?? agent.role}
               {agent.title ? ` - ${agent.title}` : ""}
             </p>
@@ -900,6 +901,7 @@ export function AgentDetail() {
           </Popover>
         </div>
       </div>
+      </div>{/* /glass-card header */}
 
       {!urlRunId && (
         <Tabs
