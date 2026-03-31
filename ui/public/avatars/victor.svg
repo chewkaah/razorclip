@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <!-- Background glow -->
+  <circle cx="200" cy="200" r="195" fill="#231c06"/>
+  <circle cx="200" cy="200" r="195" fill="url(#victorGlow)" opacity="0.4"/>
+
+  <!-- Body / Suit jacket -->
+  <path d="M120 280 Q120 240 140 230 L160 225 Q200 215 240 225 L260 230 Q280 240 280 280 L280 360 Q280 380 260 380 L140 380 Q120 380 120 360 Z" fill="#3d3008" stroke="#EAB308" stroke-width="2"/>
+  <!-- Suit lapels -->
+  <path d="M160 225 L185 260 L200 380" stroke="#EAB308" stroke-width="1.5" fill="none"/>
+  <path d="M240 225 L215 260 L200 380" stroke="#EAB308" stroke-width="1.5" fill="none"/>
+  <!-- Pocket square -->
+  <g transform="translate(252, 260)">
+    <path d="M0 0 L-8 -12 L-4 -14 L0 -8 L4 -14 L8 -12 Z" fill="#EAB308" opacity="0.6"/>
+  </g>
+
+  <!-- Neck -->
+  <rect x="180" y="195" width="40" height="35" rx="8" fill="#4d3d10" stroke="#EAB308" stroke-width="1.5"/>
+  <rect x="175" y="215" width="50" height="8" rx="4" fill="#3d3008" stroke="#EAB308" stroke-width="1"/>
+
+  <!-- Tie -->
+  <path d="M200 223 L192 238 L200 340 L208 238 Z" fill="#EAB308" opacity="0.4"/>
+  <path d="M192 225 L200 232 L208 225 L204 223 L200 227 L196 223 Z" fill="#EAB308"/>
+
+  <!-- Head dome -->
+  <ellipse cx="200" cy="140" rx="75" ry="80" fill="#3d3008" stroke="#EAB308" stroke-width="2.5"/>
+  <ellipse cx="200" cy="100" rx="55" ry="45" fill="url(#victorDome)" opacity="0.3"/>
+
+  <!-- Eyes — composed, strategic -->
+  <ellipse cx="175" cy="142" rx="17" ry="18" fill="#231c06" stroke="#EAB308" stroke-width="2"/>
+  <ellipse cx="225" cy="142" rx="17" ry="18" fill="#231c06" stroke="#EAB308" stroke-width="2"/>
+  <circle cx="175" cy="141" r="7" fill="#EAB308"/>
+  <circle cx="225" cy="141" r="7" fill="#EAB308"/>
+  <circle cx="173" cy="138" r="3" fill="#fef08a"/>
+  <circle cx="223" cy="138" r="3" fill="#fef08a"/>
+
+  <!-- Subtle confident smile -->
+  <path d="M183 165 Q200 175 217 165" stroke="#EAB308" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Cheek blush -->
+  <circle cx="155" cy="158" r="7" fill="#EAB308" opacity="0.15"/>
+  <circle cx="245" cy="158" r="7" fill="#EAB308" opacity="0.15"/>
+
+  <!-- Crown -->
+  <g transform="translate(200, 55)">
+    <path d="M-30 12 L-30 -5 L-18 5 L-8 -12 L0 0 L8 -12 L18 5 L30 -5 L30 12 Z" fill="#3d3008" stroke="#EAB308" stroke-width="2"/>
+    <circle cx="-18" cy="0" r="3" fill="#EAB308"/>
+    <circle cx="0" cy="-5" r="3.5" fill="#fef08a"/>
+    <circle cx="18" cy="0" r="3" fill="#EAB308"/>
+    <rect x="-30" y="10" width="60" height="6" rx="3" fill="#EAB308" opacity="0.4"/>
+  </g>
+
+  <!-- Antenna (behind crown, subtle) -->
+  <line x1="200" y1="62" x2="200" y2="45" stroke="#EAB308" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Arms — hands together (strategic pose) -->
+  <path d="M120 250 Q95 265 100 295 Q102 310 115 318" stroke="#EAB308" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M280 250 Q305 265 300 295 Q298 310 285 318" stroke="#EAB308" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Hands meeting -->
+  <circle cx="125" cy="322" r="10" fill="#3d3008" stroke="#EAB308" stroke-width="2"/>
+  <circle cx="275" cy="322" r="10" fill="#3d3008" stroke="#EAB308" stroke-width="2"/>
+
+  <!-- Chess piece hint (strategy) -->
+  <g transform="translate(130, 340)">
+    <path d="M-5 0 L-3 -10 Q0 -15 3 -10 L5 0 Z" fill="#EAB308" opacity="0.4"/>
+    <circle cx="0" cy="-14" r="4" fill="#EAB308" opacity="0.3"/>
+  </g>
+
+  <defs>
+    <radialGradient id="victorGlow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#EAB308" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#231c06" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="victorDome" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="100%" stop-color="#EAB308" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>

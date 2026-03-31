@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <!-- Background glow -->
+  <circle cx="200" cy="200" r="195" fill="#06231a"/>
+  <circle cx="200" cy="200" r="195" fill="url(#rexGlow)" opacity="0.4"/>
+
+  <!-- Body / Apron -->
+  <path d="M120 280 Q120 240 140 230 L160 225 Q200 215 240 225 L260 230 Q280 240 280 280 L280 360 Q280 380 260 380 L140 380 Q120 380 120 360 Z" fill="#0a3d2e" stroke="#10B981" stroke-width="2"/>
+  <!-- Apron / utility belt detail -->
+  <path d="M160 240 L160 340 Q160 350 170 350 L230 350 Q240 350 240 340 L240 240" fill="#0f4d3a" stroke="#10B981" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- Gear icon on apron -->
+  <g transform="translate(200, 290)">
+    <circle cx="0" cy="0" r="14" fill="none" stroke="#10B981" stroke-width="2.5"/>
+    <circle cx="0" cy="0" r="5" fill="#10B981"/>
+    <line x1="0" y1="-17" x2="0" y2="-11" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+    <line x1="0" y1="11" x2="0" y2="17" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-17" y1="0" x2="-11" y2="0" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+    <line x1="11" y1="0" x2="17" y2="0" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-12" y1="-12" x2="-8" y2="-8" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+    <line x1="8" y1="8" x2="12" y2="12" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+    <line x1="12" y1="-12" x2="8" y2="-8" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+    <line x1="-8" y1="8" x2="-12" y2="12" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Neck -->
+  <rect x="180" y="195" width="40" height="35" rx="8" fill="#0f4d3a" stroke="#10B981" stroke-width="1.5"/>
+  <rect x="175" y="215" width="50" height="8" rx="4" fill="#0a3d2e" stroke="#10B981" stroke-width="1"/>
+
+  <!-- Head dome -->
+  <ellipse cx="200" cy="140" rx="75" ry="80" fill="#0a3d2e" stroke="#10B981" stroke-width="2.5"/>
+  <ellipse cx="200" cy="100" rx="55" ry="45" fill="url(#rexDome)" opacity="0.3"/>
+
+  <!-- Eyes — slightly narrower, ops/focused look -->
+  <ellipse cx="175" cy="142" rx="18" ry="16" fill="#06231a" stroke="#10B981" stroke-width="2"/>
+  <ellipse cx="225" cy="142" rx="18" ry="16" fill="#06231a" stroke="#10B981" stroke-width="2"/>
+  <circle cx="175" cy="141" r="7" fill="#10B981"/>
+  <circle cx="225" cy="141" r="7" fill="#10B981"/>
+  <circle cx="172" cy="138" r="3" fill="#6ee7b7"/>
+  <circle cx="222" cy="138" r="3" fill="#6ee7b7"/>
+
+  <!-- Determined grin -->
+  <path d="M182 165 L195 170 L205 170 L218 165" stroke="#10B981" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Cheek blush -->
+  <circle cx="155" cy="155" r="8" fill="#10B981" opacity="0.2"/>
+  <circle cx="245" cy="155" r="8" fill="#10B981" opacity="0.2"/>
+
+  <!-- Antenna with signal waves -->
+  <line x1="200" y1="62" x2="200" y2="28" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="200" cy="22" r="8" fill="#10B981"/>
+  <circle cx="200" cy="22" r="4" fill="#6ee7b7"/>
+  <path d="M186 14 Q200 4 214 14" stroke="#6ee7b7" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M180 8 Q200 -5 220 8" stroke="#6ee7b7" stroke-width="1.5" fill="none" opacity="0.3"/>
+
+  <!-- Utility belt across chest -->
+  <rect x="135" y="250" width="130" height="10" rx="5" fill="#0f4d3a" stroke="#10B981" stroke-width="1.5"/>
+  <circle cx="165" cy="255" r="4" fill="#10B981" opacity="0.6"/>
+  <circle cx="200" cy="255" r="4" fill="#10B981" opacity="0.6"/>
+  <circle cx="235" cy="255" r="4" fill="#10B981" opacity="0.6"/>
+
+  <!-- Arms holding wrench -->
+  <path d="M120 250 Q90 260 82 288 Q80 300 88 308" stroke="#10B981" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="88" cy="311" r="10" fill="#0a3d2e" stroke="#10B981" stroke-width="2"/>
+  <path d="M280 250 Q310 258 318 280 Q320 290 312 300" stroke="#10B981" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Wrench -->
+  <g transform="translate(308, 300) rotate(30)">
+    <rect x="-2" y="0" width="5" height="25" rx="2" fill="#10B981"/>
+    <path d="M-6 25 Q-6 32 0 32 Q6 32 6 25" stroke="#10B981" stroke-width="2.5" fill="none"/>
+  </g>
+
+  <defs>
+    <radialGradient id="rexGlow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#06231a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rexDome" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>
