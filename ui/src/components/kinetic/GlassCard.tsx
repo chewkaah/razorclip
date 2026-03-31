@@ -36,7 +36,7 @@ export function GlassCard({
         base,
         "rounded-2xl border border-white/5",
         variant === "interactive" &&
-          "transition-all duration-200 hover:bg-white/10 hover:border-[#c2c1ff]/30 cursor-pointer active:scale-[0.98]",
+          "transition-all duration-200 hover:bg-white/10 hover:border-[--rc-primary]/30 cursor-pointer active:scale-[0.98]",
         className,
       )}
       style={accentBorder ? { borderLeftWidth: 2, borderLeftColor: accentBorder } : undefined}

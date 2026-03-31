@@ -124,7 +124,7 @@ function MobileSwipeQueue({
   const agentName = (p.agentName as string) ?? "Agent";
   const slug = resolveSlug(agentName);
   const config = slug ? AGENT_REGISTRY[slug] : null;
-  const accentColor = config?.color ?? "#c2c1ff";
+  const accentColor = config?.color ?? "var(--rc-primary)";
   const title = (p.title as string) ?? (p.summary as string) ?? `${approval.type} request`;
   const desc = (p.description as string) ?? (p.plan as string) ?? null;
   const avatarUrl = slug ? getAgentAvatar(agentName) : null;
@@ -385,8 +385,8 @@ export function ApprovalQueue() {
             const agentName = (p.agentName as string) ?? "Agent";
             const slug = resolveSlug(agentName);
             const config = slug ? AGENT_REGISTRY[slug] : null;
-            const accentColor = config?.color ?? "#c2c1ff";
-            const accentLight = config?.colorLight ?? "#c7c4d7";
+            const accentColor = config?.color ?? "var(--rc-primary)";
+            const accentLight = config?.colorLight ?? "var(--rc-on-surface-variant)";
             const title = (p.title as string) ?? (p.summary as string) ?? `${approval.type} request`;
             const desc = (p.description as string) ?? (p.plan as string) ?? null;
             const avatarUrl = slug ? getAgentAvatar(agentName) : null;
@@ -453,7 +453,7 @@ export function ApprovalQueue() {
                     <button
                       onClick={() => approveMutation.mutate(approval.id)}
                       disabled={approveMutation.isPending}
-                      className="px-4 py-2 rounded-xl bg-[--rc-primary] text-[--rc-on-primary] text-[10px] font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-[#c2c1ff]/10"
+                      className="px-4 py-2 rounded-xl bg-[--rc-primary] text-[--rc-on-primary] text-[10px] font-bold uppercase tracking-widest hover:scale-[1.02] transition-all shadow-lg shadow-[--rc-primary]/10"
                     >
                       Approve
                     </button>

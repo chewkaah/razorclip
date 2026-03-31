@@ -15,11 +15,11 @@ export function ChatMessageList({ messages, streamingContent, isStreaming }: Cha
   if (messages.length === 0 && !isStreaming) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-3">
-        <div className="w-12 h-12 rounded-full bg-[#c2c1ff]/10 flex items-center justify-center">
-          <span className="material-symbols-outlined text-[#c2c1ff] text-2xl" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chat_bubble</span>
+        <div className="w-12 h-12 rounded-full bg-[--rc-primary]/10 flex items-center justify-center">
+          <span className="material-symbols-outlined text-[--rc-primary] text-2xl" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chat_bubble</span>
         </div>
-        <p className="text-sm text-[#c7c4d7]/50">Start a conversation.</p>
-        <p className="text-xs text-[#c7c4d7]/30">Type a message below or use /commands.</p>
+        <p className="text-sm text-[--rc-on-surface-variant]/50">Start a conversation.</p>
+        <p className="text-xs text-[--rc-on-surface-variant]/30">Type a message below or use /commands.</p>
       </div>
     );
   }
@@ -29,7 +29,7 @@ export function ChatMessageList({ messages, streamingContent, isStreaming }: Cha
       {/* Day Divider — from Stitch */}
       {messages.length > 0 && (
         <div className="flex justify-center my-4">
-          <span className="text-[10px] uppercase tracking-[0.1em] font-medium text-[#c7c4d7]/40 bg-[#191b22] px-3 py-1 rounded-full">
+          <span className="text-[10px] uppercase tracking-[0.1em] font-medium text-[--rc-on-surface-variant]/40 bg-[--rc-surface-container-low] px-3 py-1 rounded-full">
             Today
           </span>
         </div>

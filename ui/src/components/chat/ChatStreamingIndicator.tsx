@@ -6,7 +6,7 @@ export function ChatStreamingIndicator() {
     <div className="flex gap-3 max-w-[90%]">
       <div className="flex-shrink-0 mt-auto">
         <div className="w-8 h-8 rounded-full p-[1px] bg-gradient-to-br from-[#8B5CF6] to-[#D8B4FE]">
-          <div className="w-full h-full rounded-full bg-[#0c0e14] flex items-center justify-center">
+          <div className="w-full h-full rounded-full bg-[--rc-surface-container-lowest] flex items-center justify-center">
             <span
               className="material-symbols-outlined text-xs text-[#8B5CF6]"
               style={{ fontVariationSettings: "'FILL' 1, 'wght' 300" }}

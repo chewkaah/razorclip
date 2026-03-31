@@ -55,8 +55,8 @@ export function AgentProfile() {
   const name = agentData?.name ?? "Agent";
   const slug = resolveSlug(name);
   const config = slug ? AGENT_REGISTRY[slug] : null;
-  const accentColor = config?.color ?? "#c2c1ff";
-  const accentLight = config?.colorLight ?? "#c7c4d7";
+  const accentColor = config?.color ?? "var(--rc-primary)";
+  const accentLight = config?.colorLight ?? "var(--rc-on-surface-variant)";
   const avatarUrl = getAgentAvatar(name);
   const totalCost = agentData?.totalSpendCents ? formatCents(agentData.totalSpendCents) : "$0.42";
   const totalRuns = (runs ?? []).length;
@@ -84,7 +84,7 @@ export function AgentProfile() {
             ) : (
               <div className="w-full h-full rounded-full flex items-center justify-center p-4 relative z-10 bg-[--rc-surface-container-low] text-4xl font-light" style={{ color: accentColor }}>{name[0]}</div>
             )}
-            <div className="absolute bottom-4 right-4 w-5 h-5 rounded-full border-4 border-[#111319] z-20 shadow-[0_0_15px_rgba(139,92,246,0.6)]" style={{ background: `linear-gradient(to top right, ${accentColor}, ${accentLight})` }} />
+            <div className="absolute bottom-4 right-4 w-5 h-5 rounded-full border-4 border-[--rc-surface] z-20 shadow-[0_0_15px_rgba(139,92,246,0.6)]" style={{ background: `linear-gradient(to top right, ${accentColor}, ${accentLight})` }} />
           </div>
         </div>
 
@@ -188,7 +188,7 @@ export function AgentProfile() {
           <h3 className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold opacity-60 mb-6">Recent Completions</h3>
           <div className="space-y-4">
             {recentRuns.length > 0 ? recentRuns.map((run: any) => (
-              <div key={run.id} className="group bg-[--rc-surface-container-low]/50 hover:bg-[--rc-surface-container-high] transition-all p-4 rounded-xl border border-[--rc-outline-variant]/10 hover:border-[#c2c1ff]/20">
+              <div key={run.id} className="group bg-[--rc-surface-container-low]/50 hover:bg-[--rc-surface-container-high] transition-all p-4 rounded-xl border border-[--rc-outline-variant]/10 hover:border-[--rc-primary]/20">
                 <div className="flex justify-between items-start mb-2">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[--rc-primary]">{run.status === "completed" ? "Deployment" : "Error"}</span>
                   <span className="text-[9px] tabular-nums text-[--rc-outline]">{relativeTime(run.completedAt || run.createdAt)}</span>
@@ -222,7 +222,7 @@ export function AgentProfile() {
         <div className="p-8 bg-[--rc-surface-container-low]/30 backdrop-blur-md">
           <Link
             to="/chat"
-            className="no-underline w-full bg-[--rc-primary] hover:bg-[#e2dfff] text-[--rc-on-primary] font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-3 group shadow-[0_20px_40px_-12px_rgba(194,193,255,0.2)]"
+            className="no-underline w-full bg-[--rc-primary] hover:bg-[#e2dfff] text-[--rc-on-primary] font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-3 group shadow-[0_20px_40px_-12px_rgba(0,255,170,0.2)]"
           >
             <span className="material-symbols-outlined group-hover:rotate-12 transition-transform" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chat_bubble</span>
             <span className="uppercase tracking-widest text-xs">Chat with {name}</span>

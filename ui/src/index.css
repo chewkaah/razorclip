@@ -10,31 +10,31 @@
    ═══════════════════════════════════════════════════════ */
 
 @theme inline {
-  /* Kinetic Terminal: Surface tiers */
-  --color-kt-surface: #111319;
-  --color-kt-surface-dim: #111319;
-  --color-kt-surface-container-lowest: #0c0e14;
-  --color-kt-surface-container-low: #191b22;
-  --color-kt-surface-container: #1e1f26;
-  --color-kt-surface-container-high: #282a30;
-  --color-kt-surface-container-highest: #33343b;
-  --color-kt-surface-bright: #373940;
-  --color-kt-surface-variant: #33343b;
+  /* Kinetic Terminal: Surface tiers (Integral palette) */
+  --color-kt-surface: #0A0A0A;
+  --color-kt-surface-dim: #0A0A0A;
+  --color-kt-surface-container-lowest: #080808;
+  --color-kt-surface-container-low: #141414;
+  --color-kt-surface-container: #1A1A1A;
+  --color-kt-surface-container-high: #222222;
+  --color-kt-surface-container-highest: #2A2A2A;
+  --color-kt-surface-bright: #333333;
+  --color-kt-surface-variant: #2A2A2A;
 
-  /* Kinetic Terminal: Primary accent (electric lavender) */
-  --color-kt-primary: #c2c1ff;
-  --color-kt-primary-container: #5e5ce6;
-  --color-kt-on-primary: #1800a7;
+  /* Kinetic Terminal: Primary accent (Integral neon green) */
+  --color-kt-primary: #00FFAA;
+  --color-kt-primary-container: #00CC88;
+  --color-kt-on-primary: #080808;
 
   /* Kinetic Terminal: Text layers */
-  --color-kt-on-surface: #e2e2eb;
-  --color-kt-on-surface-variant: #c7c4d7;
-  --color-kt-outline: #918fa0;
-  --color-kt-outline-variant: #464554;
+  --color-kt-on-surface: #E5E5E5;
+  --color-kt-on-surface-variant: #A0A0A0;
+  --color-kt-outline: #555555;
+  --color-kt-outline-variant: #333333;
 
   /* Kinetic Terminal: Semantic */
   --color-kt-tertiary: #eac400;
-  --color-kt-error: #ffb4ab;
+  --color-kt-error: #FF6B6B;
 
   /* Kinetic Terminal: Agent accents */
   --color-agent-dante: #8B5CF6;
@@ -95,124 +95,125 @@
 }
 
 /* ═══════════════════════════════════════════════════════
-   RAZORCLIP — Light Mode
-   Inverted palette with the same accent colors.
+   RAZORCLIP — Light Mode (Integral palette)
+   Matte, high-contrast inverse. Clean and legible.
+   Colors drawn from Integral Studio brand system.
    ═══════════════════════════════════════════════════════ */
 :root {
   color-scheme: light;
   --radius: 0.75rem;
-  --background: #f8f8fc;
-  --foreground: #1a1a2e;
-  --card: #ffffff;
-  --card-foreground: #1a1a2e;
-  --popover: #ffffff;
-  --popover-foreground: #1a1a2e;
-  --primary: #4d4ad5;             /* deeper lavender for contrast on light */
-  --primary-foreground: #ffffff;
-  --secondary: #f0f0f6;
-  --secondary-foreground: #1a1a2e;
-  --muted: #f0f0f6;
-  --muted-foreground: #6b6b8a;
-  --accent: #f0f0f6;
-  --accent-foreground: #1a1a2e;
-  --destructive: #dc3545;
-  --destructive-foreground: #ffffff;
-  --border: rgba(0, 0, 0, 0.08);
-  --input: rgba(0, 0, 0, 0.08);
-  --ring: #4d4ad5;
+  --background: #FAFAFA;
+  --foreground: #0A0A0A;
+  --card: #FFFFFF;
+  --card-foreground: #0A0A0A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0A0A0A;
+  --primary: #059669;             /* Integral green (darker for light bg legibility) */
+  --primary-foreground: #FFFFFF;
+  --secondary: #F3F4F6;
+  --secondary-foreground: #080808;
+  --muted: #F3F4F6;
+  --muted-foreground: #525252;
+  --accent: #F0FDF4;              /* green tint for accent surfaces */
+  --accent-foreground: #080808;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(0, 0, 0, 0.10);
+  --input: rgba(0, 0, 0, 0.10);
+  --ring: #059669;
+  --chart-1: #059669;
+  --chart-2: #059669;
+  --chart-3: #D97706;
+  --chart-4: #DB2777;
+  --chart-5: #2563EB;
+  --sidebar: #F9FAFB;
+  --sidebar-foreground: #080808;
+  --sidebar-primary: #059669;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F3F4F6;
+  --sidebar-accent-foreground: #080808;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-ring: #059669;
+
+  /* Razorclip semantic colors — light (Integral palette) */
+  --rc-surface: #FAFAFA;
+  --rc-surface-dim: #F3F4F6;
+  --rc-surface-container-lowest: #FFFFFF;
+  --rc-surface-container-low: #F9FAFB;
+  --rc-surface-container: #F3F4F6;
+  --rc-surface-container-high: #E5E7EB;
+  --rc-surface-container-highest: #D1D5DB;
+  --rc-on-surface: #080808;
+  --rc-on-surface-variant: #525252;
+  --rc-primary: #059669;
+  --rc-primary-light: #6EE7B7;
+  --rc-on-primary: #FFFFFF;
+  --rc-outline: #9CA3AF;
+  --rc-outline-variant: #D1D5DB;
+  --rc-glass-bg: rgba(255, 255, 255, 0.85);
+  --rc-glass-border: rgba(0, 0, 0, 0.08);
+  --rc-sidebar-bg: #F9FAFB;
+  --rc-topbar-bg: rgba(250, 250, 250, 0.9);
+}
+
+/* ═══════════════════════════════════════════════════════
+   KINETIC TERMINAL — Dark theme (Integral palette)
+   Near-black surfaces, neon green primary, purple secondary.
+   Brand: #0A0A0A bg, #03FFAA green, #7c3aed purple.
+   ═══════════════════════════════════════════════════════ */
+.dark {
+  --background: #080808;          /* Integral near-black */
+  --foreground: #FAFAFA;
+  --card: #1F1F1F;
+  --card-foreground: #FAFAFA;
+  --popover: #1F1F1F;
+  --popover-foreground: #FAFAFA;
+  --primary: #00FFAA;             /* Integral neon green */
+  --primary-foreground: #080808;
+  --secondary: #1F1F1F;
+  --secondary-foreground: #FAFAFA;
+  --muted: #141414;
+  --muted-foreground: #999999;
+  --accent: #1F1F1F;
+  --accent-foreground: #FAFAFA;
+  --destructive: #FF6B6B;
+  --destructive-foreground: #FAFAFA;
+  --border: rgba(255, 255, 255, 0.06);
+  --input: rgba(255, 255, 255, 0.06);
+  --ring: #00FFAA;
   --chart-1: #8B5CF6;
   --chart-2: #10B981;
   --chart-3: #F59E0B;
   --chart-4: #EC4899;
   --chart-5: #3B82F6;
-  --sidebar: #f4f4f8;
-  --sidebar-foreground: #1a1a2e;
-  --sidebar-primary: #4d4ad5;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ebebf2;
-  --sidebar-accent-foreground: #1a1a2e;
-  --sidebar-border: rgba(0, 0, 0, 0.08);
-  --sidebar-ring: #4d4ad5;
+  --sidebar: #080808;
+  --sidebar-foreground: #FAFAFA;
+  --sidebar-primary: #00FFAA;
+  --sidebar-primary-foreground: #080808;
+  --sidebar-accent: #1F1F1F;
+  --sidebar-accent-foreground: #FAFAFA;
+  --sidebar-border: rgba(255, 255, 255, 0.06);
+  --sidebar-ring: #00FFAA;
 
-  /* Razorclip semantic colors — light variants */
-  --rc-surface: #f8f8fc;
-  --rc-surface-dim: #f0f0f6;
-  --rc-surface-container-lowest: #ffffff;
-  --rc-surface-container-low: #f4f4f8;
-  --rc-surface-container: #ebebf2;
-  --rc-surface-container-high: #e2e2ec;
-  --rc-surface-container-highest: #d8d8e4;
-  --rc-on-surface: #1a1a2e;
-  --rc-on-surface-variant: #6b6b8a;
-  --rc-primary: #4d4ad5;
-  --rc-primary-light: #c2c1ff;
-  --rc-on-primary: #ffffff;
-  --rc-outline: #9e9eb8;
-  --rc-outline-variant: #c8c8da;
-  --rc-glass-bg: rgba(255, 255, 255, 0.7);
-  --rc-glass-border: rgba(0, 0, 0, 0.06);
-  --rc-sidebar-bg: #f4f4f8;
-  --rc-topbar-bg: rgba(248, 248, 252, 0.8);
-}
-
-/* ═══════════════════════════════════════════════════════
-   KINETIC TERMINAL — Dark theme overrides
-   Maps Paperclip's CSS custom properties to KT palette
-   so ALL existing components inherit the new look.
-   ═══════════════════════════════════════════════════════ */
-.dark {
-  --background: #111319;          /* kt-surface */
-  --foreground: #e2e2eb;          /* kt-on-surface */
-  --card: #1e1f26;                /* kt-surface-container */
-  --card-foreground: #e2e2eb;     /* kt-on-surface */
-  --popover: #1e1f26;             /* kt-surface-container */
-  --popover-foreground: #e2e2eb;  /* kt-on-surface */
-  --primary: #c2c1ff;             /* kt-primary (electric lavender) */
-  --primary-foreground: #1800a7;  /* kt-on-primary */
-  --secondary: #282a30;           /* kt-surface-container-high */
-  --secondary-foreground: #e2e2eb;
-  --muted: #191b22;               /* kt-surface-container-low */
-  --muted-foreground: #c7c4d7;    /* kt-on-surface-variant */
-  --accent: #282a30;              /* kt-surface-container-high */
-  --accent-foreground: #e2e2eb;
-  --destructive: #ffb4ab;         /* kt-error */
-  --destructive-foreground: #e2e2eb;
-  --border: rgba(255, 255, 255, 0.06);  /* ghost border — white at 6% */
-  --input: rgba(255, 255, 255, 0.06);
-  --ring: #5e5ce6;                /* kt-primary-container */
-  --chart-1: #8B5CF6;             /* agent-dante purple */
-  --chart-2: #10B981;             /* agent-rex green */
-  --chart-3: #F59E0B;             /* agent-scout orange */
-  --chart-4: #EC4899;             /* agent-nova pink */
-  --chart-5: #3B82F6;             /* agent-brent blue */
-  --sidebar: #0c0e14;             /* kt-surface-container-lowest */
-  --sidebar-foreground: #e2e2eb;
-  --sidebar-primary: #c2c1ff;     /* kt-primary */
-  --sidebar-primary-foreground: #1800a7;
-  --sidebar-accent: #191b22;      /* kt-surface-container-low */
-  --sidebar-accent-foreground: #e2e2eb;
-  --sidebar-border: rgba(255, 255, 255, 0.06);  /* ghost border */
-  --sidebar-ring: #5e5ce6;
-
-  /* Razorclip semantic colors — dark variants */
-  --rc-surface: #111319;
-  --rc-surface-dim: #111319;
-  --rc-surface-container-lowest: #0c0e14;
-  --rc-surface-container-low: #191b22;
-  --rc-surface-container: #1e1f26;
-  --rc-surface-container-high: #282a30;
-  --rc-surface-container-highest: #33343b;
-  --rc-on-surface: #e2e2eb;
-  --rc-on-surface-variant: #c7c4d7;
-  --rc-primary: #c2c1ff;
-  --rc-primary-light: #e2dfff;
-  --rc-on-primary: #1800a7;
-  --rc-outline: #918fa0;
-  --rc-outline-variant: #464554;
-  --rc-glass-bg: rgba(26, 29, 39, 0.6);
-  --rc-glass-border: rgba(255, 255, 255, 0.05);
-  --rc-sidebar-bg: rgba(17, 19, 25, 0.8);
-  --rc-topbar-bg: rgba(17, 19, 25, 0.6);
+  /* Razorclip semantic colors — dark (Integral palette) */
+  --rc-surface: #080808;
+  --rc-surface-dim: #080808;
+  --rc-surface-container-lowest: #050505;
+  --rc-surface-container-low: #141414;
+  --rc-surface-container: #1F1F1F;
+  --rc-surface-container-high: #2A2A2A;
+  --rc-surface-container-highest: #3F3C39;
+  --rc-on-surface: #FAFAFA;
+  --rc-on-surface-variant: #999999;
+  --rc-primary: #00FFAA;          /* Integral neon green */
+  --rc-primary-light: #66FFD0;
+  --rc-on-primary: #080808;
+  --rc-outline: #3F3C39;
+  --rc-outline-variant: #2A2A2A;
+  --rc-glass-bg: rgba(8, 8, 8, 0.75);
+  --rc-glass-border: rgba(255, 255, 255, 0.06);
+  --rc-sidebar-bg: rgba(8, 8, 8, 0.95);
+  --rc-topbar-bg: rgba(8, 8, 8, 0.8);
 }
 
 @layer base {

@@ -18,10 +18,10 @@ export function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
   if (isUser) {
     return (
       <div className="flex flex-col items-end gap-1 max-w-[85%] ml-auto">
-        <div className="bg-[#c2c1ff] text-[#1800a7] px-4 py-3 rounded-2xl rounded-tr-none text-sm font-medium shadow-sm">
+        <div className="bg-[--rc-primary] text-[--rc-on-primary] px-4 py-3 rounded-2xl rounded-tr-none text-sm font-medium shadow-sm">
           <p className="whitespace-pre-wrap">{message.content}</p>
         </div>
-        <span className="text-[10px] text-[#c7c4d7]/50 tabular-nums uppercase mr-1">
+        <span className="text-[10px] text-[--rc-on-surface-variant]/50 tabular-nums uppercase mr-1">
           {new Date(message.createdAt).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })} · Read
         </span>
       </div>
@@ -33,7 +33,7 @@ export function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
     <div className="flex gap-3 max-w-[90%]">
       <div className="flex-shrink-0 mt-auto">
         <div className="w-8 h-8 rounded-full p-[1px] bg-gradient-to-br from-[#8B5CF6] to-[#D8B4FE]">
-          <div className="w-full h-full rounded-full bg-[#0c0e14] flex items-center justify-center">
+          <div className="w-full h-full rounded-full bg-[--rc-surface-container-lowest] flex items-center justify-center">
             <span
               className="material-symbols-outlined text-xs text-[#8B5CF6]"
               style={{ fontVariationSettings: "'FILL' 1, 'wght' 300" }}
@@ -51,7 +51,7 @@ export function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
           </span>
         </div>
         <div
-          className="glass-card border-l-2 border-[#8B5CF6] px-4 py-3 rounded-2xl rounded-tl-none text-sm text-[#c7c4d7] leading-relaxed"
+          className="glass-card border-l-2 border-[#8B5CF6] px-4 py-3 rounded-2xl rounded-tl-none text-sm text-[--rc-on-surface-variant] leading-relaxed"
           style={{ boxShadow: "0 0 15px rgba(139, 92, 246, 0.15)" }}
         >
           {message.content ? (
@@ -59,7 +59,7 @@ export function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
               <MarkdownBody>{message.content}</MarkdownBody>
             </div>
           ) : message.isStreaming ? null : (
-            <p className="text-[#c7c4d7]/50 italic">No response.</p>
+            <p className="text-[--rc-on-surface-variant]/50 italic">No response.</p>
           )}
           {message.error && (
             <p className="text-xs text-[#ffb4ab] mt-2">{message.error}</p>

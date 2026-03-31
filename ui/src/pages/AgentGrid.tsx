@@ -103,7 +103,7 @@ function getStatusLabel(status: string): { label: string; color: string; bgColor
     case "paused":
       return { label: "Offline", color: "#FBCFE8", bgColor: "rgba(236, 72, 153, 0.1)" };
     default:
-      return { label: status, color: "#c7c4d7", bgColor: "rgba(199, 196, 215, 0.1)" };
+      return { label: status, color: "var(--rc-on-surface-variant)", bgColor: "rgba(199, 196, 215, 0.1)" };
   }
 }
 
@@ -192,8 +192,8 @@ export function AgentGrid() {
         {sorted.map((agent) => {
           const slug = resolveAgentSlug(agent.name);
           const config = slug ? AGENT_REGISTRY[slug] : null;
-          const accentColor = config?.color ?? "#c2c1ff";
-          const accentLight = config?.colorLight ?? "#c7c4d7";
+          const accentColor = config?.color ?? "var(--rc-primary)";
+          const accentLight = config?.colorLight ?? "var(--rc-on-surface-variant)";
           const avatarUrl = slug ? getAgentAvatar(agent.name) : null;
           const status = getStatusLabel(agent.status);
           const glowClass = getGlowClass(slug, agent.status);
@@ -243,14 +243,14 @@ export function AgentGrid() {
                       ) : (
                         <div
                           className="w-full h-full rounded-full flex items-center justify-center text-lg font-bold"
-                          style={{ backgroundColor: "#191b22", color: accentColor }}
+                          style={{ backgroundColor: "var(--rc-surface-container-low)", color: accentColor }}
                         >
                           {agent.name[0]}
                         </div>
                       )}
                     </div>
                     <span
-                      className="absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-[#111319]"
+                      className="absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-[--rc-surface]"
                       style={{
                         backgroundColor: isError ? "#ffb4ab" : isActive ? "#10B981" : "#918fa0",
                       }}
@@ -268,7 +268,7 @@ export function AgentGrid() {
                         "w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold tabular-nums border",
                         isError
                           ? "bg-[#ffb4ab]/20 text-[#ffb4ab] border-[#ffb4ab]/30"
-                          : "bg-[--rc-primary]/20 text-[--rc-primary] border-[#c2c1ff]/30",
+                          : "bg-[--rc-primary]/20 text-[--rc-primary] border-[--rc-primary]/30",
                       )}
                     >
                       {liveCount || (isError ? "!" : "0")}
@@ -300,7 +300,7 @@ export function AgentGrid() {
                       </span>
                       <span
                         className="text-[10px] tabular-nums font-medium"
-                        style={{ color: isError ? "#ffb4ab" : "#c2c1ff" }}
+                        style={{ color: isError ? "#ffb4ab" : "var(--rc-primary)" }}
                       >
                         {taskProgress}%
                       </span>
@@ -336,7 +336,7 @@ export function AgentGrid() {
                               height: `${h}%`,
                               backgroundColor: isError && i >= 6
                                 ? `rgba(255, 180, 171, ${isLast ? 0.6 : 0.4})`
-                                : `rgba(194, 193, 255, ${isLast ? 0.4 : 0.15 + (count > 0 ? 0.15 : 0)})`,
+                                : `rgba(0,255,170, ${isLast ? 0.4 : 0.15 + (count > 0 ? 0.15 : 0)})`,
                             }}
                           />
                         );

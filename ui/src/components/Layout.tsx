@@ -295,7 +295,7 @@ export function Layout() {
               <CompanyRail />
               {isInstanceSettingsRoute ? <InstanceSidebar /> : <Sidebar />}
             </div>
-            <div className="border-t border-r border-white/5 px-3 py-2 bg-[#0c0e14]">
+            <div className="border-t border-r border-white/5 px-3 py-2 bg-[--rc-surface-container-lowest]">
               <div className="flex items-center gap-1">
                 <a
                   href="https://docs.paperclip.ing/"

@@ -42,13 +42,13 @@ export function MobileBottomNav({ visible }: MobileBottomNavProps) {
   return (
     <nav
       className={cn(
-        "fixed bottom-0 left-0 right-0 z-30 bg-[#111319]/90 backdrop-blur-2xl rounded-t-3xl transition-transform duration-200 ease-out md:hidden pb-[env(safe-area-inset-bottom)]",
+        "fixed bottom-0 left-0 right-0 z-30 bg-[--rc-surface]/90 backdrop-blur-2xl rounded-t-3xl transition-transform duration-200 ease-out md:hidden pb-[env(safe-area-inset-bottom)]",
         visible ? "translate-y-0" : "translate-y-full",
       )}
       aria-label="Mobile navigation"
     >
       {/* Top gradient line */}
-      <div className="bg-gradient-to-r from-transparent via-[#c2c1ff]/20 to-transparent h-px" />
+      <div className="bg-gradient-to-r from-transparent via-[--rc-primary]/20 to-transparent h-px" />
 
       <div className="grid h-16 grid-cols-5 px-1">
         {items.map((item) => {
@@ -61,8 +61,8 @@ export function MobileBottomNav({ visible }: MobileBottomNavProps) {
                 cn(
                   "relative flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-medium uppercase tracking-[0.05em] transition-all",
                   isActive
-                    ? "text-[#c2c1ff] bg-[#c2c1ff]/10"
-                    : "text-[#c7c4d7]/50 hover:text-[#c2c1ff]",
+                    ? "text-[--rc-primary] bg-[--rc-primary]/10"
+                    : "text-[--rc-on-surface-variant]/50 hover:text-[--rc-primary]",
                 )
               }
             >

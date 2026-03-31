@@ -63,7 +63,7 @@ export function FloatingChatBar() {
     return (
       <button
         onClick={() => setState("agents")}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[--rc-primary] text-[--rc-on-primary] shadow-[0_10px_25px_-5px_rgba(194,193,255,0.4)] flex items-center justify-center active:scale-90 transition-transform hover:shadow-[0_14px_30px_-5px_rgba(194,193,255,0.5)]"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-[--rc-primary] text-[--rc-on-primary] shadow-[0_10px_25px_-5px_rgba(0,255,170,0.4)] flex items-center justify-center active:scale-90 transition-transform hover:shadow-[0_14px_30px_-5px_rgba(0,255,170,0.5)]"
         aria-label="Open chat"
       >
         <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chat_bubble</span>
@@ -72,7 +72,7 @@ export function FloatingChatBar() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 w-[400px] h-[580px] flex flex-col rounded-2xl overflow-hidden border border-[--rc-primary]/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5),0_0_40px_-10px_rgba(194,193,255,0.15)] bg-[--rc-surface]">
+    <div className="fixed bottom-6 right-6 z-50 w-[400px] h-[580px] flex flex-col rounded-2xl overflow-hidden border border-[--rc-primary]/10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5),0_0_40px_-10px_rgba(0,255,170,0.15)] bg-[--rc-surface]">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 bg-[--rc-surface-container-low] border-b border-[--rc-primary]/10">
         <div className="flex items-center gap-2">
@@ -87,7 +87,7 @@ export function FloatingChatBar() {
                   return avatar ? (
                     <img src={avatar} className="w-full h-full object-cover" alt={selectedAgent.name} />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-[9px] font-bold" style={{ backgroundColor: `${config?.color ?? "#c2c1ff"}20`, color: config?.color ?? "#c2c1ff" }}>{selectedAgent.name[0]}</div>
+                    <div className="w-full h-full flex items-center justify-center text-[9px] font-bold" style={{ backgroundColor: `${config?.color ?? "var(--rc-primary)"}20`, color: config?.color ?? "var(--rc-primary)" }}>{selectedAgent.name[0]}</div>
                   );
                 })()}
               </div>
@@ -139,11 +139,11 @@ export function FloatingChatBar() {
                     onClick={() => handleSelectAgent(agent)}
                     className="flex items-center gap-3 p-3 rounded-xl border border-[--rc-glass-border] hover:border-[--rc-primary]/20 hover:bg-[--rc-primary]/5 transition-all text-left"
                   >
-                    <div className="w-8 h-8 rounded-full overflow-hidden border shrink-0" style={{ borderColor: `${config?.color ?? "#c7c4d7"}40` }}>
+                    <div className="w-8 h-8 rounded-full overflow-hidden border shrink-0" style={{ borderColor: `${config?.color ?? "var(--rc-on-surface-variant)"}40` }}>
                       {avatar ? (
                         <img src={avatar} className="w-full h-full object-cover" alt={agent.name} />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-[10px] font-bold" style={{ backgroundColor: `${config?.color ?? "#c2c1ff"}15`, color: config?.color ?? "#c2c1ff" }}>{agent.name[0]}</div>
+                        <div className="w-full h-full flex items-center justify-center text-[10px] font-bold" style={{ backgroundColor: `${config?.color ?? "var(--rc-primary)"}15`, color: config?.color ?? "var(--rc-primary)" }}>{agent.name[0]}</div>
                       )}
                     </div>
                     <div className="min-w-0">

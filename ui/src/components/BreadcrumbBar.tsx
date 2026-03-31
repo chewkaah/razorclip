@@ -47,7 +47,7 @@ export function BreadcrumbBar() {
 
   if (breadcrumbs.length === 0) {
     return (
-      <div className="border-b border-white/5 px-4 md:px-6 h-12 shrink-0 flex items-center bg-[#111319]/80 backdrop-blur-xl justify-end">
+      <div className="border-b border-white/5 px-4 md:px-6 h-12 shrink-0 flex items-center bg-[--rc-surface]/80 backdrop-blur-xl justify-end">
         {globalToolbarSlots}
       </div>
     );
@@ -68,7 +68,7 @@ export function BreadcrumbBar() {
   // Single breadcrumb = page title (uppercase)
   if (breadcrumbs.length === 1) {
     return (
-      <div className="border-b border-white/5 px-4 md:px-6 h-12 shrink-0 flex items-center bg-[#111319]/80 backdrop-blur-xl">
+      <div className="border-b border-white/5 px-4 md:px-6 h-12 shrink-0 flex items-center bg-[--rc-surface]/80 backdrop-blur-xl">
         {menuButton}
         <div className="min-w-0 overflow-hidden flex-1">
           <h1 className="text-sm font-semibold uppercase tracking-wider truncate">
@@ -82,7 +82,7 @@ export function BreadcrumbBar() {
 
   // Multiple breadcrumbs = breadcrumb trail
   return (
-    <div className="border-b border-white/5 px-4 md:px-6 h-12 shrink-0 flex items-center bg-[#111319]/80 backdrop-blur-xl">
+    <div className="border-b border-white/5 px-4 md:px-6 h-12 shrink-0 flex items-center bg-[--rc-surface]/80 backdrop-blur-xl">
       {menuButton}
       <div className="min-w-0 overflow-hidden flex-1">
         <Breadcrumb className="min-w-0 overflow-hidden">

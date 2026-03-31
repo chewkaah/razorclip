@@ -41,8 +41,8 @@ export function SidebarNavItem({
         cn(
           "flex items-center gap-2.5 px-3 py-2 text-[13px] font-medium transition-all rounded-lg",
           isActive
-            ? "bg-[#c2c1ff]/10 text-[#c2c1ff]"
-            : "text-[#c7c4d7]/70 hover:bg-white/5 hover:text-[#e2e2eb]",
+            ? "bg-[--rc-primary]/10 text-[--rc-primary]"
+            : "text-[--rc-on-surface-variant]/70 hover:bg-white/5 hover:text-[--rc-on-surface]",
           className,
         )
       }
