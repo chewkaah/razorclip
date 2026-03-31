@@ -79,9 +79,23 @@ export function Connections() {
   const { setBreadcrumbs } = useBreadcrumbs();
   const { selectedCompanyId } = useCompany();
   const [search, setSearch] = useState("");
+  const queryClient = useQueryClient();
   const [showAddForm, setShowAddForm] = useState(false);
   const [newSlug, setNewSlug] = useState("");
   const [newName, setNewName] = useState("");
+  const [newCategory, setNewCategory] = useState("Custom");
+
+  const createMutation = useMutation({
+    mutationFn: (data: { slug: string; displayName: string; category: string }) =>
+      connectionsApi.create(selectedCompanyId!, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["connections", selectedCompanyId] });
+      setShowAddForm(false);
+      setNewName("");
+      setNewSlug("");
+      setNewCategory("Custom");
+    },
+  });
 
   useEffect(() => { setBreadcrumbs([{ label: "Connections" }]); }, [setBreadcrumbs]);
 
@@ -175,7 +189,7 @@ export function Connections() {
           <p className="text-xs text-[--rc-on-surface-variant]">
             Install an MCP server or configure an API key for a new integration.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">Connection Name</label>
               <input
@@ -185,14 +199,35 @@ export function Connections() {
               />
             </div>
             <div>
-              <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">NPM Package or URL</label>
+              <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">NPM Package or Slug</label>
               <input
                 type="text" value={newSlug} onChange={e => setNewSlug(e.target.value)}
                 placeholder="e.g. @modelcontextprotocol/server-slack"
                 className="w-full bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/20 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40 focus:outline-none focus:border-[--rc-primary]/40 transition-all"
               />
             </div>
+            <div>
+              <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">Category</label>
+              <select
+                value={newCategory} onChange={e => setNewCategory(e.target.value)}
+                className="w-full bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/20 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] focus:outline-none focus:border-[--rc-primary]/40 transition-all"
+              >
+                <option value="Custom">Custom</option>
+                <option value="Communication & CRM">Communication & CRM</option>
+                <option value="Project Management">Project Management</option>
+                <option value="Dev & Deploy">Dev & Deploy</option>
+                <option value="Creative">Creative</option>
+                <option value="AI & Media">AI & Media</option>
+                <option value="Infrastructure">Infrastructure</option>
+                <option value="Financial">Financial</option>
+                <option value="Analytics">Analytics</option>
+                <option value="Social">Social</option>
+              </select>
+            </div>
           </div>
+          {createMutation.error && (
+            <p className="text-xs text-[#ffb4ab]">{(createMutation.error as Error).message}</p>
+          )}
           <div className="flex gap-3">
             <button
               onClick={() => { setShowAddForm(false); setNewName(""); setNewSlug(""); }}
@@ -202,9 +237,14 @@ export function Connections() {
             </button>
             <button
               className="px-4 py-2 rounded-xl text-xs font-bold bg-[--rc-primary] text-[--rc-on-primary] hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
-              disabled={!newName.trim()}
+              disabled={!newName.trim() || createMutation.isPending}
+              onClick={() => createMutation.mutate({
+                slug: newSlug.trim() || newName.trim().toLowerCase().replace(/\s+/g, "-"),
+                displayName: newName.trim(),
+                category: newCategory,
+              })}
             >
-              Install Connection
+              {createMutation.isPending ? "Installing..." : "Install Connection"}
             </button>
           </div>
         </div>

@@ -52,4 +52,7 @@ export const connectionsApi = {
 
   syncLogs: (companyId: string, slug: string) =>
     api.get<SyncLog[]>(`/companies/${companyId}/connections/${slug}/sync-logs`),
+
+  create: (companyId: string, data: { slug: string; displayName: string; category?: string; connectionType?: string; authMechanism?: string }) =>
+    api.post<Connection>(`/companies/${companyId}/connections`, data),
 };
