@@ -194,5 +194,36 @@ export function connectionsService(db: Db) {
     return rows.map(toSyncLog);
   }
 
-  return { list, getBySlug, seedDefaults, enable, disable, updateStatus, logSync, getSyncLogs };
+  /** Create a new connection */
+  async function create(
+    companyId: string,
+    data: {
+      slug: string;
+      displayName: string;
+      category: string;
+      connectionType: string;
+      authMechanism: string;
+      status?: string;
+    },
+  ) {
+    const [created] = await db
+      .insert(connections)
+      .values({
+        id: randomUUID(),
+        companyId,
+        slug: data.slug,
+        displayName: data.displayName,
+        category: data.category,
+        connectionType: data.connectionType,
+        authMechanism: data.authMechanism,
+        status: (data.status ?? "disconnected") as any,
+        sortOrder: 99,
+        isEnabled: false,
+        metadata: {},
+      })
+      .returning();
+    return toConnection(created);
+  }
+
+  return { list, getBySlug, seedDefaults, enable, disable, updateStatus, logSync, getSyncLogs, create };
 }

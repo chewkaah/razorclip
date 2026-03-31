@@ -20,6 +20,29 @@ export function connectionRoutes(db: Db) {
     res.json(conns);
   });
 
+  /** POST /companies/:companyId/connections — create a new connection */
+  router.post("/companies/:companyId/connections", async (req, res) => {
+    assertBoard(req);
+    const companyId = req.params.companyId as string;
+    assertCompanyAccess(req, companyId);
+
+    const { slug, displayName, category, connectionType, authMechanism, status } = req.body;
+    if (!slug || !displayName) {
+      res.status(400).json({ error: "slug and displayName are required" });
+      return;
+    }
+
+    const created = await svc.create(companyId, {
+      slug: slug.toLowerCase().replace(/\s+/g, "-"),
+      displayName,
+      category: category || "Custom",
+      connectionType: connectionType || "api_key",
+      authMechanism: authMechanism || "api_key",
+      status,
+    });
+    res.status(201).json(created);
+  });
+
   /** GET /companies/:companyId/connections/:slug — single connection detail */
   router.get("/companies/:companyId/connections/:slug", async (req, res) => {
     assertBoard(req);
