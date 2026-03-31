@@ -687,7 +687,11 @@ export function IssueDetail() {
   );
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="max-w-2xl space-y-6 rc-issue-detail">
+      {/* Mobile bottom-sheet drag handle */}
+      <div className="md:hidden flex justify-center -mt-2 mb-2">
+        <div className="w-10 h-1 rounded-full bg-[--rc-on-surface-variant]/20" />
+      </div>
       {/* Parent chain breadcrumb */}
       {ancestors.length > 0 && (
         <nav className="flex items-center gap-1 text-xs text-muted-foreground flex-wrap">
@@ -716,7 +720,7 @@ export function IssueDetail() {
         </div>
       )}
 
-      <div className="space-y-3">
+      <div className="space-y-3 md:space-y-3 max-md:glass-card max-md:rounded-2xl max-md:border max-md:border-white/5 max-md:p-4">
         <div className="flex items-center gap-2 min-w-0 flex-wrap">
           <StatusIcon
             status={issue.status}

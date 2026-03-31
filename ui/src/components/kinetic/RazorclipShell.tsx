@@ -7,7 +7,7 @@
  * Replaces the upstream Paperclip Layout for all Razorclip pages.
  * Branding: "Razorclip" (not War Room, not Kinetic Terminal, not Paperclip)
  */
-import { type ReactNode, useState, useMemo } from "react";
+import { type ReactNode, useState, useMemo, useEffect, useCallback, useRef } from "react";
 import { NavLink, useLocation, useNavigate, Outlet } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
 import { useCompany } from "@/context/CompanyContext";
@@ -21,6 +21,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import type { Agent } from "@paperclipai/shared";
 import { AGENT_REGISTRY, type AgentSlug } from "./AgentChip";
 import { FloatingChatBar } from "../chat/FloatingChatBar";
+import { CommandPaletteRC } from "./CommandPaletteRC";
 
 function resolveSlug(name: string): AgentSlug | null {
   const s = name.toLowerCase().trim();
@@ -165,10 +166,79 @@ const mobileNavItems = [
   { to: "/chat", label: "Chat", icon: "chat_bubble" },
   { to: "/agents/grid", label: "Agents", icon: "smart_toy" },
   { to: "/health", label: "Health", icon: "monitor_heart" },
-  { to: "/inbox/mine", label: "More", icon: "more_horiz" },
 ];
 
-function MobileBottomNav() {
+const moreDrawerItems = [
+  { to: "/inbox/mine", label: "Inbox", icon: "inbox" },
+  { to: "/issues", label: "Issues", icon: "error" },
+  { to: "/routines", label: "Routines", icon: "sync" },
+  { to: "/goals", label: "Goals", icon: "target" },
+  { to: "/projects", label: "Projects", icon: "folder" },
+  { to: "/costs", label: "Costs", icon: "payments" },
+  { to: "/activity", label: "Activity", icon: "timeline" },
+  { to: "/company/settings", label: "Settings", icon: "settings" },
+  { to: "/skills", label: "Skills", icon: "build" },
+  { to: "/org", label: "Org", icon: "account_tree" },
+  { to: "/connections", label: "Connections", icon: "cable" },
+  { to: "/approvals/queue", label: "Approvals", icon: "verified" },
+  { to: "/clients", label: "Clients", icon: "group" },
+];
+
+function MobileMoreDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] md:hidden">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+      {/* Drawer */}
+      <div className="absolute bottom-0 left-0 w-full max-h-[70vh] bg-[--rc-surface]/95 backdrop-blur-2xl rounded-t-3xl border-t border-[--rc-primary]/10 animate-in slide-in-from-bottom duration-300 overflow-hidden flex flex-col">
+        {/* Drag handle */}
+        <div className="flex justify-center pt-3 pb-2 shrink-0">
+          <div className="w-10 h-1 rounded-full bg-[--rc-on-surface-variant]/20" />
+        </div>
+        {/* Title */}
+        <div className="px-6 pb-3 shrink-0">
+          <h3 className="text-sm font-semibold uppercase tracking-widest text-[--rc-on-surface-variant]/60">More</h3>
+        </div>
+        {/* Items */}
+        <div className="flex-1 overflow-y-auto px-4 pb-8 grid grid-cols-3 gap-2">
+          {moreDrawerItems.map((item) => (
+            <button
+              key={item.to}
+              onClick={() => { onClose(); navigate(item.to); }}
+              className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-[--rc-surface-container]/50 border border-[--rc-outline-variant]/10 hover:bg-[--rc-primary]/10 hover:border-[--rc-primary]/20 transition-all active:scale-95"
+            >
+              <span
+                className="material-symbols-outlined text-xl text-[--rc-primary]"
+                style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}
+              >
+                {item.icon}
+              </span>
+              <span className="text-[10px] uppercase tracking-wider font-medium text-[--rc-on-surface-variant]">{item.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MobileBottomNav({ onMorePress }: { onMorePress: () => void }) {
   return (
     <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[--rc-surface]/90 backdrop-blur-2xl rounded-t-3xl md:hidden">
       {mobileNavItems.map((item) => (
@@ -188,6 +258,14 @@ function MobileBottomNav() {
           <span className="text-[10px] uppercase tracking-[0.05em] font-medium">{item.label}</span>
         </NavLink>
       ))}
+      {/* More button (not a NavLink — triggers drawer) */}
+      <button
+        onClick={onMorePress}
+        className="flex flex-col items-center justify-center transition-all text-[--rc-on-surface-variant]/50"
+      >
+        <span className="material-symbols-outlined mb-0.5 text-xl" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>more_horiz</span>
+        <span className="text-[10px] uppercase tracking-[0.05em] font-medium">More</span>
+      </button>
     </nav>
   );
 }
@@ -216,9 +294,10 @@ export function RazorclipShell() {
   const { companies, selectedCompany, setSelectedCompanyId } = useCompany();
   const { openOnboarding } = useDialog();
   const [showCompanySwitcher, setShowCompanySwitcher] = useState(false);
+  const [moreDrawerOpen, setMoreDrawerOpen] = useState(false);
 
   return (
-    <div className="razorclip-shell bg-[--rc-surface] text-[--rc-on-surface] font-['Inter'] h-screen overflow-hidden selection:bg-[--rc-primary]/30">
+    <div className="razorclip-shell bg-[--rc-surface] text-[--rc-on-surface] font-['Inter'] h-[100vh] h-[100dvh] overflow-hidden selection:bg-[--rc-primary]/30">
 
       {/* ─── Mobile Top Bar (< md) ─── */}
       <MobileTopBar companyName={selectedCompany?.name ?? "Razorclip"} />
@@ -323,9 +402,14 @@ export function RazorclipShell() {
               search
             </span>
             <input
-              className="bg-transparent border-none focus:ring-0 focus:outline-none text-[10px] w-64 pl-10 text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40"
+              className="bg-transparent border-none focus:ring-0 focus:outline-none text-[10px] w-64 pl-10 text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40 cursor-pointer"
               placeholder="CMD + K TO SEARCH..."
               type="text"
+              readOnly
+              onFocus={(e) => {
+                e.target.blur();
+                document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
+              }}
             />
           </div>
           <nav className="hidden md:flex gap-8">
@@ -359,17 +443,23 @@ export function RazorclipShell() {
       </header>
 
       {/* ─── Main content ─── */}
-      <main className="md:ml-64 pt-20 md:pt-24 pb-24 md:pb-12 px-4 md:px-8 overflow-y-auto" style={{ height: "100vh" }}>
+      <main className="md:ml-64 pt-20 md:pt-24 pb-24 md:pb-12 px-4 md:px-8 overflow-y-auto" style={{ height: "100dvh" }}>
         <Outlet />
       </main>
 
       {/* Mobile bottom nav (< md) */}
-      <MobileBottomNav />
+      <MobileBottomNav onMorePress={() => setMoreDrawerOpen(true)} />
+
+      {/* Mobile "More" drawer */}
+      <MobileMoreDrawer open={moreDrawerOpen} onClose={() => setMoreDrawerOpen(false)} />
 
       {/* Floating chat — desktop only (mobile uses Chat tab) */}
       <div className="hidden md:block">
         <FloatingChatBar />
       </div>
+
+      {/* Command Palette (Cmd+K) */}
+      <CommandPaletteRC />
     </div>
   );
 }

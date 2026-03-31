@@ -1283,3 +1283,47 @@ a.paperclip-project-mention-chip {
 [class*="_toolbarNodeKindSelectContainer_"] {
   z-index: 81 !important;
 }
+
+/* ── Kinetic Terminal: Agent Detail page restyle ─────────── */
+.rc-agent-detail [data-slot="tab-bar"],
+.rc-agent-detail [role="tablist"] {
+  background: var(--rc-surface-container, rgba(255, 255, 255, 0.03));
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.25rem;
+}
+
+.rc-agent-detail .rounded-lg.border.border-border {
+  background: var(--rc-surface-container, rgba(255, 255, 255, 0.04));
+  border-color: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  backdrop-filter: blur(24px);
+}
+
+.rc-agent-detail .bg-card,
+.rc-agent-detail .bg-background\/60 {
+  background: var(--rc-surface-container, rgba(255, 255, 255, 0.04));
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ── Kinetic Terminal: Issue Detail page restyle ─────────── */
+.rc-issue-detail .rounded-lg.border {
+  background: var(--rc-surface-container, rgba(255, 255, 255, 0.04));
+  border-color: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  backdrop-filter: blur(24px);
+}
+
+.rc-issue-detail .bg-card {
+  background: var(--rc-surface-container, rgba(255, 255, 255, 0.04));
+}
+
+/* ── Kinetic Terminal: Mobile bottom sheet ─────────── */
+.rc-bottom-sheet-enter {
+  animation: rc-slide-up 0.3s ease-out;
+}
+
+@keyframes rc-slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

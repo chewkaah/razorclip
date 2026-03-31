@@ -9,10 +9,78 @@ import { queryKeys } from "../lib/queryKeys";
 import { cn, agentUrl } from "../lib/utils";
 // Layout provided by RazorclipShell via router — no wrapper needed here
 import { AGENT_REGISTRY, type AgentSlug } from "../components/kinetic/AgentChip";
-import { AGENT_ROLE_LABELS, type Agent } from "@paperclipai/shared";
+import { AGENT_ROLE_LABELS, type Agent, type HeartbeatRun } from "@paperclipai/shared";
 import { getAgentAvatar } from "../components/kinetic/agent-avatars";
 
 const roleLabels = AGENT_ROLE_LABELS as Record<string, string>;
+
+/**
+ * Build 8-week activity sparkline data (weekly run counts) for each agent.
+ * Returns a Map of agentId -> array of 8 numbers (oldest week first).
+ */
+function buildWeeklyActivity(runs: HeartbeatRun[]): Map<string, number[]> {
+  const now = Date.now();
+  const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+  const map = new Map<string, number[]>();
+
+  for (const run of runs) {
+    const agentId = run.agentId;
+    if (!agentId) continue;
+    const startedAt = run.startedAt ? new Date(run.startedAt as any).getTime() : new Date(run.createdAt as any).getTime();
+    if (!startedAt) continue;
+    const weeksAgo = Math.floor((now - startedAt) / WEEK_MS);
+    if (weeksAgo < 0 || weeksAgo >= 8) continue;
+    const weekIndex = 7 - weeksAgo; // 0 = oldest, 7 = most recent
+    if (!map.has(agentId)) map.set(agentId, [0, 0, 0, 0, 0, 0, 0, 0]);
+    const arr = map.get(agentId)!;
+    arr[weekIndex]++;
+  }
+  return map;
+}
+
+/**
+ * Derive a task snippet from the most recent run for an agent.
+ */
+function getTaskSnippet(
+  agentRuns: HeartbeatRun[],
+  agentId: string,
+  isActive: boolean,
+  isError: boolean,
+): { text: string; progress: number } {
+  const agentRunsSorted = agentRuns
+    .filter((r) => r.agentId === agentId)
+    .sort((a, b) => {
+      const aTime = a.startedAt ? new Date(a.startedAt as any).getTime() : 0;
+      const bTime = b.startedAt ? new Date(b.startedAt as any).getTime() : 0;
+      return bTime - aTime;
+    });
+
+  const latest = agentRunsSorted[0];
+  if (!latest) return { text: isActive ? "Idle" : "Awaiting next task", progress: 0 };
+
+  const status = latest.status;
+  if (isError) {
+    const errMsg = latest.error || latest.stderrExcerpt || "Connection timed out";
+    return { text: errMsg.slice(0, 80), progress: 12 };
+  }
+  if (status === "running" || status === "queued") {
+    const source = latest.invocationSource ?? "task";
+    const detail = latest.triggerDetail;
+    const snippet = detail
+      ? `${source}: ${typeof detail === "string" ? detail : JSON.stringify(detail).slice(0, 60)}`
+      : `Running ${source} task...`;
+    return { text: snippet.slice(0, 80), progress: 65 };
+  }
+  if (status === "succeeded") {
+    const excerpt = latest.stdoutExcerpt;
+    return { text: excerpt ? excerpt.slice(0, 80) : "Last run succeeded", progress: 100 };
+  }
+  if (status === "failed") {
+    const errMsg = latest.error || latest.stderrExcerpt || "Run failed";
+    return { text: errMsg.slice(0, 80), progress: 12 };
+  }
+  return { text: isActive ? "Idle" : "Awaiting next task", progress: 0 };
+}
 
 function resolveAgentSlug(name: string): AgentSlug | null {
   const slug = name.toLowerCase().trim();
@@ -80,6 +148,9 @@ export function AgentGrid() {
     return map;
   }, [runs]);
 
+  // Real 8-week activity sparklines per agent
+  const weeklyActivity = useMemo(() => buildWeeklyActivity(runs ?? []), [runs]);
+
   const sorted = useMemo(() => {
     return [...(agents ?? [])].sort((a, b) => a.name.localeCompare(b.name));
   }, [agents]);
@@ -129,7 +200,10 @@ export function AgentGrid() {
           const liveCount = liveRunByAgent.get(agent.id) ?? 0;
           const isError = agent.status === "error";
           const isActive = agent.status === "running" || agent.status === "idle" || agent.status === "active";
-          const taskProgress = isError ? 12 : isActive ? Math.floor(Math.random() * 60 + 30) : 0;
+          const taskSnippet = getTaskSnippet(runs ?? [], agent.id, isActive, isError);
+          const taskProgress = taskSnippet.progress;
+          const sparklineData = weeklyActivity.get(agent.id) ?? [0, 0, 0, 0, 0, 0, 0, 0];
+          const sparklineMax = Math.max(...sparklineData, 1);
 
           return (
             <Link
@@ -232,11 +306,7 @@ export function AgentGrid() {
                       </span>
                     </div>
                     <p className={cn("text-xs mb-3 line-clamp-1", isError ? "text-[#ffb4ab]/80" : "text-[--rc-on-surface]/80")}>
-                      {isError
-                        ? "Connection timed out"
-                        : isActive
-                          ? `Processing task ${agent.name.toLowerCase()}-${Math.floor(Math.random() * 999)}`
-                          : "Awaiting next task"}
+                      {taskSnippet.text}
                     </p>
                     <div className={cn("h-1 w-full rounded-full overflow-hidden", isError ? "bg-[#ffb4ab]/20" : "bg-[#464554]/20")}>
                       <div
@@ -251,26 +321,22 @@ export function AgentGrid() {
                     </div>
                   </div>
 
-                  {/* 8W Activity Sparkline */}
+                  {/* 8W Activity Sparkline — wired to real weekly run counts */}
                   <div>
                     <span className="text-[10px] uppercase text-[--rc-on-surface-variant] mb-2 block">8w Activity</span>
                     <div className="flex items-end gap-1 h-8">
-                      {[...Array(8)].map((_, i) => {
-                        const h = isActive
-                          ? Math.floor(Math.random() * 70 + 20)
-                          : isError
-                            ? Math.max(2, 90 - i * 12)
-                            : Math.max(2, 80 - i * 10);
+                      {sparklineData.map((count, i) => {
+                        const h = sparklineMax > 0 ? Math.max(4, (count / sparklineMax) * 100) : 4;
                         const isLast = i === 7;
                         return (
                           <div
                             key={i}
-                            className="flex-1 rounded-t-sm"
+                            className="flex-1 rounded-t-sm transition-all duration-300"
                             style={{
                               height: `${h}%`,
                               backgroundColor: isError && i >= 6
                                 ? `rgba(255, 180, 171, ${isLast ? 0.6 : 0.4})`
-                                : `rgba(194, 193, 255, ${isLast ? 0.4 : 0.2})`,
+                                : `rgba(194, 193, 255, ${isLast ? 0.4 : 0.15 + (count > 0 ? 0.15 : 0)})`,
                             }}
                           />
                         );
@@ -285,8 +351,8 @@ export function AgentGrid() {
       </div>
 
       {/* Footer Stats Banner — LIVE data */}
-      <div className="mt-16 glass-card rounded-2xl p-8 border border-[--rc-outline-variant]/10 flex flex-wrap gap-12 items-center justify-between">
-        <div className="flex gap-12">
+      <div className="mt-16 glass-card rounded-2xl p-4 md:p-8 border border-[--rc-outline-variant]/10 flex flex-wrap gap-4 md:gap-12 items-center justify-between">
+        <div className="flex gap-4 md:gap-12 flex-wrap">
           <div>
             <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] opacity-60 block mb-2">
               Total Agents

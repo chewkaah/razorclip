@@ -1,5 +1,12 @@
+/**
+ * MobileBottomNav — Legacy Layout shell bottom nav.
+ *
+ * NOTE: The primary mobile nav is in RazorclipShell. This version exists
+ * only for the instance-settings Layout shell. Kept in sync with the
+ * RazorclipShell nav targets for consistency.
+ */
 import { useMemo } from "react";
-import { NavLink, useLocation } from "@/lib/router";
+import { NavLink } from "@/lib/router";
 import {
   House,
   MessageSquare,
@@ -7,7 +14,6 @@ import {
   HeartPulse,
   MoreHorizontal,
 } from "lucide-react";
-import { useCompany } from "../context/CompanyContext";
 import { cn } from "../lib/utils";
 
 interface MobileBottomNavProps {
@@ -26,9 +32,9 @@ export function MobileBottomNav({ visible }: MobileBottomNavProps) {
     () => [
       { to: "/home", label: "Home", icon: House },
       { to: "/chat", label: "Chat", icon: MessageSquare },
-      { to: "/agents/all", label: "Agents", icon: Users },
+      { to: "/agents/grid", label: "Agents", icon: Users },
       { to: "/health", label: "Health", icon: HeartPulse },
-      { to: "/connections", label: "More", icon: MoreHorizontal },
+      { to: "/inbox/mine", label: "More", icon: MoreHorizontal },
     ],
     [],
   );

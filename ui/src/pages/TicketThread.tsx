@@ -267,7 +267,7 @@ export function TicketThread() {
       </main>
 
       {/* Comment Input */}
-      <div className="fixed bottom-0 left-0 w-full bg-kt-surface/90 backdrop-blur-2xl border-t border-kt-outline-variant/10 p-4 pb-8 z-30">
+      <div className="fixed bottom-0 left-0 md:left-64 w-full md:w-[calc(100%-16rem)] bg-kt-surface/90 backdrop-blur-2xl border-t border-kt-outline-variant/10 p-4 pb-8 z-30">
         <div className="max-w-screen-md mx-auto">
           {/* Command hints */}
           <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar mb-2">
