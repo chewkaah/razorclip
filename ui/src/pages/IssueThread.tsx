@@ -77,7 +77,7 @@ export function IssueThread() {
               <Link key={i.id} to={`/issues/${i.id}/thread-view`} className="no-underline text-inherit">
                 <div className={cn(
                   "px-4 py-4 cursor-pointer border-l-2 transition-colors",
-                  isCurrent ? "border-[#c2c1ff] bg-[--rc-primary]/5" : "border-transparent hover:bg-[--rc-surface-container-high]"
+                  isCurrent ? "border-[--rc-primary] bg-[--rc-primary]/5" : "border-transparent hover:bg-[--rc-surface-container-high]"
                 )}>
                   <div className="flex justify-between items-start mb-2">
                     <span className={cn("text-[10px] tracking-widest font-bold", isCurrent ? "text-[--rc-primary]" : "text-[--rc-on-surface-variant]")}>{iPrefix}</span>
@@ -113,7 +113,7 @@ export function IssueThread() {
         <div className="p-6 flex justify-between items-start border-b border-[--rc-outline-variant]/10">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
-              <span className="px-2 py-0.5 bg-[--rc-primary]/20 text-[--rc-primary] text-[10px] font-bold tracking-widest rounded-sm border border-[#c2c1ff]/20">RAZORCLIP</span>
+              <span className="px-2 py-0.5 bg-[--rc-primary]/20 text-[--rc-primary] text-[10px] font-bold tracking-widest rounded-sm border border-[--rc-primary]/20">RAZORCLIP</span>
               <span className="text-[--rc-on-surface-variant] text-xs tabular-nums">{prefix} • Updated {relativeTime(issue.updatedAt)}</span>
             </div>
             <h1 className="text-2xl font-extrabold tracking-tight mt-2">{issue.title}</h1>
@@ -122,7 +122,7 @@ export function IssueThread() {
             <button className="bg-[--rc-surface-container-highest] hover:bg-[#373940] text-xs font-bold px-4 py-2 rounded-xl border border-[--rc-outline-variant]/20 transition-all flex items-center gap-2">
               <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>close</span> Close
             </button>
-            <button className="bg-[--rc-primary] text-[--rc-on-primary] text-xs font-bold px-4 py-2 rounded-xl hover:opacity-90 transition-all flex items-center gap-2 shadow-[0_10px_20px_-5px_rgba(194,193,255,0.3)]">
+            <button className="bg-[--rc-primary] text-[--rc-on-primary] text-xs font-bold px-4 py-2 rounded-xl hover:opacity-90 transition-all flex items-center gap-2 shadow-[0_10px_20px_-5px_rgba(0,255,170,0.3)]">
               <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>check_circle</span> Approve Fix
             </button>
           </div>
@@ -172,7 +172,7 @@ export function IssueThread() {
           <div className="h-48 bg-black border-t border-[--rc-outline-variant]/30 font-mono p-4 flex flex-col">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[--rc-primary] shadow-[0_0_8px_rgba(194,193,255,0.6)]" />
+                <span className="w-2 h-2 rounded-full bg-[--rc-primary] shadow-[0_0_8px_rgba(0,255,170,0.6)]" />
                 <span className="text-[10px] text-[--rc-primary] tracking-widest uppercase font-bold">{assignedAgent.name} Execution Log</span>
               </div>
               <span className="text-[10px] text-[--rc-outline] uppercase">Live Feed</span>
@@ -197,17 +197,17 @@ export function IssueThread() {
             c.isAgent ? (
               /* Agent Message — from Stitch */
               <div key={c.id} className="flex gap-3">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full border-2 p-0.5" style={{ borderColor: `${c.config?.color ?? "#c2c1ff"}50` }}>
+                <div className="flex-shrink-0 w-8 h-8 rounded-full border-2 p-0.5" style={{ borderColor: `${c.config?.color ?? "var(--rc-primary)"}50` }}>
                   <div className={`w-full h-full rounded-full flex items-center justify-center text-[10px] font-bold text-white ${c.config ? `bg-gradient-to-br ${c.config.gradient}` : "bg-[#464554]"}`}>
                     {c.name[0]}
                   </div>
                 </div>
                 <div className="flex-1 space-y-1.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold" style={{ color: c.config?.color ?? "#c2c1ff" }}>{c.name}</span>
+                    <span className="text-xs font-bold" style={{ color: c.config?.color ?? "var(--rc-primary)" }}>{c.name}</span>
                     <span className="text-[10px] text-[--rc-on-surface-variant] tabular-nums">{c.time}</span>
                   </div>
-                  <div className="glass-card p-3 rounded-xl rounded-tl-none border text-sm leading-relaxed" style={{ borderColor: `${c.config?.color ?? "#c2c1ff"}10` }}>
+                  <div className="glass-card p-3 rounded-xl rounded-tl-none border text-sm leading-relaxed" style={{ borderColor: `${c.config?.color ?? "var(--rc-primary)"}10` }}>
                     {typeof c.body === "string" && c.body.length > 300 ? c.body.slice(0, 300) + "..." : c.body}
                   </div>
                 </div>
@@ -241,7 +241,7 @@ export function IssueThread() {
               <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>terminal</span>
             </div>
             <textarea
-              className="w-full bg-[--rc-surface-container-lowest] border border-[--rc-outline-variant]/20 focus:border-[#c2c1ff]/50 focus:ring-1 focus:ring-[#c2c1ff]/20 rounded-xl pl-10 pr-12 py-3 text-sm placeholder:text-[--rc-outline]/50 resize-none transition-all text-[--rc-on-surface] focus:outline-none"
+              className="w-full bg-[--rc-surface-container-lowest] border border-[--rc-outline-variant]/20 focus:border-[--rc-primary]/50 focus:ring-1 focus:ring-[--rc-primary]/20 rounded-xl pl-10 pr-12 py-3 text-sm placeholder:text-[--rc-outline]/50 resize-none transition-all text-[--rc-on-surface] focus:outline-none"
               placeholder="Type / to invoke agent commands..."
               rows={1}
               value={commentText}

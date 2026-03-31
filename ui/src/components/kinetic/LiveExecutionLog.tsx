@@ -46,7 +46,7 @@ export function LiveExecutionLog({
   className,
 }: LiveExecutionLogProps) {
   const config = agentSlug ? AGENT_REGISTRY[agentSlug] : null;
-  const accentColor = config?.color ?? "#c2c1ff";
+  const accentColor = config?.color ?? "var(--rc-primary)";
 
   return (
     <div className={cn("space-y-2", className)}>

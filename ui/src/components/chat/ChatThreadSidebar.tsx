@@ -29,11 +29,11 @@ export function ChatThreadSidebar({ companyId, activeThreadId, onThreadSelect }:
   };
 
   return (
-    <div className="w-64 border-r border-[#c2c1ff]/10 flex flex-col h-full bg-[#0c0e14]/50 shrink-0">
-      <div className="p-3 border-b border-[#c2c1ff]/10">
+    <div className="w-64 border-r border-[--rc-primary]/10 flex flex-col h-full bg-[--rc-surface-container-lowest]/50 shrink-0">
+      <div className="p-3 border-b border-[--rc-primary]/10">
         <button
           onClick={handleNewThread}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#c2c1ff]/10 border border-[#c2c1ff]/20 text-[#c2c1ff] text-xs font-bold uppercase tracking-wider hover:bg-[#c2c1ff]/20 active:scale-95 transition-all"
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[--rc-primary]/10 border border-[--rc-primary]/20 text-[--rc-primary] text-xs font-bold uppercase tracking-wider hover:bg-[--rc-primary]/20 active:scale-95 transition-all"
         >
           <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>add</span>
           New Chat
@@ -45,8 +45,8 @@ export function ChatThreadSidebar({ companyId, activeThreadId, onThreadSelect }:
         ))}
         {threads?.length === 0 && (
           <div className="flex flex-col items-center justify-center py-12 gap-3">
-            <span className="material-symbols-outlined text-[#c2c1ff]/20 text-3xl" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chat_bubble</span>
-            <p className="text-xs text-[#c7c4d7]/40">No conversations yet</p>
+            <span className="material-symbols-outlined text-[--rc-primary]/20 text-3xl" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chat_bubble</span>
+            <p className="text-xs text-[--rc-on-surface-variant]/40">No conversations yet</p>
           </div>
         )}
       </div>

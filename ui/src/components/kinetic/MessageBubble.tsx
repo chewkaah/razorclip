@@ -42,7 +42,7 @@ export function MessageBubble({
   className,
 }: MessageBubbleProps) {
   const config = agentSlug ? AGENT_REGISTRY[agentSlug] : null;
-  const accentColor = config?.color ?? "#c2c1ff";
+  const accentColor = config?.color ?? "var(--rc-primary)";
 
   if (variant === "user") {
     return (
@@ -107,7 +107,7 @@ export function MessageBubble({
             >
               <span
                 className="text-[9px] font-bold uppercase tracking-tighter"
-                style={{ color: config?.colorLight ?? "#c7c4d7" }}
+                style={{ color: config?.colorLight ?? "var(--rc-on-surface-variant)" }}
               >
                 {badge}
               </span>

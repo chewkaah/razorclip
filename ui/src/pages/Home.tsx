@@ -1,19 +1,20 @@
 /**
  * Home / Command Center — ALL LIVE DATA, no placeholders
  */
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useCompany } from "../context/CompanyContext";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { agentsApi } from "../api/agents";
 import { activityApi } from "../api/activity";
 import { queryKeys } from "../lib/queryKeys";
-import { relativeTime } from "../lib/utils";
+import { relativeTime, agentUrl } from "../lib/utils";
 import { AGENT_REGISTRY, type AgentSlug } from "../components/kinetic/AgentChip";
 import { useUserProfile } from "../hooks/useUserProfile";
 import { biApi } from "../api/bi";
 import type { Agent, ActivityEvent } from "@paperclipai/shared";
 import { getAgentAvatar } from "../components/kinetic/agent-avatars";
+import { Link } from "@/lib/router";
 
 
 const agentAvatarList: { slug: AgentSlug; gradient: string }[] = [
@@ -35,6 +36,7 @@ export function Home() {
   const { setBreadcrumbs } = useBreadcrumbs();
   const { displayName: userName } = useUserProfile();
 
+  const [pulsePeriod, setPulsePeriod] = useState<"D" | "W" | "M" | "Q">("M");
   useEffect(() => { setBreadcrumbs([{ label: "Command Center" }]); }, [setBreadcrumbs]);
 
   // Real BI pulse
@@ -79,7 +81,7 @@ export function Home() {
       return {
         id: event.id,
         agentName: agent?.name ?? "System",
-        color: config?.color ?? "#c7c4d7",
+        color: config?.color ?? "var(--rc-on-surface-variant)",
         text: (event as any).metadata?.description || (event as any).metadata?.commentBody || actionLabel,
         time: relativeTime(event.createdAt),
         tag: event.action.includes("completed") ? "SUCCESS" : "",
@@ -111,7 +113,21 @@ export function Home() {
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-bold uppercase tracking-[0.1em] text-[--rc-on-surface-variant]">Business Pulse</h2>
-          <span className="text-[10px] text-[--rc-primary]/60 font-medium tabular-nums uppercase">Real-time • Weekly</span>
+          <div className="flex items-center gap-1 bg-[--rc-surface-container] rounded-lg p-0.5">
+            {(["D", "W", "M", "Q"] as const).map(p => (
+              <button
+                key={p}
+                onClick={() => setPulsePeriod(p)}
+                className={`px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all ${
+                  pulsePeriod === p
+                    ? "bg-[--rc-primary] text-[--rc-on-primary] shadow-sm"
+                    : "text-[--rc-on-surface-variant] hover:text-[--rc-on-surface]"
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden">
@@ -123,14 +139,14 @@ export function Home() {
           </div>
           <div className="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden">
             <div className="absolute -right-2 -top-2 w-12 h-12 bg-emerald-500/10 blur-2xl rounded-full" />
-            <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">Weekly Revenue</span>
+            <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">{pulsePeriod === "D" ? "Daily" : pulsePeriod === "W" ? "Weekly" : pulsePeriod === "Q" ? "Quarterly" : "Monthly"} Revenue</span>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-semibold tabular-nums">{pulse?.weeklyRevenue ? `$${Math.round(pulse.weeklyRevenue / 1000)}k` : "—"}</span>
             </div>
           </div>
           <div className="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-between h-24 relative overflow-hidden">
             <div className="absolute -right-2 -top-2 w-12 h-12 bg-amber-500/10 blur-2xl rounded-full" />
-            <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">Weekly Burn</span>
+            <span className="text-[10px] font-medium text-[--rc-on-surface-variant] uppercase tracking-wider">{pulsePeriod === "D" ? "Daily" : pulsePeriod === "W" ? "Weekly" : pulsePeriod === "Q" ? "Quarterly" : "Monthly"} Burn</span>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-semibold tabular-nums">{pulse?.weeklyBurn ? `$${(pulse.weeklyBurn / 1000).toFixed(1)}k` : "—"}</span>
             </div>
@@ -145,10 +161,10 @@ export function Home() {
         </div>
       </section>
 
-      {/* Agents — LIVE from agents API */}
+      {/* Agents — LIVE from agents API, clickable with status */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xs font-bold uppercase tracking-[0.1em] text-[--rc-on-surface-variant]">Syncing Agents</h2>
+          <h2 className="text-xs font-bold uppercase tracking-[0.1em] text-[--rc-on-surface-variant]">Active Agents</h2>
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             <span className="text-[10px] font-semibold text-emerald-500">{onlineCount} ONLINE</span>
@@ -157,19 +173,32 @@ export function Home() {
         <div className="flex gap-5 overflow-x-auto no-scrollbar pb-2">
           {agentAvatarList.map(({ slug, gradient }) => {
             const config = AGENT_REGISTRY[slug];
+            const agent = agentList?.find((a: Agent) => a.name.toLowerCase() === slug);
+            const status = agent?.status ?? "unknown";
+            const statusColor = status === "idle" ? "#10B981" : status === "running" ? "#3B82F6" : status === "error" ? "#EF4444" : status === "paused" ? "#F59E0B" : "#6B7280";
+            const statusLabel = status === "idle" ? "Online" : status === "running" ? "Running" : status === "error" ? "Error" : status === "paused" ? "Paused" : "Offline";
             return (
-              <div key={slug} className="flex flex-col items-center gap-2 shrink-0">
-                <div className={`relative p-1 rounded-full bg-gradient-to-br ${gradient}`}>
+              <Link key={slug} to={agent ? agentUrl(agent) + "/profile" : `agents/grid`} className="flex flex-col items-center gap-2 shrink-0 group cursor-pointer">
+                <div className={`relative p-1 rounded-full bg-gradient-to-br ${gradient} group-hover:scale-105 transition-transform duration-200`}>
                   <div className="bg-[--rc-surface] rounded-full p-0.5">
                     <div className="w-14 h-14 rounded-full overflow-hidden">
                       <img className="w-full h-full object-cover" src={getAgentAvatar(slug) ?? undefined} alt={config.label} />
                     </div>
                   </div>
+                  {/* Status dot */}
+                  <span
+                    className="absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full border-2 border-[--rc-surface]"
+                    style={{ backgroundColor: statusColor }}
+                    title={statusLabel}
+                  />
                 </div>
-                <span className="text-[10px] font-bold tracking-widest uppercase" style={{ color: config.color }}>
+                <span className="text-[10px] font-bold tracking-widest uppercase group-hover:opacity-80 transition-opacity" style={{ color: config.color }}>
                   {config.label}
                 </span>
-              </div>
+                <span className="text-[8px] uppercase tracking-wider font-medium -mt-1" style={{ color: statusColor }}>
+                  {statusLabel}
+                </span>
+              </Link>
             );
           })}
         </div>

@@ -118,7 +118,7 @@ export function Issues() {
         </div>
         <button
           onClick={() => openNewIssue()}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[--rc-primary] text-[--rc-on-primary] rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_20px_-5px_rgba(194,193,255,0.3)]"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[--rc-primary] text-[--rc-on-primary] rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_20px_-5px_rgba(0,255,170,0.3)]"
         >
           <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>add</span>
           New Issue

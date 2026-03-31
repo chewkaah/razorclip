@@ -61,30 +61,30 @@ export function AuthPage() {
 
   if (isSessionLoading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-[#111319]">
+      <div className="fixed inset-0 flex items-center justify-center bg-[--rc-surface]">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-[#c2c1ff] animate-pulse" />
-          <span className="text-sm text-[#c7c4d7]">Loading…</span>
+          <div className="w-2 h-2 rounded-full bg-[--rc-primary] animate-pulse" />
+          <span className="text-sm text-[--rc-on-surface-variant]">Loading…</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 flex bg-[#111319] text-[#e2e2eb] font-['Inter']">
+    <div className="fixed inset-0 flex bg-[--rc-surface] text-[--rc-on-surface] font-['Inter']">
       {/* Left half — Razorclip branded form */}
       <div className="w-full md:w-1/2 flex flex-col overflow-y-auto">
         <div className="w-full max-w-md mx-auto my-auto px-8 py-12">
           {/* Brand */}
           <div className="mb-10">
-            <h1 className="text-3xl font-thin tracking-tighter text-[#c2c1ff] uppercase mb-1">Razorclip</h1>
-            <p className="text-[10px] text-[#c7c4d7] tracking-[0.2em] uppercase opacity-60">Agent Command Center</p>
+            <h1 className="text-3xl font-thin tracking-tighter text-[--rc-primary] uppercase mb-1">Razorclip</h1>
+            <p className="text-[10px] text-[--rc-on-surface-variant] tracking-[0.2em] uppercase opacity-60">Agent Command Center</p>
           </div>
 
-          <h2 className="text-xl font-semibold text-[#e2e2eb]">
+          <h2 className="text-xl font-semibold text-[--rc-on-surface]">
             {mode === "sign_in" ? "Sign in to Razorclip" : "Create your account"}
           </h2>
-          <p className="mt-1 text-sm text-[#c7c4d7]">
+          <p className="mt-1 text-sm text-[--rc-on-surface-variant]">
             {mode === "sign_in"
               ? "Access your agent command center."
               : "Set up your profile to start orchestrating agents."}
@@ -102,10 +102,10 @@ export function AuthPage() {
           >
             {mode === "sign_up" && (
               <div>
-                <label htmlFor="name" className="text-[10px] uppercase tracking-wider text-[#c7c4d7] mb-2 block">Name</label>
+                <label htmlFor="name" className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">Name</label>
                 <input
                   id="name" name="name"
-                  className="w-full bg-[#191b22] border border-[#464554]/30 rounded-xl px-4 py-3 text-sm text-[#e2e2eb] outline-none focus:border-[#c2c1ff]/50 focus:ring-1 focus:ring-[#c2c1ff]/20 placeholder:text-[#c7c4d7]/30 transition-all"
+                  className="w-full bg-[--rc-surface-container-low] border border-[#464554]/30 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] outline-none focus:border-[--rc-primary]/50 focus:ring-1 focus:ring-[--rc-primary]/20 placeholder:text-[--rc-on-surface-variant]/30 transition-all"
                   placeholder="Your name"
                   value={name} onChange={(e) => setName(e.target.value)}
                   autoComplete="name" autoFocus
@@ -113,20 +113,20 @@ export function AuthPage() {
               </div>
             )}
             <div>
-              <label htmlFor="email" className="text-[10px] uppercase tracking-wider text-[#c7c4d7] mb-2 block">Email</label>
+              <label htmlFor="email" className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">Email</label>
               <input
                 id="email" name="email" type="email"
-                className="w-full bg-[#191b22] border border-[#464554]/30 rounded-xl px-4 py-3 text-sm text-[#e2e2eb] outline-none focus:border-[#c2c1ff]/50 focus:ring-1 focus:ring-[#c2c1ff]/20 placeholder:text-[#c7c4d7]/30 transition-all"
+                className="w-full bg-[--rc-surface-container-low] border border-[#464554]/30 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] outline-none focus:border-[--rc-primary]/50 focus:ring-1 focus:ring-[--rc-primary]/20 placeholder:text-[--rc-on-surface-variant]/30 transition-all"
                 placeholder="you@company.com"
                 value={email} onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email" autoFocus={mode === "sign_in"}
               />
             </div>
             <div>
-              <label htmlFor="password" className="text-[10px] uppercase tracking-wider text-[#c7c4d7] mb-2 block">Password</label>
+              <label htmlFor="password" className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">Password</label>
               <input
                 id="password" name="password" type="password"
-                className="w-full bg-[#191b22] border border-[#464554]/30 rounded-xl px-4 py-3 text-sm text-[#e2e2eb] outline-none focus:border-[#c2c1ff]/50 focus:ring-1 focus:ring-[#c2c1ff]/20 placeholder:text-[#c7c4d7]/30 transition-all"
+                className="w-full bg-[--rc-surface-container-low] border border-[#464554]/30 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] outline-none focus:border-[--rc-primary]/50 focus:ring-1 focus:ring-[--rc-primary]/20 placeholder:text-[--rc-on-surface-variant]/30 transition-all"
                 placeholder={mode === "sign_up" ? "Min 8 characters" : "••••••••"}
                 value={password} onChange={(e) => setPassword(e.target.value)}
                 autoComplete={mode === "sign_in" ? "current-password" : "new-password"}
@@ -136,17 +136,17 @@ export function AuthPage() {
             <button
               type="submit"
               disabled={mutation.isPending || !canSubmit}
-              className="w-full py-3 bg-[#c2c1ff] text-[#1800a7] font-bold rounded-xl text-sm uppercase tracking-wider hover:scale-[1.01] active:scale-[0.99] transition-all shadow-[0_10px_25px_-5px_rgba(194,193,255,0.3)] disabled:opacity-50"
+              className="w-full py-3 bg-[--rc-primary] text-[--rc-on-primary] font-bold rounded-xl text-sm uppercase tracking-wider hover:scale-[1.01] active:scale-[0.99] transition-all shadow-[0_10px_25px_-5px_rgba(0,255,170,0.3)] disabled:opacity-50"
             >
               {mutation.isPending ? "Working…" : mode === "sign_in" ? "Sign In" : "Create Account"}
             </button>
           </form>
 
-          <div className="mt-6 text-sm text-[#c7c4d7]">
+          <div className="mt-6 text-sm text-[--rc-on-surface-variant]">
             {mode === "sign_in" ? "Need an account?" : "Already have an account?"}{" "}
             <button
               type="button"
-              className="font-medium text-[#c2c1ff] hover:underline underline-offset-2"
+              className="font-medium text-[--rc-primary] hover:underline underline-offset-2"
               onClick={() => { setError(null); setMode(mode === "sign_in" ? "sign_up" : "sign_in"); }}
             >
               {mode === "sign_in" ? "Create one" : "Sign in"}
@@ -158,23 +158,23 @@ export function AuthPage() {
       {/* Right half — Razorclip visual */}
       <div className="hidden md:flex w-1/2 items-center justify-center relative overflow-hidden">
         {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/10 via-[#111319] to-[#3B82F6]/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/10 via-[--rc-surface] to-[#3B82F6]/10" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#8B5CF6]/8 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#c2c1ff]/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[--rc-primary]/5 rounded-full blur-[100px]" />
 
         {/* Razor icon + tagline */}
         <div className="relative z-10 text-center space-y-6">
-          <div className="w-24 h-24 mx-auto rounded-3xl bg-[#c2c1ff]/10 border border-[#c2c1ff]/20 flex items-center justify-center">
+          <div className="w-24 h-24 mx-auto rounded-3xl bg-[--rc-primary]/10 border border-[--rc-primary]/20 flex items-center justify-center">
             <span
-              className="material-symbols-outlined text-5xl text-[#c2c1ff]"
+              className="material-symbols-outlined text-5xl text-[--rc-primary]"
               style={{ fontVariationSettings: "'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48" }}
             >
               content_cut
             </span>
           </div>
           <div>
-            <h2 className="text-2xl font-thin tracking-tighter text-[#c2c1ff] uppercase">Razorclip</h2>
-            <p className="text-xs text-[#c7c4d7]/60 uppercase tracking-[0.3em] mt-1">Agent Command Center</p>
+            <h2 className="text-2xl font-thin tracking-tighter text-[--rc-primary] uppercase">Razorclip</h2>
+            <p className="text-xs text-[--rc-on-surface-variant]/60 uppercase tracking-[0.3em] mt-1">Agent Command Center</p>
           </div>
           <div className="flex gap-3 justify-center mt-8">
             {["#8B5CF6", "#3B82F6", "#10B981", "#F59E0B", "#EC4899", "#EAB308"].map((color, i) => (

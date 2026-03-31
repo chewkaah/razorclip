@@ -42,21 +42,22 @@ function MI({ icon, className }: { icon: string; className?: string }) {
 
 /* ── Nav items ───────────────────────────────────────── */
 const mainNav = [
-  { to: "/home", label: "Dashboard", icon: "dashboard" },
-  { to: "/chat", label: "Chat", icon: "chat_bubble" },
-  { to: "/inbox/mine", label: "Inbox", icon: "inbox" },
-  { to: "/issues", label: "Issues", icon: "error" },
-  { to: "/routines", label: "Routines", icon: "sync" },
-  { to: "/goals", label: "Goals", icon: "target" },
-  { to: "/agents/grid", label: "Agents", icon: "smart_toy" },
-  { to: "/clients", label: "Clients", icon: "group" },
-  { to: "/approvals/queue", label: "Approvals", icon: "verified" },
+  { to: "home", label: "Dashboard", icon: "dashboard" },
+  { to: "chat", label: "Chat", icon: "chat_bubble" },
+  { to: "inbox/mine", label: "Inbox", icon: "inbox" },
+  { to: "issues", label: "Issues", icon: "error" },
+  { to: "routines", label: "Routines", icon: "sync" },
+  { to: "goals", label: "Goals", icon: "target" },
+  { to: "agents/grid", label: "Agents", icon: "smart_toy" },
+  { to: "clients", label: "Clients", icon: "group" },
+  { to: "approvals/queue", label: "Approvals", icon: "verified" },
+  { to: "org", label: "Org Chart", icon: "account_tree" },
 ];
 
 const bottomNav = [
-  { to: "/health", label: "Health", icon: "monitor_heart" },
-  { to: "/connections", label: "Connections", icon: "cable" },
-  { to: "/company/settings", label: "Settings", icon: "settings" },
+  { to: "health", label: "Health", icon: "monitor_heart" },
+  { to: "connections", label: "Connections", icon: "cable" },
+  { to: "company/settings", label: "Settings", icon: "settings" },
 ];
 
 /* ── Sidebar Link ────────────────────────────────────── */
@@ -149,7 +150,7 @@ function SidebarAgentList() {
                 />
                 <span className="flex-1 truncate">{agent.name}</span>
                 {live > 0 && (
-                  <span className="text-[10px] tabular-nums text-[#c2c1ff]/60">{live}</span>
+                  <span className="text-[10px] tabular-nums text-[--rc-primary]/60">{live}</span>
                 )}
               </NavLink>
             );
@@ -162,26 +163,26 @@ function SidebarAgentList() {
 
 /* ── Mobile Bottom Nav ─────────────────────────────── */
 const mobileNavItems = [
-  { to: "/home", label: "Home", icon: "home" },
-  { to: "/chat", label: "Chat", icon: "chat_bubble" },
-  { to: "/agents/grid", label: "Agents", icon: "smart_toy" },
-  { to: "/health", label: "Health", icon: "monitor_heart" },
+  { to: "home", label: "Home", icon: "home" },
+  { to: "chat", label: "Chat", icon: "chat_bubble" },
+  { to: "agents/grid", label: "Agents", icon: "smart_toy" },
+  { to: "health", label: "Health", icon: "monitor_heart" },
 ];
 
 const moreDrawerItems = [
-  { to: "/inbox/mine", label: "Inbox", icon: "inbox" },
-  { to: "/issues", label: "Issues", icon: "error" },
-  { to: "/routines", label: "Routines", icon: "sync" },
-  { to: "/goals", label: "Goals", icon: "target" },
-  { to: "/projects", label: "Projects", icon: "folder" },
-  { to: "/costs", label: "Costs", icon: "payments" },
-  { to: "/activity", label: "Activity", icon: "timeline" },
-  { to: "/company/settings", label: "Settings", icon: "settings" },
-  { to: "/skills", label: "Skills", icon: "build" },
-  { to: "/org", label: "Org", icon: "account_tree" },
-  { to: "/connections", label: "Connections", icon: "cable" },
-  { to: "/approvals/queue", label: "Approvals", icon: "verified" },
-  { to: "/clients", label: "Clients", icon: "group" },
+  { to: "inbox/mine", label: "Inbox", icon: "inbox" },
+  { to: "issues", label: "Issues", icon: "error" },
+  { to: "routines", label: "Routines", icon: "sync" },
+  { to: "goals", label: "Goals", icon: "target" },
+  { to: "projects", label: "Projects", icon: "folder" },
+  { to: "costs", label: "Costs", icon: "payments" },
+  { to: "activity", label: "Activity", icon: "timeline" },
+  { to: "company/settings", label: "Settings", icon: "settings" },
+  { to: "skills", label: "Skills", icon: "build" },
+  { to: "org", label: "Org", icon: "account_tree" },
+  { to: "connections", label: "Connections", icon: "cable" },
+  { to: "approvals/queue", label: "Approvals", icon: "verified" },
+  { to: "clients", label: "Clients", icon: "group" },
 ];
 
 function MobileMoreDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -273,9 +274,9 @@ function MobileBottomNav({ onMorePress }: { onMorePress: () => void }) {
 /* ── Mobile Top Bar ────────────────────────────────── */
 function MobileTopBar({ companyName }: { companyName: string }) {
   return (
-    <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[--rc-surface]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_20px_40px_-12px_rgba(194,193,255,0.08)] md:hidden">
+    <header className="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[--rc-surface]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_20px_40px_-12px_rgba(0,255,170,0.08)] md:hidden">
       <div className="flex items-center gap-3">
-        <NavLink to="/profile" className="w-8 h-8 rounded-full overflow-hidden border border-[--rc-primary]/20 bg-[--rc-surface-container] flex items-center justify-center">
+        <NavLink to="profile" className="w-8 h-8 rounded-full overflow-hidden border border-[--rc-primary]/20 bg-[--rc-surface-container] flex items-center justify-center">
           <span className="material-symbols-outlined text-sm text-[--rc-primary]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>account_circle</span>
         </NavLink>
         <span className="text-xl font-thin tracking-tighter text-[--rc-primary]">Razorclip</span>
@@ -303,7 +304,7 @@ export function RazorclipShell() {
       <MobileTopBar companyName={selectedCompany?.name ?? "Razorclip"} />
 
       {/* ─── Desktop Sidebar (>= md) ─── */}
-      <aside className="hidden md:flex fixed left-0 top-0 h-full flex-col py-6 bg-[--rc-sidebar-bg] backdrop-blur-3xl w-64 border-r border-[--rc-primary]/10 tabular-nums tracking-tight font-medium text-sm shadow-[20px_0_40px_-12px_rgba(194,193,255,0.05)] z-50">
+      <aside className="hidden md:flex fixed left-0 top-0 h-full flex-col py-6 bg-[--rc-sidebar-bg] backdrop-blur-3xl w-64 border-r border-[--rc-primary]/10 tabular-nums tracking-tight font-medium text-sm shadow-[20px_0_40px_-12px_rgba(0,255,170,0.05)] z-50">
         {/* Brand + Company Switcher */}
         <div className="px-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
@@ -431,7 +432,7 @@ export function RazorclipShell() {
           >
             terminal
           </button>
-          <NavLink to="/profile" className="h-8 w-8 rounded-full bg-[--rc-surface-container-high] border border-[--rc-outline-variant]/20 flex items-center justify-center hover:border-[--rc-primary]/30 transition-all">
+          <NavLink to="profile" className="h-8 w-8 rounded-full bg-[--rc-surface-container-high] border border-[--rc-outline-variant]/20 flex items-center justify-center hover:border-[--rc-primary]/30 transition-all">
             <span
               className="material-symbols-outlined text-sm"
               style={{ fontVariationSettings: "'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24" }}

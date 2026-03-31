@@ -28,7 +28,7 @@ export function SystemActionCard({
   className,
 }: SystemActionCardProps) {
   const config = agentSlug ? AGENT_REGISTRY[agentSlug] : null;
-  const accentColor = config?.color ?? "#c2c1ff";
+  const accentColor = config?.color ?? "var(--rc-primary)";
 
   return (
     <div className={cn("mx-4", className)}>
@@ -37,7 +37,7 @@ export function SystemActionCard({
           className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
           style={{ backgroundColor: `${accentColor}10` }}
         >
-          <Zap className="w-4 h-4" style={{ color: config?.colorLight ?? "#c7c4d7" }} />
+          <Zap className="w-4 h-4" style={{ color: config?.colorLight ?? "var(--rc-on-surface-variant)" }} />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-[11px] font-bold text-kt-on-surface-variant uppercase tracking-wider mb-0.5">

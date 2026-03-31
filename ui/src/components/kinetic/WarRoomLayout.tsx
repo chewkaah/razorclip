@@ -34,12 +34,12 @@ export function WarRoomLayout({ children }: WarRoomLayoutProps) {
   const location = useLocation();
 
   return (
-    <div className="bg-[#111319] text-[#e2e2eb] font-['Inter'] min-h-screen">
+    <div className="bg-[--rc-surface] text-[--rc-on-surface] font-['Inter'] min-h-screen">
       {/* Side Nav Bar */}
-      <aside className="fixed left-0 top-0 h-full flex flex-col py-6 bg-[#111319]/80 backdrop-blur-3xl w-64 border-r border-[#c2c1ff]/10 font-medium text-sm shadow-[20px_0_40px_-12px_rgba(194,193,255,0.05)] z-50">
+      <aside className="fixed left-0 top-0 h-full flex flex-col py-6 bg-[--rc-surface]/80 backdrop-blur-3xl w-64 border-r border-[--rc-primary]/10 font-medium text-sm shadow-[20px_0_40px_-12px_rgba(0,255,170,0.05)] z-50">
         <div className="px-6 mb-8">
-          <h1 className="text-xl font-thin tracking-tighter text-[#c2c1ff] uppercase">War Room</h1>
-          <p className="text-[10px] text-[#c7c4d7] tracking-[0.2em] uppercase opacity-60">Global Orchestration</p>
+          <h1 className="text-xl font-thin tracking-tighter text-[--rc-primary] uppercase">War Room</h1>
+          <p className="text-[10px] text-[--rc-on-surface-variant] tracking-[0.2em] uppercase opacity-60">Global Orchestration</p>
         </div>
         <nav className="flex-1 px-3 space-y-1">
           {navItems.map((item) => (
@@ -50,8 +50,8 @@ export function WarRoomLayout({ children }: WarRoomLayoutProps) {
                 cn(
                   "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors duration-200",
                   isActive
-                    ? "text-[#c2c1ff] bg-[#c2c1ff]/10 font-semibold border-r-2 border-[#c2c1ff]"
-                    : "text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5",
+                    ? "text-[--rc-primary] bg-[--rc-primary]/10 font-semibold border-r-2 border-[--rc-primary]"
+                    : "text-[--rc-on-surface-variant] hover:text-[--rc-on-surface] hover:bg-[--rc-primary]/5",
                 )
               }
             >
@@ -74,8 +74,8 @@ export function WarRoomLayout({ children }: WarRoomLayoutProps) {
                 cn(
                   "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors duration-200",
                   isActive
-                    ? "text-[#c2c1ff] bg-[#c2c1ff]/10 font-semibold"
-                    : "text-[#c7c4d7] hover:text-[#e2e2eb] hover:bg-[#c2c1ff]/5",
+                    ? "text-[--rc-primary] bg-[--rc-primary]/10 font-semibold"
+                    : "text-[--rc-on-surface-variant] hover:text-[--rc-on-surface] hover:bg-[--rc-primary]/5",
                 )
               }
             >
@@ -92,28 +92,28 @@ export function WarRoomLayout({ children }: WarRoomLayoutProps) {
       </aside>
 
       {/* Top Nav Bar */}
-      <header className="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-8 z-40 bg-[#111319]/60 backdrop-blur-xl border-b border-[#c2c1ff]/10 font-medium text-xs uppercase tracking-widest">
+      <header className="fixed top-0 right-0 left-64 h-16 flex justify-between items-center px-8 z-40 bg-[--rc-surface]/60 backdrop-blur-xl border-b border-[--rc-primary]/10 font-medium text-xs uppercase tracking-widest">
         <div className="flex items-center gap-6">
           <div className="relative">
             <span
-              className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#c7c4d7] text-sm"
+              className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[--rc-on-surface-variant] text-sm"
               style={{ fontVariationSettings: "'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24" }}
             >
               search
             </span>
             <input
-              className="bg-transparent border-none focus:ring-0 focus:outline-none text-[10px] w-64 pl-10 text-[#e2e2eb] placeholder:text-[#c7c4d7]/40"
+              className="bg-transparent border-none focus:ring-0 focus:outline-none text-[10px] w-64 pl-10 text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40"
               placeholder="CMD + K TO SEARCH..."
               type="text"
             />
           </div>
           <nav className="hidden md:flex gap-8">
-            <a className="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all cursor-pointer">System Status</a>
-            <a className="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all cursor-pointer">Network</a>
-            <a className="text-[#c7c4d7] hover:text-[#c2c1ff] transition-all cursor-pointer">Logs</a>
+            <a className="text-[--rc-on-surface-variant] hover:text-[--rc-primary] transition-all cursor-pointer">System Status</a>
+            <a className="text-[--rc-on-surface-variant] hover:text-[--rc-primary] transition-all cursor-pointer">Network</a>
+            <a className="text-[--rc-on-surface-variant] hover:text-[--rc-primary] transition-all cursor-pointer">Logs</a>
           </nav>
         </div>
-        <div className="flex items-center gap-4 text-[#c2c1ff]">
+        <div className="flex items-center gap-4 text-[--rc-primary]">
           <button className="material-symbols-outlined p-2 scale-95 active:opacity-80 transition-all">
             notifications
           </button>

@@ -71,10 +71,10 @@ export function ChatMessageArea({ companyId, threadId }: ChatMessageAreaProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#111319]">
+    <div className="flex flex-col h-full bg-[--rc-surface]">
       {/* Header — from Stitch */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-white/5 bg-[#111319]/80 backdrop-blur-xl min-h-[3rem]">
-        <h2 className="text-sm font-semibold text-[#e2e2eb] truncate tracking-tight">
+      <div className="flex items-center justify-between px-6 py-3 border-b border-white/5 bg-[--rc-surface]/80 backdrop-blur-xl min-h-[3rem]">
+        <h2 className="text-sm font-semibold text-[--rc-on-surface] truncate tracking-tight">
           {thread?.title ?? "Chat"}
         </h2>
         {thread && (
@@ -89,7 +89,7 @@ export function ChatMessageArea({ companyId, threadId }: ChatMessageAreaProps) {
       </div>
 
       {/* Input — from Stitch */}
-      <div className="px-4 pb-6 pt-3 bg-[#111319]/90 backdrop-blur-2xl border-t border-[#464554]/10">
+      <div className="px-4 pb-6 pt-3 bg-[--rc-surface]/90 backdrop-blur-2xl border-t border-[#464554]/10">
         <ChatInput value={inputValue} onChange={setInputValue} onSubmit={handleSubmit} disabled={isSubmitting || !!activeRunId} />
       </div>
     </div>

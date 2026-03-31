@@ -288,7 +288,7 @@ export function TicketThread() {
           </div>
 
           {/* Input */}
-          <div className="bg-kt-surface-container-high rounded-2xl flex items-center px-4 py-2 border border-kt-outline-variant/20 focus-within:border-kt-primary/40 focus-within:shadow-[0_0_20px_rgba(194,193,255,0.1)] transition-all">
+          <div className="bg-kt-surface-container-high rounded-2xl flex items-center px-4 py-2 border border-kt-outline-variant/20 focus-within:border-kt-primary/40 focus-within:shadow-[0_0_20px_rgba(0,255,170,0.1)] transition-all">
             <button className="text-kt-on-surface-variant/60 hover:text-kt-primary transition-colors p-1">
               <Plus className="w-5 h-5" />
             </button>
@@ -302,7 +302,7 @@ export function TicketThread() {
               <button className="text-kt-on-surface-variant/60 hover:text-kt-primary transition-colors">
                 <AtSign className="w-5 h-5" />
               </button>
-              <button className="bg-kt-primary text-kt-on-primary w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-transform shadow-[0_4px_12px_rgba(194,193,255,0.3)]">
+              <button className="bg-kt-primary text-kt-on-primary w-8 h-8 rounded-full flex items-center justify-center active:scale-90 transition-transform shadow-[0_4px_12px_rgba(0,255,170,0.3)]">
                 <Send className="w-4 h-4" />
               </button>
             </div>

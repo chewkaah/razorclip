@@ -24,21 +24,21 @@ interface SearchResult {
 }
 
 const pageResults: SearchResult[] = [
-  { id: "page-home", type: "page", label: "Dashboard", sublabel: "Home command center", icon: "dashboard", path: "/home" },
-  { id: "page-chat", type: "page", label: "Chat", sublabel: "Conversations", icon: "chat_bubble", path: "/chat" },
-  { id: "page-agents", type: "page", label: "Agents", sublabel: "Agent grid view", icon: "smart_toy", path: "/agents/grid" },
-  { id: "page-issues", type: "page", label: "Issues", sublabel: "All issues", icon: "error", path: "/issues" },
-  { id: "page-inbox", type: "page", label: "Inbox", sublabel: "Your inbox", icon: "inbox", path: "/inbox/mine" },
-  { id: "page-routines", type: "page", label: "Routines", sublabel: "Scheduled routines", icon: "sync", path: "/routines" },
-  { id: "page-goals", type: "page", label: "Goals", sublabel: "Company goals", icon: "target", path: "/goals" },
-  { id: "page-projects", type: "page", label: "Projects", sublabel: "All projects", icon: "folder", path: "/projects" },
-  { id: "page-costs", type: "page", label: "Costs", sublabel: "Spend analytics", icon: "payments", path: "/costs" },
-  { id: "page-activity", type: "page", label: "Activity", sublabel: "Activity feed", icon: "timeline", path: "/activity" },
-  { id: "page-health", type: "page", label: "Health", sublabel: "System health", icon: "monitor_heart", path: "/health" },
-  { id: "page-approvals", type: "page", label: "Approvals", sublabel: "Approval queue", icon: "verified", path: "/approvals/queue" },
-  { id: "page-settings", type: "page", label: "Settings", sublabel: "Company settings", icon: "settings", path: "/company/settings" },
-  { id: "page-connections", type: "page", label: "Connections", sublabel: "Integrations", icon: "cable", path: "/connections" },
-  { id: "page-skills", type: "page", label: "Skills", sublabel: "Company skills", icon: "build", path: "/skills" },
+  { id: "page-home", type: "page", label: "Dashboard", sublabel: "Home command center", icon: "dashboard", path: "home" },
+  { id: "page-chat", type: "page", label: "Chat", sublabel: "Conversations", icon: "chat_bubble", path: "chat" },
+  { id: "page-agents", type: "page", label: "Agents", sublabel: "Agent grid view", icon: "smart_toy", path: "agents/grid" },
+  { id: "page-issues", type: "page", label: "Issues", sublabel: "All issues", icon: "error", path: "issues" },
+  { id: "page-inbox", type: "page", label: "Inbox", sublabel: "Your inbox", icon: "inbox", path: "inbox/mine" },
+  { id: "page-routines", type: "page", label: "Routines", sublabel: "Scheduled routines", icon: "sync", path: "routines" },
+  { id: "page-goals", type: "page", label: "Goals", sublabel: "Company goals", icon: "target", path: "goals" },
+  { id: "page-projects", type: "page", label: "Projects", sublabel: "All projects", icon: "folder", path: "projects" },
+  { id: "page-costs", type: "page", label: "Costs", sublabel: "Spend analytics", icon: "payments", path: "costs" },
+  { id: "page-activity", type: "page", label: "Activity", sublabel: "Activity feed", icon: "timeline", path: "activity" },
+  { id: "page-health", type: "page", label: "Health", sublabel: "System health", icon: "monitor_heart", path: "health" },
+  { id: "page-approvals", type: "page", label: "Approvals", sublabel: "Approval queue", icon: "verified", path: "approvals/queue" },
+  { id: "page-settings", type: "page", label: "Settings", sublabel: "Company settings", icon: "settings", path: "company/settings" },
+  { id: "page-connections", type: "page", label: "Connections", sublabel: "Integrations", icon: "cable", path: "connections" },
+  { id: "page-skills", type: "page", label: "Skills", sublabel: "Company skills", icon: "build", path: "skills" },
 ];
 
 export function CommandPaletteRC() {
@@ -192,7 +192,7 @@ export function CommandPaletteRC() {
         onClick={() => setOpen(false)}
       />
       {/* Palette */}
-      <div className="relative w-full max-w-lg mx-4 glass-card rounded-2xl border border-[--rc-primary]/15 shadow-[0_25px_50px_-12px_rgba(194,193,255,0.15)] overflow-hidden">
+      <div className="relative w-full max-w-lg mx-4 glass-card rounded-2xl border border-[--rc-primary]/15 shadow-[0_25px_50px_-12px_rgba(0,255,170,0.15)] overflow-hidden">
         {/* Search input */}
         <div className="flex items-center gap-3 px-5 py-4 border-b border-[--rc-outline-variant]/10">
           <span

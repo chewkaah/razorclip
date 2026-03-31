@@ -118,12 +118,29 @@ export function Connections() {
   const allSlots = useMemo(() => {
     const slots = [...PREDEFINED_SLOTS];
 
-    // Override from API if available
+    // Override from API — but only upgrade status (connected beats disconnected),
+    // or apply real status for BI integrations that require actual API key setup.
+    // MCP connections that are hardcoded as "connected" stay connected since they're
+    // actually running as MCP servers in the current session.
     if (apiConnections && apiConnections.length > 0) {
       for (const apiConn of apiConnections) {
         const idx = slots.findIndex(s => s.slug === apiConn.slug);
         if (idx >= 0) {
-          slots[idx] = { ...slots[idx], status: apiConn.status as any };
+          const slot = slots[idx];
+          const apiStatus = apiConn.status as ConnectionSlot["status"];
+          // For BI integrations (need real API keys), always trust the API status
+          if (slot.connectionType === "bi_integration") {
+            slots[idx] = { ...slot, status: apiStatus };
+          }
+          // For MCP connections, only upgrade (disconnected → connected), never downgrade
+          else if (apiStatus === "connected" || apiStatus === "running") {
+            slots[idx] = { ...slot, status: apiStatus };
+          }
+          // If API says error, show that regardless
+          else if (apiStatus === "error") {
+            slots[idx] = { ...slot, status: "error" };
+          }
+          // Otherwise keep the hardcoded status (MCP servers we know are running)
         }
       }
     }
@@ -175,7 +192,7 @@ export function Connections() {
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[--rc-primary] text-[--rc-on-primary] rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_20px_-5px_rgba(194,193,255,0.3)]"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[--rc-primary] text-[--rc-on-primary] rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_20px_-5px_rgba(0,255,170,0.3)]"
         >
           <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>add</span>
           Add Connection
@@ -305,7 +322,16 @@ export function Connections() {
                     {slot.status === "connected" || slot.status === "running" ? "● Connected" : slot.status === "error" ? "● Error" : "○ Not connected"}
                   </span>
                   {slot.status !== "connected" && slot.status !== "running" && (
-                    <button className="px-3 py-1.5 rounded-lg bg-[--rc-primary]/10 text-[--rc-primary] text-[10px] font-bold uppercase tracking-widest hover:bg-[--rc-primary]/20 transition-all">
+                    <button
+                      onClick={() => {
+                        setNewName(slot.displayName);
+                        setNewSlug(slot.slug);
+                        setNewCategory(slot.category);
+                        setShowAddForm(true);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-[--rc-primary]/10 text-[--rc-primary] text-[10px] font-bold uppercase tracking-widest hover:bg-[--rc-primary]/20 transition-all"
+                    >
                       Configure
                     </button>
                   )}
