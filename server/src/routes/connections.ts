@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { execSync } from "child_process";
 import type { Db } from "@paperclipai/db";
 import { assertBoard, assertCompanyAccess } from "./authz.js";
 import { connectionsService } from "../services/connections.js";
@@ -32,15 +33,35 @@ export function connectionRoutes(db: Db) {
       return;
     }
 
+    const cleanSlug = (slug || displayName).toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
+
+    // If it looks like an npm package, try to add it as an MCP via Claude CLI
+    const isNpmPackage = cleanSlug.startsWith("@") || cleanSlug.includes("/") || slug?.includes("@");
+    let mcpInstalled = false;
+
+    if (isNpmPackage && slug) {
+      try {
+        // Use claude mcp add to register the MCP server
+        execSync(`claude mcp add "${cleanSlug}" -- npx -y "${slug}"`, {
+          timeout: 30000,
+          stdio: "pipe",
+        });
+        mcpInstalled = true;
+      } catch (err) {
+        // MCP install is best-effort — still create the DB record
+        console.warn(`MCP install failed for ${slug}:`, (err as Error).message);
+      }
+    }
+
     const created = await svc.create(companyId, {
-      slug: slug.toLowerCase().replace(/\s+/g, "-"),
+      slug: cleanSlug,
       displayName,
       category: category || "Custom",
-      connectionType: connectionType || "api_key",
+      connectionType: connectionType || (isNpmPackage ? "mcp_server" : "api_key"),
       authMechanism: authMechanism || "api_key",
-      status,
+      status: mcpInstalled ? "connected" : undefined,
     });
-    res.status(201).json(created);
+    res.status(201).json({ ...created, mcpInstalled });
   });
 
   /** GET /companies/:companyId/connections/:slug — single connection detail */
