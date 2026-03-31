@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <!-- Background glow -->
+  <circle cx="200" cy="200" r="195" fill="#231806"/>
+  <circle cx="200" cy="200" r="195" fill="url(#scoutGlow)" opacity="0.4"/>
+
+  <!-- Body / Apron -->
+  <path d="M120 280 Q120 240 140 230 L160 225 Q200 215 240 225 L260 230 Q280 240 280 280 L280 360 Q280 380 260 380 L140 380 Q120 380 120 360 Z" fill="#3d2a0a" stroke="#F59E0B" stroke-width="2"/>
+  <!-- Apron -->
+  <path d="M160 240 L160 340 Q160 350 170 350 L230 350 Q240 350 240 340 L240 240" fill="#4d3510" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- Radar/target icon on apron -->
+  <g transform="translate(200, 290)">
+    <circle cx="0" cy="0" r="16" fill="none" stroke="#F59E0B" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="10" fill="none" stroke="#F59E0B" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="0" cy="0" r="4" fill="#F59E0B"/>
+    <line x1="0" y1="-18" x2="0" y2="-12" stroke="#F59E0B" stroke-width="1.5"/>
+    <line x1="0" y1="12" x2="0" y2="18" stroke="#F59E0B" stroke-width="1.5"/>
+    <line x1="-18" y1="0" x2="-12" y2="0" stroke="#F59E0B" stroke-width="1.5"/>
+    <line x1="12" y1="0" x2="18" y2="0" stroke="#F59E0B" stroke-width="1.5"/>
+  </g>
+
+  <!-- Neck -->
+  <rect x="180" y="195" width="40" height="35" rx="8" fill="#4d3510" stroke="#F59E0B" stroke-width="1.5"/>
+  <rect x="175" y="215" width="50" height="8" rx="4" fill="#3d2a0a" stroke="#F59E0B" stroke-width="1"/>
+
+  <!-- Head dome -->
+  <ellipse cx="200" cy="140" rx="75" ry="80" fill="#3d2a0a" stroke="#F59E0B" stroke-width="2.5"/>
+  <ellipse cx="200" cy="100" rx="55" ry="45" fill="url(#scoutDome)" opacity="0.3"/>
+
+  <!-- Eyes — wide, alert, scouting -->
+  <ellipse cx="175" cy="138" rx="20" ry="22" fill="#231806" stroke="#F59E0B" stroke-width="2"/>
+  <ellipse cx="225" cy="138" rx="20" ry="22" fill="#231806" stroke="#F59E0B" stroke-width="2"/>
+  <circle cx="178" cy="136" r="9" fill="#F59E0B"/>
+  <circle cx="228" cy="136" r="9" fill="#F59E0B"/>
+  <circle cx="175" cy="133" r="3.5" fill="#fde68a"/>
+  <circle cx="225" cy="133" r="3.5" fill="#fde68a"/>
+
+  <!-- Eager smile -->
+  <path d="M178 168 Q200 184 222 168" stroke="#F59E0B" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Cheek blush -->
+  <circle cx="152" cy="158" r="8" fill="#F59E0B" opacity="0.2"/>
+  <circle cx="248" cy="158" r="8" fill="#F59E0B" opacity="0.2"/>
+
+  <!-- Antenna — radar dish style -->
+  <line x1="200" y1="62" x2="200" y2="25" stroke="#F59E0B" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="200" cy="20" rx="14" ry="8" fill="#3d2a0a" stroke="#F59E0B" stroke-width="2"/>
+  <circle cx="200" cy="18" r="3" fill="#fde68a"/>
+  <!-- Radar waves -->
+  <path d="M220 12 Q230 20 220 28" stroke="#fde68a" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M228 8 Q240 20 228 32" stroke="#fde68a" stroke-width="1.5" fill="none" opacity="0.3"/>
+
+  <!-- Arms — one shielding eyes (scouting pose) -->
+  <path d="M120 250 Q90 258 82 282 Q80 295 88 305" stroke="#F59E0B" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="88" cy="308" r="10" fill="#3d2a0a" stroke="#F59E0B" stroke-width="2"/>
+  <!-- Right arm up to forehead (looking out) -->
+  <path d="M275 240 Q295 230 290 200 Q288 185 275 175" stroke="#F59E0B" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="272" cy="172" r="10" fill="#3d2a0a" stroke="#F59E0B" stroke-width="2"/>
+
+  <!-- Binoculars hint near hand -->
+  <rect x="258" y="160" width="10" height="16" rx="4" fill="#4d3510" stroke="#F59E0B" stroke-width="1.5"/>
+  <rect x="270" y="160" width="10" height="16" rx="4" fill="#4d3510" stroke="#F59E0B" stroke-width="1.5"/>
+  <rect x="267" y="165" width="4" height="6" rx="2" fill="#F59E0B" opacity="0.4"/>
+
+  <defs>
+    <radialGradient id="scoutGlow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#231806" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="scoutDome" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <!-- Background glow -->
+  <circle cx="200" cy="200" r="195" fill="#280a1e"/>
+  <circle cx="200" cy="200" r="195" fill="url(#novaGlow)" opacity="0.4"/>
+
+  <!-- Body / Apron -->
+  <path d="M120 280 Q120 240 140 230 L160 225 Q200 215 240 225 L260 230 Q280 240 280 280 L280 360 Q280 380 260 380 L140 380 Q120 380 120 360 Z" fill="#3d1232" stroke="#EC4899" stroke-width="2"/>
+  <!-- Apron with paint splatter -->
+  <path d="M160 240 L160 340 Q160 350 170 350 L230 350 Q240 350 240 340 L240 240" fill="#4d1a40" stroke="#EC4899" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- Paint palette icon -->
+  <g transform="translate(200, 288)">
+    <ellipse cx="0" cy="0" rx="18" ry="14" fill="#4d1a40" stroke="#EC4899" stroke-width="1.5"/>
+    <circle cx="-8" cy="-4" r="3.5" fill="#f472b6"/>
+    <circle cx="0" cy="-6" r="3" fill="#a855f7"/>
+    <circle cx="8" cy="-3" r="3" fill="#38bdf8"/>
+    <circle cx="5" cy="5" r="3.5" fill="#fbbf24"/>
+    <circle cx="-5" cy="5" r="2.5" fill="#34d399"/>
+    <circle cx="12" cy="4" r="4" fill="#4d1a40" stroke="#EC4899" stroke-width="0.5"/>
+  </g>
+
+  <!-- Neck -->
+  <rect x="180" y="195" width="40" height="35" rx="8" fill="#4d1a40" stroke="#EC4899" stroke-width="1.5"/>
+  <rect x="175" y="215" width="50" height="8" rx="4" fill="#3d1232" stroke="#EC4899" stroke-width="1"/>
+
+  <!-- Head dome -->
+  <ellipse cx="200" cy="140" rx="75" ry="80" fill="#3d1232" stroke="#EC4899" stroke-width="2.5"/>
+  <ellipse cx="200" cy="100" rx="55" ry="45" fill="url(#novaDome)" opacity="0.3"/>
+
+  <!-- Eyes — expressive, creative sparkle -->
+  <ellipse cx="175" cy="138" rx="18" ry="20" fill="#280a1e" stroke="#EC4899" stroke-width="2"/>
+  <ellipse cx="225" cy="138" rx="18" ry="20" fill="#280a1e" stroke="#EC4899" stroke-width="2"/>
+  <circle cx="175" cy="136" r="8" fill="#EC4899"/>
+  <circle cx="225" cy="136" r="8" fill="#EC4899"/>
+  <circle cx="172" cy="133" r="3" fill="#fbcfe8"/>
+  <circle cx="222" cy="133" r="3" fill="#fbcfe8"/>
+  <!-- Sparkle in eye -->
+  <path d="M182 130 L184 128 L186 130 L184 132 Z" fill="#fbcfe8" opacity="0.8"/>
+  <path d="M232 130 L234 128 L236 130 L234 132 Z" fill="#fbcfe8" opacity="0.8"/>
+
+  <!-- Playful smile -->
+  <path d="M180 165 Q200 182 220 165" stroke="#EC4899" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Tongue -->
+  <ellipse cx="205" cy="174" rx="5" ry="4" fill="#f472b6" opacity="0.5"/>
+
+  <!-- Cheek blush -->
+  <circle cx="155" cy="158" r="9" fill="#EC4899" opacity="0.25"/>
+  <circle cx="245" cy="158" r="9" fill="#EC4899" opacity="0.25"/>
+
+  <!-- Antenna with star burst -->
+  <line x1="200" y1="62" x2="200" y2="28" stroke="#EC4899" stroke-width="3" stroke-linecap="round"/>
+  <!-- Star on antenna -->
+  <g transform="translate(200, 20)">
+    <path d="M0 -12 L3 -4 L12 -4 L5 2 L7 10 L0 5 L-7 10 L-5 2 L-12 -4 L-3 -4 Z" fill="#EC4899"/>
+    <circle cx="0" cy="0" r="3" fill="#fbcfe8"/>
+  </g>
+
+  <!-- Beret -->
+  <ellipse cx="210" cy="72" rx="45" ry="15" fill="#4d1a40" stroke="#EC4899" stroke-width="1.5"/>
+  <path d="M165 72 Q170 45 210 40 Q250 45 255 72" fill="#3d1232" stroke="#EC4899" stroke-width="1.5"/>
+  <circle cx="210" cy="38" r="5" fill="#EC4899"/>
+
+  <!-- Arms — one holding paintbrush -->
+  <path d="M120 250 Q90 260 82 285 Q80 298 90 308" stroke="#EC4899" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="90" cy="311" r="10" fill="#3d1232" stroke="#EC4899" stroke-width="2"/>
+  <path d="M280 250 Q305 245 315 265 Q318 275 310 285" stroke="#EC4899" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Paintbrush -->
+  <g transform="translate(310, 285) rotate(20)">
+    <rect x="-2" y="0" width="4" height="30" rx="2" fill="#EC4899" opacity="0.7"/>
+    <path d="M-4 30 Q-2 38 2 30" fill="#f472b6"/>
+    <circle cx="0" cy="34" r="3" fill="#38bdf8" opacity="0.8"/>
+  </g>
+
+  <defs>
+    <radialGradient id="novaGlow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#EC4899" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#280a1e" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="novaDome" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fbcfe8"/>
+      <stop offset="100%" stop-color="#EC4899" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>

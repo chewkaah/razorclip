@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <!-- Background glow -->
+  <circle cx="200" cy="200" r="195" fill="#1a0a2e"/>
+  <circle cx="200" cy="200" r="195" fill="url(#danteGlow)" opacity="0.4"/>
+
+  <!-- Body / Apron -->
+  <path d="M120 280 Q120 240 140 230 L160 225 Q200 215 240 225 L260 230 Q280 240 280 280 L280 360 Q280 380 260 380 L140 380 Q120 380 120 360 Z" fill="#2d1854" stroke="#8B5CF6" stroke-width="2"/>
+  <!-- Apron detail -->
+  <path d="M160 240 L160 340 Q160 350 170 350 L230 350 Q240 350 240 340 L240 240" fill="#3d2264" stroke="#8B5CF6" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- Music note on apron -->
+  <g transform="translate(188, 275)">
+    <circle cx="0" cy="20" r="7" fill="#8B5CF6"/>
+    <circle cx="18" cy="14" r="7" fill="#8B5CF6"/>
+    <rect x="-1" y="-10" width="3" height="30" rx="1.5" fill="#8B5CF6"/>
+    <rect x="17" y="-16" width="3" height="30" rx="1.5" fill="#8B5CF6"/>
+    <path d="M2 -10 Q10 -20 20 -16" stroke="#8B5CF6" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Neck -->
+  <rect x="180" y="195" width="40" height="35" rx="8" fill="#3d2264" stroke="#8B5CF6" stroke-width="1.5"/>
+  <rect x="175" y="215" width="50" height="8" rx="4" fill="#2d1854" stroke="#8B5CF6" stroke-width="1"/>
+
+  <!-- Head dome -->
+  <ellipse cx="200" cy="140" rx="75" ry="80" fill="#2d1854" stroke="#8B5CF6" stroke-width="2.5"/>
+  <!-- Glass dome top -->
+  <ellipse cx="200" cy="100" rx="55" ry="45" fill="url(#danteDome)" opacity="0.3"/>
+
+  <!-- Eyes -->
+  <ellipse cx="175" cy="140" rx="18" ry="20" fill="#1a0a2e" stroke="#8B5CF6" stroke-width="2"/>
+  <ellipse cx="225" cy="140" rx="18" ry="20" fill="#1a0a2e" stroke="#8B5CF6" stroke-width="2"/>
+  <circle cx="175" cy="138" r="8" fill="#8B5CF6"/>
+  <circle cx="225" cy="138" r="8" fill="#8B5CF6"/>
+  <circle cx="172" cy="135" r="3" fill="#c4b5fd"/>
+  <circle cx="222" cy="135" r="3" fill="#c4b5fd"/>
+
+  <!-- Smile -->
+  <path d="M180 165 Q200 180 220 165" stroke="#8B5CF6" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Cheek blush -->
+  <circle cx="155" cy="158" r="8" fill="#8B5CF6" opacity="0.2"/>
+  <circle cx="245" cy="158" r="8" fill="#8B5CF6" opacity="0.2"/>
+
+  <!-- Antenna -->
+  <line x1="200" y1="62" x2="200" y2="30" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="200" cy="24" r="8" fill="#8B5CF6"/>
+  <circle cx="200" cy="24" r="4" fill="#c4b5fd"/>
+
+  <!-- Headphones -->
+  <path d="M125 130 Q125 80 155 70" stroke="#7c3aed" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M275 130 Q275 80 245 70" stroke="#7c3aed" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <rect x="112" y="122" width="22" height="30" rx="8" fill="#7c3aed" stroke="#8B5CF6" stroke-width="1.5"/>
+  <rect x="266" y="122" width="22" height="30" rx="8" fill="#7c3aed" stroke="#8B5CF6" stroke-width="1.5"/>
+
+  <!-- Arms -->
+  <path d="M120 250 Q90 260 85 290 Q82 310 95 315" stroke="#8B5CF6" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="95" cy="318" r="10" fill="#2d1854" stroke="#8B5CF6" stroke-width="2"/>
+  <path d="M280 250 Q310 260 315 290 Q318 310 305 315" stroke="#8B5CF6" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="305" cy="318" r="10" fill="#2d1854" stroke="#8B5CF6" stroke-width="2"/>
+
+  <defs>
+    <radialGradient id="danteGlow" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#1a0a2e" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="danteDome" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c4b5fd"/>
+      <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>
