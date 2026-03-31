@@ -154,6 +154,40 @@ export function Health() {
           </div>
         )}
       </section>
+
+      {/* Website Traffic — placeholder until Vercel Analytics / GA4 connected */}
+      <section className="space-y-4">
+        <h3 className="text-lg font-light tracking-tight px-2">Website Traffic</h3>
+        <div className="glass-card p-6 rounded-[2rem] border border-white/5 text-center">
+          <span className="material-symbols-outlined text-2xl text-[--rc-on-surface-variant]/30 mb-2 block" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>analytics</span>
+          <p className="text-sm text-[--rc-on-surface-variant]/50">Connect Vercel Analytics or GA4 in Connections to see traffic data.</p>
+          <p className="text-[10px] text-[--rc-on-surface-variant]/30 mt-2">Properties: example.com</p>
+        </div>
+      </section>
+
+      {/* LinkedIn Presence — placeholder until LinkedIn connected */}
+      <section className="space-y-4">
+        <h3 className="text-lg font-light tracking-tight px-2">LinkedIn Presence</h3>
+        <div className="glass-card p-6 rounded-[2rem] border border-white/5 text-center">
+          <span className="material-symbols-outlined text-2xl text-[--rc-on-surface-variant]/30 mb-2 block" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>share</span>
+          <p className="text-sm text-[--rc-on-surface-variant]/50">Connect LinkedIn in Connections to see profile views, post performance, and SSI score.</p>
+        </div>
+      </section>
+
+      {/* Getting Started callout when no data sources are connected */}
+      {!pulse?.weeklyRevenue && !pulse?.activeClients && (
+        <section className="glass-card rounded-[2rem] p-6 border border-[--rc-primary]/20 bg-[--rc-primary]/5">
+          <div className="flex items-start gap-4">
+            <span className="material-symbols-outlined text-2xl text-[--rc-primary]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>rocket_launch</span>
+            <div>
+              <h3 className="text-sm font-bold text-[--rc-on-surface] mb-1">Connect Your Data Sources</h3>
+              <p className="text-xs text-[--rc-on-surface-variant] leading-relaxed">
+                This dashboard comes alive when you connect your tools. Go to <strong>Connections</strong> to set up Stripe (revenue), Mercury (banking), Notion (clients), Vercel Analytics (traffic), and LinkedIn (social).
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
