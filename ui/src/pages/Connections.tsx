@@ -1,7 +1,8 @@
 /**
- * Connections — wired to real /companies/:id/connections API
+ * Connections — shows predefined integration slots + installed plugins
+ * with real status indicators and "Add Connection" flow
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { useCompany } from "../context/CompanyContext";
@@ -19,79 +20,116 @@ const ICON_MAP: Record<string, string> = {
   tiktok: "movie", symphony: "music_note",
 };
 
-/** Default connection slots — shown when API returns empty or errors */
-const DEFAULT_CONNECTIONS: Connection[] = [
-  { id: "1", companyId: "", slug: "gmail", displayName: "Gmail", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 0, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "2", companyId: "", slug: "google-calendar", displayName: "Google Calendar", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 1, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "3", companyId: "", slug: "apollo", displayName: "Apollo.io", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 2, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "4", companyId: "", slug: "fireflies", displayName: "Fireflies.ai", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 3, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "5", companyId: "", slug: "linear", displayName: "Linear", category: "Project Management", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 4, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "6", companyId: "", slug: "notion", displayName: "Notion", category: "Project Management", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 5, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "7", companyId: "", slug: "vercel", displayName: "Vercel", category: "Dev & Deploy", connectionType: "mcp_server", authMechanism: "bearer_token", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 6, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "8", companyId: "", slug: "stripe-mcp", displayName: "Stripe", category: "Dev & Deploy", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 7, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "9", companyId: "", slug: "canva", displayName: "Canva", category: "Creative", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 8, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "10", companyId: "", slug: "stripe-bi", displayName: "Stripe (Financial)", category: "Financial", connectionType: "bi_integration", authMechanism: "api_key", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 9, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "11", companyId: "", slug: "mercury", displayName: "Mercury", category: "Financial", connectionType: "bi_integration", authMechanism: "api_key", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 10, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "12", companyId: "", slug: "vercel-analytics", displayName: "Vercel Analytics", category: "Analytics", connectionType: "bi_integration", authMechanism: "bearer_token", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 11, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "13", companyId: "", slug: "ga4", displayName: "Google Analytics 4", category: "Analytics", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 12, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "14", companyId: "", slug: "linkedin", displayName: "LinkedIn", category: "Social", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 13, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "15", companyId: "", slug: "instagram", displayName: "Instagram", category: "Social", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 14, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "16", companyId: "", slug: "twitter-x", displayName: "Twitter / X", category: "Social", connectionType: "bi_integration", authMechanism: "bearer_token", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 15, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "17", companyId: "", slug: "tiktok", displayName: "TikTok", category: "Social", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 16, isEnabled: false, createdAt: "", updatedAt: "" },
-  { id: "18", companyId: "", slug: "symphony", displayName: "Symphony", category: "Music SaaS", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", pluginId: null, secretRef: null, oauthScopes: null, lastSyncAt: null, lastHealthCheckAt: null, lastError: null, errorCode: null, metadata: {}, sortOrder: 17, isEnabled: false, createdAt: "", updatedAt: "" },
+interface ConnectionSlot {
+  slug: string;
+  displayName: string;
+  category: string;
+  connectionType: string;
+  authMechanism: string;
+  status: "connected" | "disconnected" | "error" | "running";
+  description: string;
+  icon: string;
+  isPlugin?: boolean;
+  pluginVersion?: string;
+}
+
+const PREDEFINED_SLOTS: ConnectionSlot[] = [
+  { slug: "gmail", displayName: "Gmail", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", description: "Email read, search, and drafts", icon: "mail" },
+  { slug: "google-calendar", displayName: "Google Calendar", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", description: "Events, scheduling, free time", icon: "calendar_month" },
+  { slug: "apollo", displayName: "Apollo.io", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", description: "Contact search, enrichment, campaigns", icon: "person_search" },
+  { slug: "fireflies", displayName: "Fireflies.ai", category: "Communication & CRM", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", description: "Meeting transcripts and summaries", icon: "mic" },
+  { slug: "linear", displayName: "Linear", category: "Project Management", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", description: "Issues, projects, and cycles", icon: "linear_scale" },
+  { slug: "notion", displayName: "Notion", category: "Project Management", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", description: "Databases, pages, CRM, pipeline", icon: "edit_note" },
+  { slug: "vercel", displayName: "Vercel", category: "Dev & Deploy", connectionType: "mcp_server", authMechanism: "bearer_token", status: "disconnected", description: "Deployments, projects, and logs", icon: "cloud_upload" },
+  { slug: "stripe-mcp", displayName: "Stripe", category: "Dev & Deploy", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", description: "Products, prices, subscriptions", icon: "credit_card" },
+  { slug: "canva", displayName: "Canva", category: "Creative", connectionType: "mcp_server", authMechanism: "oauth2", status: "disconnected", description: "Design generation and brand kits", icon: "palette" },
+  { slug: "stripe-bi", displayName: "Stripe (Financial)", category: "Financial", connectionType: "bi_integration", authMechanism: "api_key", status: "disconnected", description: "Revenue, MRR, churn, payments", icon: "payments" },
+  { slug: "mercury", displayName: "Mercury", category: "Financial", connectionType: "bi_integration", authMechanism: "api_key", status: "disconnected", description: "Banking, cash position, runway", icon: "account_balance" },
+  { slug: "vercel-analytics", displayName: "Vercel Analytics", category: "Analytics", connectionType: "bi_integration", authMechanism: "bearer_token", status: "disconnected", description: "Website traffic for Vercel sites", icon: "analytics" },
+  { slug: "ga4", displayName: "Google Analytics 4", category: "Analytics", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", description: "Traffic, conversions, audience", icon: "monitoring" },
+  { slug: "linkedin", displayName: "LinkedIn", category: "Social", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", description: "Profile views, posts, SSI, followers", icon: "share" },
+  { slug: "instagram", displayName: "Instagram", category: "Social", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", description: "Reach, engagement, followers", icon: "photo_camera" },
+  { slug: "twitter-x", displayName: "Twitter / X", category: "Social", connectionType: "bi_integration", authMechanism: "bearer_token", status: "disconnected", description: "Impressions, mentions, followers", icon: "tag" },
+  { slug: "tiktok", displayName: "TikTok", category: "Social", connectionType: "bi_integration", authMechanism: "oauth2", status: "disconnected", description: "Views, engagement, followers", icon: "movie" },
+  { slug: "symphony", displayName: "Symphony", category: "Music SaaS", connectionType: "mcp_server", authMechanism: "api_key", status: "disconnected", description: "Music marketing campaigns and analytics", icon: "music_note" },
 ];
 
-function groupByCategory(conns: Connection[]): Record<string, Connection[]> {
-  const g: Record<string, Connection[]> = {};
-  for (const c of conns) (g[c.category] ??= []).push(c);
+function groupByCategory(slots: ConnectionSlot[]): Record<string, ConnectionSlot[]> {
+  const g: Record<string, ConnectionSlot[]> = {};
+  for (const s of slots) (g[s.category] ??= []).push(s);
   return g;
 }
 
 export function Connections() {
   const { setBreadcrumbs } = useBreadcrumbs();
   const { selectedCompanyId } = useCompany();
-  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newSlug, setNewSlug] = useState("");
+  const [newName, setNewName] = useState("");
 
   useEffect(() => { setBreadcrumbs([{ label: "Connections" }]); }, [setBreadcrumbs]);
 
-  const { data: connections, isLoading } = useQuery({
+  // Fetch real connections from API (if available)
+  const { data: apiConnections } = useQuery({
     queryKey: ["connections", selectedCompanyId],
     queryFn: () => connectionsApi.list(selectedCompanyId!),
     enabled: !!selectedCompanyId,
+    retry: false,
   });
 
-  // Also fetch installed MCP plugins to show them as connections
+  // Fetch installed plugins
   const { data: plugins } = useQuery({
     queryKey: queryKeys.plugins.all,
     queryFn: () => pluginsApi.list(),
+    retry: false,
   });
 
-  const testMutation = useMutation({
-    mutationFn: ({ slug }: { slug: string }) => connectionsApi.test(selectedCompanyId!, slug),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["connections", selectedCompanyId] }),
-  });
+  // Merge: API connections override predefined statuses, plugins add as connected
+  const allSlots = useMemo(() => {
+    const slots = [...PREDEFINED_SLOTS];
 
-  // Use API data if available, otherwise show default slots
-  const all = (connections && connections.length > 0) ? connections : DEFAULT_CONNECTIONS;
+    // Override from API if available
+    if (apiConnections && apiConnections.length > 0) {
+      for (const apiConn of apiConnections) {
+        const idx = slots.findIndex(s => s.slug === apiConn.slug);
+        if (idx >= 0) {
+          slots[idx] = { ...slots[idx], status: apiConn.status as any };
+        }
+      }
+    }
+
+    // Add installed plugins as connected items
+    if (plugins) {
+      for (const plugin of plugins) {
+        const pluginSlot: ConnectionSlot = {
+          slug: `plugin-${(plugin as any).id}`,
+          displayName: (plugin as any).name || (plugin as any).packageName || "Plugin",
+          category: "Installed Plugins",
+          connectionType: "mcp_plugin",
+          authMechanism: "plugin",
+          status: (plugin as any).status === "running" ? "connected" : (plugin as any).status === "error" ? "error" : "disconnected",
+          description: `MCP Plugin • ${(plugin as any).status} • v${(plugin as any).version || "?"}`,
+          icon: "extension",
+          isPlugin: true,
+          pluginVersion: (plugin as any).version,
+        };
+        slots.push(pluginSlot);
+      }
+    }
+
+    return slots;
+  }, [apiConnections, plugins]);
+
   const filtered = search
-    ? all.filter(c => c.displayName.toLowerCase().includes(search.toLowerCase()) || c.category.toLowerCase().includes(search.toLowerCase()))
-    : all;
+    ? allSlots.filter(s => s.displayName.toLowerCase().includes(search.toLowerCase()) || s.category.toLowerCase().includes(search.toLowerCase()))
+    : allSlots;
   const groups = groupByCategory(filtered);
-  const connectedCount = all.filter(c => c.status === "connected").length;
-
-  if (isLoading) {
-    return (
-      <div className="max-w-5xl space-y-6">
-        <div className="animate-pulse glass-card rounded-xl h-20" />
-        <div className="animate-pulse glass-card rounded-xl h-40" />
-        <div className="animate-pulse glass-card rounded-xl h-40" />
-      </div>
-    );
-  }
+  const connectedCount = allSlots.filter(s => s.status === "connected" || s.status === "running").length;
 
   return (
     <div className="max-w-5xl space-y-8">
+      {/* Header */}
       <div className="flex justify-between items-end">
         <div>
           <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] mb-2">
@@ -103,11 +141,61 @@ export function Connections() {
             Manage <span className="font-bold">Connections</span>
           </h2>
           <p className="text-[--rc-on-surface-variant] mt-2 text-sm font-medium">
-            {connectedCount} of {all.length} connected • MCPs, OAuth, and API keys
+            {connectedCount} of {allSlots.length} connected • MCPs, OAuth, and API keys
           </p>
         </div>
+        <button
+          onClick={() => setShowAddForm(!showAddForm)}
+          className="flex items-center gap-2 px-5 py-2.5 bg-[--rc-primary] text-[--rc-on-primary] rounded-xl text-xs font-bold uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_20px_-5px_rgba(194,193,255,0.3)]"
+        >
+          <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>add</span>
+          Add Connection
+        </button>
       </div>
 
+      {/* Add Connection Form */}
+      {showAddForm && (
+        <div className="glass-card rounded-2xl p-6 border border-[--rc-primary]/20 space-y-4">
+          <h3 className="text-sm font-bold text-[--rc-on-surface]">Add New Connection</h3>
+          <p className="text-xs text-[--rc-on-surface-variant]">
+            Install an MCP server or configure an API key for a new integration.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">Connection Name</label>
+              <input
+                type="text" value={newName} onChange={e => setNewName(e.target.value)}
+                placeholder="e.g. Slack, Discord, HubSpot"
+                className="w-full bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/20 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40 focus:outline-none focus:border-[--rc-primary]/40 transition-all"
+              />
+            </div>
+            <div>
+              <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">NPM Package or URL</label>
+              <input
+                type="text" value={newSlug} onChange={e => setNewSlug(e.target.value)}
+                placeholder="e.g. @modelcontextprotocol/server-slack"
+                className="w-full bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/20 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40 focus:outline-none focus:border-[--rc-primary]/40 transition-all"
+              />
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={() => { setShowAddForm(false); setNewName(""); setNewSlug(""); }}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-[--rc-on-surface-variant] border border-[--rc-outline-variant]/20 hover:bg-[--rc-surface-container-high] transition-all"
+            >
+              Cancel
+            </button>
+            <button
+              className="px-4 py-2 rounded-xl text-xs font-bold bg-[--rc-primary] text-[--rc-on-primary] hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+              disabled={!newName.trim()}
+            >
+              Install Connection
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Search */}
       <div className="relative">
         <span className="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-[--rc-on-surface-variant] text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>search</span>
         <input
@@ -117,51 +205,53 @@ export function Connections() {
         />
       </div>
 
-      {Object.entries(groups).map(([category, conns]) => (
+      {/* Connection Groups */}
+      {Object.entries(groups).map(([category, slots]) => (
         <section key={category} className="space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[--rc-on-surface-variant]">{category}</h3>
             <span className="text-[10px] tabular-nums text-[--rc-on-surface-variant]/50">
-              {conns.filter(c => c.status === "connected").length}/{conns.length}
+              {slots.filter(s => s.status === "connected" || s.status === "running").length}/{slots.length}
             </span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {conns.map(conn => (
-              <div key={conn.id} className="glass-card rounded-xl p-5 border border-[--rc-outline-variant]/10 hover:translate-y-[-2px] transition-all duration-300 group cursor-pointer hover:border-[--rc-primary]/20">
+            {slots.map(slot => (
+              <div key={slot.slug} className="glass-card rounded-xl p-5 border border-[--rc-outline-variant]/10 hover:translate-y-[-2px] transition-all duration-300 group cursor-pointer hover:border-[--rc-primary]/20">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-lg bg-[--rc-surface-container-high] flex items-center justify-center border border-[--rc-outline-variant]/20 shrink-0">
-                    <span className="material-symbols-outlined text-[--rc-primary] text-lg" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>
-                      {ICON_MAP[conn.slug] ?? "cable"}
-                    </span>
+                    <span className="material-symbols-outlined text-[--rc-primary] text-lg" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>{slot.icon}</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="text-sm font-semibold text-[--rc-on-surface]">{conn.displayName}</h4>
-                      <span className={`w-2 h-2 rounded-full ${
-                        conn.status === "connected" ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" :
-                        conn.status === "error" ? "bg-[#ffb4ab] shadow-[0_0_8px_rgba(255,180,171,0.5)]" :
-                        "bg-[--rc-outline-variant]"
+                      <h4 className="text-sm font-semibold text-[--rc-on-surface]">{slot.displayName}</h4>
+                      {/* Real status indicator */}
+                      <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+                        slot.status === "connected" || slot.status === "running"
+                          ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"
+                          : slot.status === "error"
+                            ? "bg-[#ffb4ab] shadow-[0_0_8px_rgba(255,180,171,0.5)]"
+                            : "bg-[--rc-outline-variant]/40"
                       }`} />
                     </div>
-                    <p className="text-[10px] text-[--rc-on-surface-variant]/50 uppercase tracking-wider">{conn.connectionType} • {conn.authMechanism}</p>
-                    {conn.lastError && (
-                      <p className="text-[10px] text-[#ffb4ab] mt-1 truncate">{conn.lastError}</p>
-                    )}
-                    {conn.lastSyncAt && (
-                      <p className="text-[10px] text-[--rc-on-surface-variant]/40 mt-1 tabular-nums">Last sync: {new Date(conn.lastSyncAt).toLocaleString()}</p>
+                    <p className="text-[11px] text-[--rc-on-surface-variant]/60 leading-relaxed">{slot.description}</p>
+                    {slot.isPlugin && slot.pluginVersion && (
+                      <p className="text-[10px] text-[--rc-on-surface-variant]/30 mt-1 tabular-nums">v{slot.pluginVersion}</p>
                     )}
                   </div>
                 </div>
-                <div className="mt-4 flex justify-end gap-2">
-                  {conn.status === "connected" ? (
-                    <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Connected</span>
-                  ) : (
-                    <button
-                      onClick={() => testMutation.mutate({ slug: conn.slug })}
-                      disabled={testMutation.isPending}
-                      className="px-3 py-1.5 rounded-lg bg-[--rc-primary]/10 text-[--rc-primary] text-[10px] font-bold uppercase tracking-widest hover:bg-[--rc-primary]/20 transition-all disabled:opacity-50"
-                    >
-                      {testMutation.isPending ? "Testing..." : "Configure"}
+                <div className="mt-4 flex justify-between items-center">
+                  <span className={`text-[10px] font-bold uppercase tracking-wider ${
+                    slot.status === "connected" || slot.status === "running"
+                      ? "text-emerald-400"
+                      : slot.status === "error"
+                        ? "text-[#ffb4ab]"
+                        : "text-[--rc-on-surface-variant]/40"
+                  }`}>
+                    {slot.status === "connected" || slot.status === "running" ? "● Connected" : slot.status === "error" ? "● Error" : "○ Not connected"}
+                  </span>
+                  {slot.status !== "connected" && slot.status !== "running" && (
+                    <button className="px-3 py-1.5 rounded-lg bg-[--rc-primary]/10 text-[--rc-primary] text-[10px] font-bold uppercase tracking-widest hover:bg-[--rc-primary]/20 transition-all">
+                      Configure
                     </button>
                   )}
                 </div>
@@ -170,43 +260,6 @@ export function Connections() {
           </div>
         </section>
       ))}
-      {/* MCP Plugins — installed connectors from Paperclip plugin system */}
-      {plugins && plugins.length > 0 && (
-        <section className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-[--rc-on-surface-variant]">MCP Connectors (Installed)</h3>
-            <span className="text-[10px] tabular-nums text-[--rc-on-surface-variant]/50">
-              {plugins.filter((p: any) => p.status === "running").length}/{plugins.length}
-            </span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {plugins.map((plugin: any) => (
-              <div key={plugin.id} className="glass-card rounded-xl p-5 border border-[--rc-outline-variant]/10 hover:translate-y-[-2px] transition-all duration-300 group cursor-pointer hover:border-[--rc-primary]/20">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-[--rc-surface-container-high] flex items-center justify-center border border-[--rc-outline-variant]/20 shrink-0">
-                    <span className="material-symbols-outlined text-[--rc-primary] text-lg" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>extension</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="text-sm font-semibold text-[--rc-on-surface]">{plugin.name || plugin.packageName}</h4>
-                      <span className={`w-2 h-2 rounded-full ${
-                        plugin.status === "running" ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" :
-                        plugin.status === "error" ? "bg-[#ffb4ab]" : "bg-[--rc-outline-variant]"
-                      }`} />
-                    </div>
-                    <p className="text-[10px] text-[--rc-on-surface-variant]/50 uppercase tracking-wider">
-                      MCP Plugin • {plugin.status}
-                    </p>
-                    {plugin.version && (
-                      <p className="text-[10px] text-[--rc-on-surface-variant]/30 mt-1 tabular-nums">v{plugin.version}</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
     </div>
   );
 }
