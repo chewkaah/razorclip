@@ -1307,11 +1307,12 @@ export function issueService(db: Db) {
         });
       }
 
+      // Release only clears the checkout lock - does NOT clear assignment or change status.
+      // The agent remains assigned and status persists (blocked stays blocked, etc.)
+      // To fully unassign, use the update endpoint with assigneeAgentId: null.
       const updated = await db
         .update(issues)
         .set({
-          status: "todo",
-          assigneeAgentId: null,
           checkoutRunId: null,
           updatedAt: new Date(),
         })
