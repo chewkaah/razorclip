@@ -9,17 +9,10 @@ import { randomUUID } from "crypto";
 import type { Db } from "@paperclipai/db";
 import { connections, biClients, connectionSyncLogs } from "@paperclipai/db";
 import { fetchNotionClients } from "./notion-bi.js";
+import { resolveConnectionKey } from "./onepassword.js";
 
 const SYNC_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
 let timer: ReturnType<typeof setInterval> | null = null;
-
-/** Resolve API key from a connection row. */
-function resolveKey(conn: { metadata: unknown; secretRef: string | null }): string | null {
-  const meta = conn.metadata as Record<string, unknown> | null;
-  if (meta?.apiKey && typeof meta.apiKey === "string") return meta.apiKey;
-  if (meta?.bearerToken && typeof meta.bearerToken === "string") return meta.bearerToken;
-  return null;
-}
 
 /** Sync Notion CRM clients into bi_clients table. */
 async function syncNotionClients(db: Db, companyId: string, token: string, databaseId: string, connectionId: string) {
@@ -118,7 +111,7 @@ async function runSyncCycle(db: Db) {
     ));
 
   for (const conn of biConns) {
-    const key = resolveKey(conn);
+    const key = resolveConnectionKey(conn);
     if (!key) continue;
     const meta = conn.metadata as Record<string, unknown> | null;
 

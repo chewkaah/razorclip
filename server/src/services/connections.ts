@@ -140,7 +140,7 @@ export function connectionsService(db: Db) {
     companyId: string,
     slug: string,
     status: string,
-    opts?: { lastError?: string; errorCode?: string; metadata?: Record<string, unknown> },
+    opts?: { lastError?: string; errorCode?: string; metadata?: Record<string, unknown>; secretRef?: string },
   ) {
     const setData: Record<string, unknown> = {
       status,
@@ -150,6 +150,7 @@ export function connectionsService(db: Db) {
     if (opts?.lastError !== undefined) setData.lastError = opts.lastError;
     if (opts?.errorCode !== undefined) setData.errorCode = opts.errorCode;
     if (opts?.metadata) setData.metadata = opts.metadata;
+    if (opts?.secretRef !== undefined) setData.secretRef = opts.secretRef;
     if (status === "connected") setData.lastSyncAt = new Date();
 
     const [updated] = await db
