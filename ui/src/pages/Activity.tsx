@@ -100,7 +100,20 @@ export function Activity() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-end">
+      <div className="flex justify-between items-end mb-6">
+        <div>
+          <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] mb-2">
+            <span>Razorclip</span>
+            <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chevron_right</span>
+            <span className="text-[--rc-primary]">Activity</span>
+          </nav>
+          <h2 className="text-3xl font-light tracking-tight text-[--rc-on-surface]">
+            Recent <span className="font-bold">Activity</span>
+          </h2>
+          <div className="flex items-center gap-3 mt-1 text-[10px] uppercase tracking-[0.15em] text-[--rc-on-surface-variant]">
+            <span>{(filtered ?? []).length} events</span>
+          </div>
+        </div>
         <Select value={filter} onValueChange={setFilter}>
           <SelectTrigger className="w-[140px] h-8 text-xs">
             <SelectValue placeholder="Filter by type" />

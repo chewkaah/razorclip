@@ -1044,7 +1044,18 @@ export function CompanySkills() {
         </DialogContent>
       </Dialog>
 
-      <div className="grid min-h-[calc(100vh-12rem)] gap-0 xl:grid-cols-[19rem_minmax(0,1fr)]">
+      <div className="mb-6">
+        <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] mb-2">
+          <span>Razorclip</span>
+          <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chevron_right</span>
+          <span className="text-[--rc-primary]">Skills</span>
+        </nav>
+        <h2 className="text-3xl font-light tracking-tight text-[--rc-on-surface]">
+          Agent <span className="font-bold">Skills</span>
+        </h2>
+      </div>
+
+      <div className="grid min-h-[calc(100vh-16rem)] gap-0 xl:grid-cols-[19rem_minmax(0,1fr)]">
         <aside className="border-r border-border">
           <div className="border-b border-border px-4 py-3">
             <div className="flex items-center justify-between gap-2">
