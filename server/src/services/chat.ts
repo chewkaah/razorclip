@@ -1,4 +1,4 @@
-import { eq, desc, asc, and } from "drizzle-orm";
+import { eq, desc, asc, and, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { chatThreads, chatMessages, agents } from "@paperclipai/db";
 import { heartbeatService } from "./heartbeat.js";
@@ -187,41 +187,50 @@ export function chatService(db: Db) {
     const thread = await getThread(input.threadId);
     if (!thread) throw notFound("Thread not found");
 
-    // Check no active streaming message
-    const streaming = await db
-      .select()
-      .from(chatMessages)
-      .where(
-        and(
-          eq(chatMessages.threadId, input.threadId),
-          eq(chatMessages.isStreaming, true),
-        ),
-      )
-      .then((rows) => rows[0] ?? null);
-    if (streaming) throw conflict("A response is already in progress for this thread");
+    // Atomic streaming guard: lock the thread row, check for active streaming,
+    // then insert both messages inside a single transaction.
+    const { userMsg, assistantMsg } = await db.transaction(async (tx) => {
+      // Lock the thread row to serialize concurrent sends
+      await tx.execute(sql`SELECT id FROM chat_threads WHERE id = ${input.threadId} FOR UPDATE`);
 
-    // Insert user message
-    const [userMsg] = await db
-      .insert(chatMessages)
-      .values({
-        threadId: input.threadId,
-        companyId: input.companyId,
-        role: "user",
-        content: input.content,
-      })
-      .returning();
+      // Check no active streaming message (now safe from races)
+      const streaming = await tx
+        .select()
+        .from(chatMessages)
+        .where(
+          and(
+            eq(chatMessages.threadId, input.threadId),
+            eq(chatMessages.isStreaming, true),
+          ),
+        )
+        .then((rows) => rows[0] ?? null);
+      if (streaming) throw conflict("A response is already in progress for this thread");
 
-    // Insert placeholder assistant message
-    const [assistantMsg] = await db
-      .insert(chatMessages)
-      .values({
-        threadId: input.threadId,
-        companyId: input.companyId,
-        role: "assistant",
-        content: "",
-        isStreaming: true,
-      })
-      .returning();
+      // Insert user message
+      const [uMsg] = await tx
+        .insert(chatMessages)
+        .values({
+          threadId: input.threadId,
+          companyId: input.companyId,
+          role: "user",
+          content: input.content,
+        })
+        .returning();
+
+      // Insert placeholder assistant message
+      const [aMsg] = await tx
+        .insert(chatMessages)
+        .values({
+          threadId: input.threadId,
+          companyId: input.companyId,
+          role: "assistant",
+          content: "",
+          isStreaming: true,
+        })
+        .returning();
+
+      return { userMsg: uMsg, assistantMsg: aMsg };
+    });
 
     // Build conversation context from history
     const history = await listMessages(input.threadId);
