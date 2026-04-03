@@ -2,8 +2,7 @@
 # Razorclip deploy — pushes to GitHub then builds + restarts on Mac mini
 set -e
 
-MINI="agent0@192.168.1.184"
-SSH_KEY="$HOME/.ssh/id_ed25519"
+MINI="ssh.integral.sh"
 REMOTE_DIR="~/Dev/razorclip"
 
 echo "🔪 Razorclip Deploy"
@@ -15,7 +14,7 @@ git push origin master 2>/dev/null && echo "  Pushed" || echo "  Already up to d
 
 # 2. Deploy on Mac mini
 echo "→ Deploying on Mac mini ($MINI)..."
-ssh -o IdentitiesOnly=yes -i "$SSH_KEY" "$MINI" bash -l << DEPLOY
+ssh "$MINI" bash -l << DEPLOY
 export PATH="/Users/agent0/.local/share/fnm/aliases/default/bin:\$PATH"
 cd $REMOTE_DIR
 echo "  Pulling..."
@@ -32,7 +31,8 @@ pnpm db:migrate 2>&1 | tail -1
 echo "  Restarting..."
 pkill -f "tsx.*src/index.ts" 2>/dev/null || true
 sleep 2
-docker exec razorclip-db-1 psql -U paperclip -d paperclip -c "UPDATE plugins SET status = 'ready', last_error = NULL;" 2>/dev/null || true
+# Reset only known-good plugins (NOT telegram — Hermes owns that connection)
+docker exec razorclip-db-1 psql -U paperclip -d paperclip -c "UPDATE plugins SET status = 'ready', last_error = NULL WHERE package_name IN ('paperclip-plugin-acp', '@tomismeta/paperclip-aperture');" 2>/dev/null || true
 nohup pnpm --filter @paperclipai/server dev > /tmp/razorclip.log 2>&1 &
 sleep 4
 echo "  Health: \$(curl -s http://localhost:3100/api/health | head -c 50)..."
