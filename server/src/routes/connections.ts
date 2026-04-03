@@ -5,6 +5,7 @@ import { assertBoard, assertCompanyAccess } from "./authz.js";
 import { connectionsService } from "../services/connections.js";
 import { checkStripeHealth } from "../services/stripe-bi.js";
 import { checkMercuryHealth } from "../services/mercury-bi.js";
+import { checkNotionHealth } from "../services/notion-bi.js";
 
 export function connectionRoutes(db: Db) {
   const router = Router();
@@ -140,6 +141,24 @@ export function connectionRoutes(db: Db) {
       const result = await checkMercuryHealth(key);
       if (result.ok) {
         const updated = await svc.updateStatus(companyId, slug, "connected", { metadata: { ...meta, accountCount: result.accountCount } });
+        res.json(updated);
+      } else {
+        const updated = await svc.updateStatus(companyId, slug, "error", { lastError: result.error, errorCode: "invalid_credentials" });
+        res.json(updated);
+      }
+      return;
+    }
+
+    if (slug === "notion" || slug === "notion-crm") {
+      const key = apiKey ?? (meta.bearerToken as string) ?? process.env.NOTION_INTEGRATION_TOKEN;
+      if (!key) {
+        const updated = await svc.updateStatus(companyId, slug, "error", { lastError: "No integration token configured", errorCode: "invalid_credentials" });
+        res.json(updated);
+        return;
+      }
+      const result = await checkNotionHealth(key);
+      if (result.ok) {
+        const updated = await svc.updateStatus(companyId, slug, "connected", { metadata: { ...meta, userName: result.userName } });
         res.json(updated);
       } else {
         const updated = await svc.updateStatus(companyId, slug, "error", { lastError: result.error, errorCode: "invalid_credentials" });

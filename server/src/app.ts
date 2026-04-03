@@ -32,6 +32,7 @@ import { chatRoutes } from "./routes/chat.js";
 import { userProfileRoutes } from "./routes/user-profile.js";
 import { connectionRoutes } from "./routes/connections.js";
 import { biRoutes } from "./routes/bi.js";
+import { startSyncScheduler } from "./services/sync-scheduler.js";
 import { pluginRoutes } from "./routes/plugins.js";
 import { pluginUiStaticRoutes } from "./routes/plugin-ui-static.js";
 import { applyUiBranding } from "./ui-branding.js";
@@ -305,6 +306,7 @@ export async function createApp(
 
   jobCoordinator.start();
   scheduler.start();
+  startSyncScheduler(db);
   void toolDispatcher.initialize().catch((err) => {
     logger.error({ err }, "Failed to initialize plugin tool dispatcher");
   });
