@@ -205,9 +205,9 @@ export function connectionRoutes(db: Db) {
     const conn = await svc.getBySlug(companyId, slug);
     if (!conn) { res.status(404).json({ error: "Connection not found" }); return; }
 
-    const { apiKey, bearerToken, oauthToken } = req.body;
-    if (!apiKey && !bearerToken && !oauthToken) {
-      res.status(400).json({ error: "Provide apiKey, bearerToken, or oauthToken" });
+    const { apiKey, bearerToken, oauthToken, secretRef } = req.body;
+    if (!apiKey && !bearerToken && !oauthToken && !secretRef) {
+      res.status(400).json({ error: "Provide apiKey, bearerToken, oauthToken, or secretRef (op:// reference)" });
       return;
     }
 
@@ -217,7 +217,14 @@ export function connectionRoutes(db: Db) {
     if (bearerToken) newMeta.bearerToken = bearerToken;
     if (oauthToken) newMeta.oauthToken = oauthToken;
 
-    const updated = await svc.updateStatus(companyId, slug, "connected", { metadata: newMeta });
+    // If a 1Password op:// reference is provided, store it in secretRef column
+    // and don't store the raw key in metadata
+    const updateOpts: { metadata: Record<string, unknown>; secretRef?: string } = { metadata: newMeta };
+    if (secretRef && typeof secretRef === "string" && secretRef.startsWith("op://")) {
+      updateOpts.secretRef = secretRef;
+    }
+
+    const updated = await svc.updateStatus(companyId, slug, "connected", updateOpts);
     if (!updated) { res.status(404).json({ error: "Connection not found" }); return; }
     res.json(updated);
   });

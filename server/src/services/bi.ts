@@ -3,6 +3,7 @@ import type { Db } from "@paperclipai/db";
 import { biClients, biAlerts, connections } from "@paperclipai/db";
 import { fetchStripePulse, type StripePulse } from "./stripe-bi.js";
 import { fetchMercuryPulse, type MercuryPulse } from "./mercury-bi.js";
+import { resolveConnectionKey } from "./onepassword.js";
 
 function toClient(row: typeof biClients.$inferSelect) {
   return {
@@ -37,7 +38,7 @@ function toAlert(row: typeof biAlerts.$inferSelect) {
   };
 }
 
-/** Resolve the API key for a BI connection slug. */
+/** Resolve the API key for a BI connection slug. Checks 1Password refs, metadata, then env. */
 async function resolveKey(db: Db, companyId: string, slug: string): Promise<string | null> {
   const rows = await db
     .select({ metadata: connections.metadata, secretRef: connections.secretRef, status: connections.status })
@@ -47,12 +48,7 @@ async function resolveKey(db: Db, companyId: string, slug: string): Promise<stri
   const conn = rows[0];
   if (!conn || conn.status !== "connected") return null;
 
-  // Key stored in metadata.apiKey (set by the configure flow)
-  const meta = conn.metadata as Record<string, unknown> | null;
-  if (meta?.apiKey && typeof meta.apiKey === "string") return meta.apiKey;
-
-  // Fallback: env var
-  return null;
+  return resolveConnectionKey(conn);
 }
 
 export function biService(db: Db) {
