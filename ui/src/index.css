@@ -593,6 +593,37 @@
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* Mobile touch target minimum — 44px per Apple HIG */
+@media (pointer: coarse) {
+  /* Nav links in sidebar and bottom nav */
+  .razorclip-shell nav a,
+  .razorclip-shell nav button {
+    min-height: 44px;
+  }
+  /* List items and card links */
+  .razorclip-shell [role="button"],
+  .razorclip-shell [role="switch"] {
+    min-height: 44px;
+  }
+}
+
+/* Scroll fade indicator — shows a gradient at the bottom to hint more content */
+.scroll-fade {
+  position: relative;
+}
+.scroll-fade::after {
+  content: "";
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  height: 32px;
+  background: linear-gradient(to bottom, transparent, var(--rc-surface, #080808));
+  pointer-events: none;
+  z-index: 1;
+}
+
 /* Tabular nums for all metrics */
 .tabular-nums {
   font-variant-numeric: tabular-nums;

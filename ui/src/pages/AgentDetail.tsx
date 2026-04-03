@@ -806,8 +806,8 @@ export function AgentDetail() {
   return (
     <div className={cn("space-y-6 rc-agent-detail", isMobile && showConfigActionBar && "pb-24")}>
       {/* Header — Kinetic Terminal styled */}
-      <div className="glass-card rounded-2xl border border-[--rc-outline-variant]/10 p-5 md:p-6">
-        <div className="flex items-center justify-between gap-2">
+      <div className="glass-card rounded-2xl border border-[--rc-outline-variant]/10 p-4 md:p-6">
+        <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-3 min-w-0">
           <AgentIconPicker
             value={agent.icon}
@@ -1175,7 +1175,7 @@ function AgentOverview({
       <LatestRunCard runs={runs} agentId={agentRouteId} />
 
       {/* Charts */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <ChartCard title="Run Activity" subtitle="Last 14 days">
           <RunActivityChart runs={runs} />
         </ChartCard>

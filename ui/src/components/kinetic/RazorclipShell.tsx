@@ -248,9 +248,9 @@ function MobileBottomNav({ onMorePress }: { onMorePress: () => void }) {
           to={item.to}
           className={({ isActive }) =>
             cn(
-              "flex flex-col items-center justify-center transition-all",
+              "flex flex-col items-center justify-center transition-all min-h-[44px] min-w-[44px]",
               isActive
-                ? "text-[--rc-primary] bg-[--rc-primary]/10 rounded-xl px-3 py-1"
+                ? "text-[--rc-primary] bg-[--rc-primary]/10 rounded-xl px-3 py-1.5"
                 : "text-[--rc-on-surface-variant]/50",
             )
           }
@@ -262,7 +262,7 @@ function MobileBottomNav({ onMorePress }: { onMorePress: () => void }) {
       {/* More button (not a NavLink — triggers drawer) */}
       <button
         onClick={onMorePress}
-        className="flex flex-col items-center justify-center transition-all text-[--rc-on-surface-variant]/50"
+        className="flex flex-col items-center justify-center transition-all text-[--rc-on-surface-variant]/50 min-h-[44px] min-w-[44px]"
       >
         <span className="material-symbols-outlined mb-0.5 text-xl" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>more_horiz</span>
         <span className="text-[10px] uppercase tracking-[0.05em] font-medium">More</span>

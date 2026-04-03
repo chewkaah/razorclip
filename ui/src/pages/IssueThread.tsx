@@ -59,9 +59,9 @@ export function IssueThread() {
   const prefix = `${(issue as any).issuePrefix ?? "RC"}-${(issue as any).issueNumber ?? issueId?.slice(0, 4)}`;
 
   return (
-    <div className="-m-8 h-[calc(100vh-4rem)] flex flex-col md:grid md:grid-cols-[320px_1fr_380px] divide-x divide-[#464554]/10">
+    <div className="-m-4 md:-m-8 min-h-[100dvh] md:h-[calc(100vh-4rem)] flex flex-col md:grid md:grid-cols-[320px_1fr_380px] md:divide-x divide-[#464554]/10">
       {/* Column 1: Active Issues List — from Stitch */}
-      <section className="flex flex-col bg-[--rc-surface-container-low] overflow-y-auto no-scrollbar">
+      <section className="flex flex-col bg-[--rc-surface-container-low] max-h-[240px] md:max-h-none overflow-y-auto no-scrollbar border-b md:border-b-0 border-[--rc-outline-variant]/10 scroll-fade md:[&::after]:hidden">
         <div className="p-4 border-b border-[--rc-outline-variant]/10 flex justify-between items-center">
           <h2 className="text-xs font-bold tracking-[0.2em] text-[--rc-on-surface-variant] uppercase">Active Priority</h2>
           <span className="text-[10px] bg-[--rc-primary]/10 text-[--rc-primary] px-2 py-0.5 rounded-full font-bold tabular-nums">{activeIssues.length} OPEN</span>
@@ -76,7 +76,7 @@ export function IssueThread() {
             return (
               <Link key={i.id} to={`/issues/${i.id}/thread-view`} className="no-underline text-inherit">
                 <div className={cn(
-                  "px-4 py-4 cursor-pointer border-l-2 transition-colors",
+                  "px-4 py-4 cursor-pointer border-l-2 transition-colors min-h-[44px]",
                   isCurrent ? "border-[--rc-primary] bg-[--rc-primary]/5" : "border-transparent hover:bg-[--rc-surface-container-high]"
                 )}>
                   <div className="flex justify-between items-start mb-2">
@@ -110,20 +110,20 @@ export function IssueThread() {
       {/* Column 2: Detailed Issue View — from Stitch */}
       <section className="flex flex-col relative overflow-hidden bg-[--rc-surface]">
         {/* Header */}
-        <div className="p-6 flex justify-between items-start border-b border-[--rc-outline-variant]/10">
-          <div className="space-y-1">
+        <div className="p-4 md:p-6 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 border-b border-[--rc-outline-variant]/10">
+          <div className="space-y-1 min-w-0">
             <div className="flex items-center gap-3">
-              <span className="px-2 py-0.5 bg-[--rc-primary]/20 text-[--rc-primary] text-[10px] font-bold tracking-widest rounded-sm border border-[--rc-primary]/20">RAZORCLIP</span>
-              <span className="text-[--rc-on-surface-variant] text-xs tabular-nums">{prefix} • Updated {relativeTime(issue.updatedAt)}</span>
+              <span className="px-2 py-0.5 bg-[--rc-primary]/20 text-[--rc-primary] text-[10px] font-bold tracking-widest rounded-sm border border-[--rc-primary]/20 shrink-0">RAZORCLIP</span>
+              <span className="text-[--rc-on-surface-variant] text-xs tabular-nums truncate">{prefix} • Updated {relativeTime(issue.updatedAt)}</span>
             </div>
-            <h1 className="text-2xl font-extrabold tracking-tight mt-2">{issue.title}</h1>
+            <h1 className="text-xl md:text-2xl font-extrabold tracking-tight mt-2">{issue.title}</h1>
           </div>
-          <div className="flex items-center gap-2">
-            <button className="bg-[--rc-surface-container-highest] hover:bg-[#373940] text-xs font-bold px-4 py-2 rounded-xl border border-[--rc-outline-variant]/20 transition-all flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
+            <button className="bg-[--rc-surface-container-highest] hover:bg-[#373940] text-xs font-bold px-3 md:px-4 py-2 rounded-xl border border-[--rc-outline-variant]/20 transition-all flex items-center gap-2 min-h-[44px]">
               <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>close</span> Close
             </button>
-            <button className="bg-[--rc-primary] text-[--rc-on-primary] text-xs font-bold px-4 py-2 rounded-xl hover:opacity-90 transition-all flex items-center gap-2 shadow-[0_10px_20px_-5px_rgba(0,255,170,0.3)]">
-              <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>check_circle</span> Approve Fix
+            <button className="bg-[--rc-primary] text-[--rc-on-primary] text-xs font-bold px-3 md:px-4 py-2 rounded-xl hover:opacity-90 transition-all flex items-center gap-2 shadow-[0_10px_20px_-5px_rgba(0,255,170,0.3)] min-h-[44px]">
+              <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>check_circle</span> Approve
             </button>
           </div>
         </div>
@@ -169,7 +169,7 @@ export function IssueThread() {
 
         {/* Terminal — from Stitch */}
         {assignedAgent && (
-          <div className="h-48 bg-black border-t border-[--rc-outline-variant]/30 font-mono p-4 flex flex-col">
+          <div className="h-36 md:h-48 bg-black border-t border-[--rc-outline-variant]/30 font-mono p-4 flex flex-col">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[--rc-primary] shadow-[0_0_8px_rgba(0,255,170,0.6)]" />
@@ -187,7 +187,7 @@ export function IssueThread() {
       </section>
 
       {/* Column 3: Operations Thread — from Stitch */}
-      <section className="flex flex-col bg-[--rc-surface-container-lowest]">
+      <section className="flex flex-col bg-[--rc-surface-container-lowest] border-t md:border-t-0 border-[--rc-outline-variant]/10">
         <div className="p-4 border-b border-[--rc-outline-variant]/10">
           <h2 className="text-xs font-bold tracking-[0.2em] text-[--rc-on-surface-variant] uppercase">Operations Thread</h2>
         </div>
