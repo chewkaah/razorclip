@@ -1,7 +1,8 @@
 import { eq, and, desc } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import { biClients, biAlerts, connections } from "@paperclipai/db";
-import { fetchStripePulse } from "./stripe-bi.js";
+import { fetchStripePulse, type StripePulse } from "./stripe-bi.js";
+import { fetchMercuryPulse, type MercuryPulse } from "./mercury-bi.js";
 
 function toClient(row: typeof biClients.$inferSelect) {
   return {
@@ -61,42 +62,39 @@ export function biService(db: Db) {
     const activeClients = clients.filter((c) => c.status === "active");
     const totalRetainer = activeClients.reduce((sum, c) => sum + (c.retainerAmount ? Number(c.retainerAmount) : 0), 0);
 
-    // Try Stripe first
+    // Resolve keys for both financial providers
     const stripeKey = await resolveKey(db, companyId, "stripe-bi") ?? process.env.STRIPE_SECRET_KEY;
-    if (stripeKey) {
-      try {
-        const stripe = await fetchStripePulse(stripeKey);
-        return {
-          activeClients: activeClients.length,
-          totalClients: clients.length,
-          weeklyRevenue: stripe.weeklyRevenue,
-          monthlyRevenue: stripe.monthlyRevenue,
-          weeklyBurn: stripe.weeklyBurn,
-          netMargin: stripe.weeklyRevenue > 0 ? Math.round(((stripe.weeklyRevenue - stripe.weeklyBurn) / stripe.weeklyRevenue) * 100) : 0,
-          cashPosition: 0, // Mercury handles this
-          pipelineValue: 0, // Apollo handles this
-          mrr: stripe.mrr,
-          activeSubscriptions: stripe.activeSubscriptions,
-          churnedThisMonth: stripe.churnedThisMonth,
-        };
-      } catch (err) {
-        console.warn("Stripe pulse fetch failed, falling back to retainer aggregation:", (err as Error).message);
-      }
-    }
+    const mercuryKey = await resolveKey(db, companyId, "mercury") ?? process.env.MERCURY_API_KEY;
 
-    // Fallback: aggregate from bi_clients
+    // Fetch Stripe + Mercury in parallel (each is optional)
+    const [stripeResult, mercuryResult] = await Promise.all([
+      stripeKey
+        ? fetchStripePulse(stripeKey).catch((err) => { console.warn("Stripe pulse failed:", (err as Error).message); return null; })
+        : Promise.resolve(null),
+      mercuryKey
+        ? fetchMercuryPulse(mercuryKey).catch((err) => { console.warn("Mercury pulse failed:", (err as Error).message); return null; })
+        : Promise.resolve(null),
+    ]) as [StripePulse | null, MercuryPulse | null];
+
+    const weeklyRevenue = stripeResult?.weeklyRevenue ?? (totalRetainer > 0 ? Math.round(totalRetainer / 4) : 0);
+    const weeklyBurn = mercuryResult?.weeklyBurn ?? 0;
+    const cashPosition = mercuryResult?.cashPosition ?? 0;
+
     return {
       activeClients: activeClients.length,
       totalClients: clients.length,
-      weeklyRevenue: totalRetainer > 0 ? Math.round(totalRetainer / 4) : 0,
-      monthlyRevenue: totalRetainer,
-      weeklyBurn: 0,
-      netMargin: totalRetainer > 0 ? 85 : 0,
-      cashPosition: 0,
-      pipelineValue: 0,
-      mrr: totalRetainer,
-      activeSubscriptions: 0,
-      churnedThisMonth: 0,
+      weeklyRevenue,
+      monthlyRevenue: stripeResult?.monthlyRevenue ?? totalRetainer,
+      weeklyBurn,
+      netMargin: weeklyRevenue > 0 ? Math.round(((weeklyRevenue - weeklyBurn) / weeklyRevenue) * 100) : (totalRetainer > 0 ? 85 : 0),
+      cashPosition,
+      availableBalance: mercuryResult?.availableBalance ?? 0,
+      runwayDays: mercuryResult?.runwayDays ?? 0,
+      monthlyBurn: mercuryResult?.monthlyBurn ?? 0,
+      pipelineValue: 0, // Apollo handles this
+      mrr: stripeResult?.mrr ?? totalRetainer,
+      activeSubscriptions: stripeResult?.activeSubscriptions ?? 0,
+      churnedThisMonth: stripeResult?.churnedThisMonth ?? 0,
     };
   }
 
