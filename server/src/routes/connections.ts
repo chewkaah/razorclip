@@ -3,6 +3,7 @@ import { execSync } from "child_process";
 import type { Db } from "@paperclipai/db";
 import { assertBoard, assertCompanyAccess } from "./authz.js";
 import { connectionsService } from "../services/connections.js";
+import { checkStripeHealth } from "../services/stripe-bi.js";
 
 export function connectionRoutes(db: Db) {
   const router = Router();
@@ -103,8 +104,63 @@ export function connectionRoutes(db: Db) {
     const { companyId, slug } = req.params;
     assertCompanyAccess(req, companyId);
 
-    // TODO: implement actual health check per adapter
-    const updated = await svc.updateStatus(companyId, slug, "connected");
+    const conn = await svc.getBySlug(companyId, slug);
+    if (!conn) { res.status(404).json({ error: "Connection not found" }); return; }
+
+    // Route health check by slug
+    const meta = (conn.metadata ?? {}) as Record<string, unknown>;
+    const apiKey = (meta.apiKey as string) ?? undefined;
+
+    if (slug === "stripe-bi" || slug === "stripe-mcp") {
+      const key = apiKey ?? process.env.STRIPE_SECRET_KEY;
+      if (!key) {
+        const updated = await svc.updateStatus(companyId, slug, "error", { lastError: "No API key configured", errorCode: "invalid_credentials" });
+        res.json(updated);
+        return;
+      }
+      const result = await checkStripeHealth(key);
+      if (result.ok) {
+        const updated = await svc.updateStatus(companyId, slug, "connected", { metadata: { ...meta, accountName: result.accountName } });
+        res.json(updated);
+      } else {
+        const updated = await svc.updateStatus(companyId, slug, "error", { lastError: result.error, errorCode: "invalid_credentials" });
+        res.json(updated);
+      }
+      return;
+    }
+
+    // Generic: if there's an API key stored, mark connected; otherwise error
+    if (apiKey) {
+      const updated = await svc.updateStatus(companyId, slug, "connected");
+      res.json(updated);
+    } else {
+      const updated = await svc.updateStatus(companyId, slug, "error", { lastError: "No credentials configured", errorCode: "invalid_credentials" });
+      res.json(updated);
+    }
+  });
+
+  /** POST /companies/:companyId/connections/:slug/configure — save API key / credentials */
+  router.post("/companies/:companyId/connections/:slug/configure", async (req, res) => {
+    assertBoard(req);
+    const { companyId, slug } = req.params;
+    assertCompanyAccess(req, companyId);
+
+    const conn = await svc.getBySlug(companyId, slug);
+    if (!conn) { res.status(404).json({ error: "Connection not found" }); return; }
+
+    const { apiKey, bearerToken, oauthToken } = req.body;
+    if (!apiKey && !bearerToken && !oauthToken) {
+      res.status(400).json({ error: "Provide apiKey, bearerToken, or oauthToken" });
+      return;
+    }
+
+    const existingMeta = (conn.metadata ?? {}) as Record<string, unknown>;
+    const newMeta = { ...existingMeta };
+    if (apiKey) newMeta.apiKey = apiKey;
+    if (bearerToken) newMeta.bearerToken = bearerToken;
+    if (oauthToken) newMeta.oauthToken = oauthToken;
+
+    const updated = await svc.updateStatus(companyId, slug, "connected", { metadata: newMeta });
     if (!updated) { res.status(404).json({ error: "Connection not found" }); return; }
     res.json(updated);
   });

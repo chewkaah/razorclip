@@ -1,6 +1,7 @@
-import { eq, desc } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
-import { biClients, biClientProjects, biSnapshots, biAlerts } from "@paperclipai/db";
+import { biClients, biAlerts, connections } from "@paperclipai/db";
+import { fetchStripePulse } from "./stripe-bi.js";
 
 function toClient(row: typeof biClients.$inferSelect) {
   return {
@@ -35,31 +36,75 @@ function toAlert(row: typeof biAlerts.$inferSelect) {
   };
 }
 
+/** Resolve the API key for a BI connection slug. */
+async function resolveKey(db: Db, companyId: string, slug: string): Promise<string | null> {
+  const rows = await db
+    .select({ metadata: connections.metadata, secretRef: connections.secretRef, status: connections.status })
+    .from(connections)
+    .where(and(eq(connections.companyId, companyId), eq(connections.slug, slug)))
+    .limit(1);
+  const conn = rows[0];
+  if (!conn || conn.status !== "connected") return null;
+
+  // Key stored in metadata.apiKey (set by the configure flow)
+  const meta = conn.metadata as Record<string, unknown> | null;
+  if (meta?.apiKey && typeof meta.apiKey === "string") return meta.apiKey;
+
+  // Fallback: env var
+  return null;
+}
+
 export function biService(db: Db) {
-  /** Business Pulse — aggregated hero metrics */
+  /** Business Pulse — real data from Stripe when connected, fallback to client retainer aggregation */
   async function getPulse(companyId: string) {
     const clients = await db.select().from(biClients).where(eq(biClients.companyId, companyId));
     const activeClients = clients.filter((c) => c.status === "active");
     const totalRetainer = activeClients.reduce((sum, c) => sum + (c.retainerAmount ? Number(c.retainerAmount) : 0), 0);
 
+    // Try Stripe first
+    const stripeKey = await resolveKey(db, companyId, "stripe-bi") ?? process.env.STRIPE_SECRET_KEY;
+    if (stripeKey) {
+      try {
+        const stripe = await fetchStripePulse(stripeKey);
+        return {
+          activeClients: activeClients.length,
+          totalClients: clients.length,
+          weeklyRevenue: stripe.weeklyRevenue,
+          monthlyRevenue: stripe.monthlyRevenue,
+          weeklyBurn: stripe.weeklyBurn,
+          netMargin: stripe.weeklyRevenue > 0 ? Math.round(((stripe.weeklyRevenue - stripe.weeklyBurn) / stripe.weeklyRevenue) * 100) : 0,
+          cashPosition: 0, // Mercury handles this
+          pipelineValue: 0, // Apollo handles this
+          mrr: stripe.mrr,
+          activeSubscriptions: stripe.activeSubscriptions,
+          churnedThisMonth: stripe.churnedThisMonth,
+        };
+      } catch (err) {
+        console.warn("Stripe pulse fetch failed, falling back to retainer aggregation:", (err as Error).message);
+      }
+    }
+
+    // Fallback: aggregate from bi_clients
     return {
       activeClients: activeClients.length,
       totalClients: clients.length,
-      weeklyRevenue: totalRetainer / 4, // rough weekly from monthly
-      weeklyBurn: 0, // TODO: from Mercury/Stripe
-      netMargin: totalRetainer > 0 ? 85 : 0, // placeholder
-      cashPosition: 0, // TODO: from Mercury
-      pipelineValue: 0, // TODO: from Apollo
+      weeklyRevenue: totalRetainer > 0 ? Math.round(totalRetainer / 4) : 0,
+      monthlyRevenue: totalRetainer,
+      weeklyBurn: 0,
+      netMargin: totalRetainer > 0 ? 85 : 0,
+      cashPosition: 0,
+      pipelineValue: 0,
+      mrr: totalRetainer,
+      activeSubscriptions: 0,
+      churnedThisMonth: 0,
     };
   }
 
-  /** List BI clients */
   async function listClients(companyId: string) {
     const rows = await db.select().from(biClients).where(eq(biClients.companyId, companyId));
     return rows.map(toClient);
   }
 
-  /** List unacknowledged alerts */
   async function listAlerts(companyId: string) {
     const rows = await db
       .select()
@@ -70,7 +115,6 @@ export function biService(db: Db) {
     return rows.map(toAlert);
   }
 
-  /** Acknowledge an alert */
   async function acknowledgeAlert(alertId: string) {
     await db.update(biAlerts).set({ acknowledged: true }).where(eq(biAlerts.id, alertId));
   }
