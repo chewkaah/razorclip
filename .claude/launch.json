@@ -4,8 +4,8 @@
     {
       "name": "razorclip-ui",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev:ui"],
-      "port": 5174
+      "runtimeArgs": ["--filter", "@paperclipai/ui", "dev"],
+      "port": 5173
     }
   ]
 }
