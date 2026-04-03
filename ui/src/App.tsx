@@ -53,6 +53,7 @@ import { TicketThread } from "./pages/TicketThread";
 import { AgentProfile } from "./pages/AgentProfile";
 import { IssueThread } from "./pages/IssueThread";
 import { ActiveClients } from "./pages/ActiveClients";
+import { Focus } from "./pages/Focus";
 import { UserProfilePage } from "./pages/UserProfile";
 import { NotFoundPage } from "./pages/NotFound";
 import { queryKeys } from "./lib/queryKeys";
@@ -185,6 +186,7 @@ function boardRoutes() {
       <Route path="approvals/pending" element={<Approvals />} />
       <Route path="approvals/all" element={<Approvals />} />
       <Route path="approvals/:approvalId" element={<ApprovalDetail />} />
+      <Route path="focus" element={<Focus />} />
       <Route path="costs" element={<Costs />} />
       <Route path="activity" element={<Activity />} />
       <Route path="inbox" element={<InboxRootRedirect />} />

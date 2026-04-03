@@ -11,7 +11,7 @@ export const chatApi = {
   createThread: (companyId: string, body: { adapterType: string; model?: string }) =>
     api.post<ChatThread>(`/companies/${companyId}/chat/threads`, body),
 
-  updateThread: (threadId: string, body: { title?: string; adapterType?: string; model?: string }) =>
+  updateThread: (threadId: string, body: { title?: string; adapterType?: string; model?: string; adapterConfig?: Record<string, unknown> }) =>
     api.patch<ChatThread>(`/chat/threads/${threadId}`, body),
 
   deleteThread: (threadId: string) =>
@@ -20,6 +20,6 @@ export const chatApi = {
   listMessages: (threadId: string) =>
     api.get<ChatMessage[]>(`/chat/threads/${threadId}/messages`),
 
-  sendMessage: (threadId: string, body: { content: string }) =>
+  sendMessage: (threadId: string, body: { content: string; agentId?: string }) =>
     api.post<SendMessageResult>(`/chat/threads/${threadId}/messages`, body),
 };

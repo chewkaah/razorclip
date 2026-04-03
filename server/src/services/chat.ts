@@ -74,11 +74,26 @@ export function chatService(db: Db) {
 
   async function updateThread(
     threadId: string,
-    patch: { title?: string; adapterType?: string; model?: string },
+    patch: { title?: string; adapterType?: string; model?: string; adapterConfig?: Record<string, unknown> },
   ) {
+    // Build the set object, merging adapterConfig if provided
+    const setValues: Record<string, unknown> = { updatedAt: new Date() };
+    if (patch.title !== undefined) setValues.title = patch.title;
+    if (patch.adapterType !== undefined) setValues.adapterType = patch.adapterType;
+    if (patch.model !== undefined) setValues.model = patch.model;
+    if (patch.adapterConfig !== undefined) {
+      // Merge with existing config so we don't clobber other fields
+      const existing = await db
+        .select()
+        .from(chatThreads)
+        .where(eq(chatThreads.id, threadId))
+        .then((rows) => rows[0] ?? null);
+      const existingConfig = (existing?.adapterConfig ?? {}) as Record<string, unknown>;
+      setValues.adapterConfig = { ...existingConfig, ...patch.adapterConfig };
+    }
     const [row] = await db
       .update(chatThreads)
-      .set({ ...patch, updatedAt: new Date() })
+      .set(setValues)
       .where(eq(chatThreads.id, threadId))
       .returning();
     if (!row) throw notFound("Thread not found");
@@ -159,6 +174,7 @@ export function chatService(db: Db) {
     companyId: string;
     actorId: string;
     content: string;
+    agentId?: string;
   }) {
     const thread = await getThread(input.threadId);
     if (!thread) throw notFound("Thread not found");
@@ -206,12 +222,14 @@ export function chatService(db: Db) {
       .map((m) => `[${m.role === "user" ? "User" : "Assistant"}]: ${m.content}`)
       .join("\n\n");
 
-    // Get or create chat agent
-    const agentId = await getOrCreateChatAgent(
-      input.companyId,
-      input.threadId,
-      thread.adapterType,
-    );
+    // Use explicit agentId if provided, otherwise get or create the thread's default chat agent
+    const agentId = input.agentId
+      ? input.agentId
+      : await getOrCreateChatAgent(
+          input.companyId,
+          input.threadId,
+          thread.adapterType,
+        );
 
     // Enqueue a heartbeat run
     const result = await heartbeat.wakeup(agentId, {

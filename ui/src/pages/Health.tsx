@@ -1,12 +1,91 @@
 /**
  * Health Dashboard — ALL LIVE DATA, no placeholders
  */
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { useCompany } from "../context/CompanyContext";
 import { useUserProfile } from "../hooks/useUserProfile";
-import { biApi } from "../api/bi";
+import { biApi, type BIClient } from "../api/bi";
+
+/* ── Pipeline Funnel ─────────────────────────────────── */
+const STAGES = [
+  { key: "active", label: "Active", color: "#10B981", icon: "check_circle" },
+  { key: "onboarding", label: "Onboarding", color: "#3B82F6", icon: "rocket_launch" },
+  { key: "at-risk", label: "At Risk", color: "#F59E0B", icon: "warning" },
+  { key: "paused", label: "Paused", color: "#6B7280", icon: "pause_circle" },
+  { key: "churned", label: "Churned", color: "#EF4444", icon: "cancel" },
+] as const;
+
+function PipelineFunnel({ clients }: { clients: BIClient[] }) {
+  const stages = useMemo(() => {
+    const grouped = new Map<string, BIClient[]>();
+    for (const stage of STAGES) grouped.set(stage.key, []);
+    for (const c of clients) {
+      const key = c.status === "active" ? "active"
+        : c.status === "onboarding" ? "onboarding"
+        : c.healthScore === "red" || c.status === "at-risk" ? "at-risk"
+        : c.status === "paused" ? "paused"
+        : c.status === "churned" ? "churned"
+        : "active";
+      const arr = grouped.get(key) ?? [];
+      arr.push(c);
+      grouped.set(key, arr);
+    }
+    const total = clients.length || 1;
+    return STAGES.map((s) => {
+      const items = grouped.get(s.key) ?? [];
+      const revenue = items.reduce((sum, c) => sum + (c.retainerAmount ?? 0), 0);
+      return { ...s, count: items.length, pct: Math.round((items.length / total) * 100), revenue, items };
+    });
+  }, [clients]);
+
+  const maxCount = Math.max(...stages.map((s) => s.count), 1);
+
+  return (
+    <div className="glass-card rounded-[2rem] p-6 border border-white/5 space-y-4">
+      {/* Funnel bars */}
+      <div className="space-y-3">
+        {stages.map((stage) => (
+          <div key={stage.key} className="flex items-center gap-3">
+            <div className="w-24 shrink-0 flex items-center gap-2">
+              <span className="material-symbols-outlined text-sm" style={{ color: stage.color, fontVariationSettings: "'FILL' 1, 'wght' 300" }}>{stage.icon}</span>
+              <span className="text-[10px] uppercase tracking-widest font-bold text-[--rc-on-surface-variant]">{stage.label}</span>
+            </div>
+            <div className="flex-1 h-8 bg-[--rc-surface-container-lowest] rounded-lg overflow-hidden relative">
+              <div
+                className="h-full rounded-lg transition-all duration-700 ease-out flex items-center px-3"
+                style={{
+                  width: `${Math.max((stage.count / maxCount) * 100, stage.count > 0 ? 8 : 0)}%`,
+                  backgroundColor: `${stage.color}30`,
+                  borderLeft: stage.count > 0 ? `3px solid ${stage.color}` : "none",
+                }}
+              >
+                {stage.count > 0 && (
+                  <span className="text-[11px] font-bold tabular-nums" style={{ color: stage.color }}>
+                    {stage.count}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="w-20 text-right shrink-0">
+              <span className="text-xs tabular-nums text-[--rc-on-surface-variant]">
+                {stage.revenue > 0 ? `$${Math.round(stage.revenue / 1000)}k` : "—"}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+      {/* Funnel summary */}
+      <div className="flex justify-between items-center pt-3 border-t border-[--rc-outline-variant]/10">
+        <span className="text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant]">Conversion</span>
+        <span className="text-xs tabular-nums font-medium text-[--rc-primary]">
+          {stages[0].count > 0 ? `${stages[0].pct}% active` : "No data"}
+        </span>
+      </div>
+    </div>
+  );
+}
 
 export function Health() {
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -124,6 +203,24 @@ export function Health() {
           <div className="glass-card p-6 rounded-3xl border border-white/5 text-center">
             <span className="material-symbols-outlined text-2xl text-[--rc-on-surface-variant]/30 mb-2 block" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>group</span>
             <p className="text-sm text-[--rc-on-surface-variant]/50">No clients yet. Connect Notion CRM in Connections to sync clients.</p>
+          </div>
+        )}
+      </section>
+
+      {/* Pipeline Funnel — deal stages */}
+      <section className="space-y-4">
+        <div className="flex justify-between items-end px-2">
+          <h3 className="text-lg font-light tracking-tight">Pipeline Funnel</h3>
+          <span className="text-[10px] text-[--rc-primary] uppercase tracking-widest font-medium tabular-nums">
+            {fmt(pulse?.pipelineValue)} total
+          </span>
+        </div>
+        {clients && clients.length > 0 ? (
+          <PipelineFunnel clients={clients} />
+        ) : (
+          <div className="glass-card p-6 rounded-[2rem] border border-white/5 text-center">
+            <span className="material-symbols-outlined text-2xl text-[--rc-on-surface-variant]/30 mb-2 block" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>filter_alt</span>
+            <p className="text-sm text-[--rc-on-surface-variant]/50">Connect your CRM to see the pipeline funnel.</p>
           </div>
         )}
       </section>

@@ -3,15 +3,16 @@
  *
  * 3-column layout: Hero Profile | Performance + Terminal | History + CTA
  */
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link } from "@/lib/router";
 import { useQuery } from "@tanstack/react-query";
 import { agentsApi } from "../api/agents";
+import { costsApi } from "../api/costs";
 import { heartbeatsApi } from "../api/heartbeats";
 import { useCompany } from "../context/CompanyContext";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { queryKeys } from "../lib/queryKeys";
-import { cn, formatCents, relativeTime, agentUrl } from "../lib/utils";
+import { cn, formatCents, formatTokens, relativeTime, agentUrl } from "../lib/utils";
 import { AGENT_REGISTRY, type AgentSlug } from "../components/kinetic/AgentChip";
 import { AGENT_ROLE_LABELS, type Agent } from "@paperclipai/shared";
 import { getAgentAvatar } from "../components/kinetic/agent-avatars";
@@ -51,6 +52,37 @@ export function AgentProfile() {
     refetchInterval: 10_000,
   });
 
+  // Per-agent cost data
+  const { data: agentCosts } = useQuery({
+    queryKey: [...queryKeys.costs(selectedCompanyId!), "by-agent", agent?.id],
+    queryFn: () => costsApi.byAgent(selectedCompanyId!),
+    enabled: !!selectedCompanyId && !!agent?.id,
+    select: (rows) => rows.find((r) => r.agentId === agent?.id) ?? null,
+  });
+
+  // Week/month toggle state
+  const [costWindow, setCostWindow] = useState<"week" | "month">("month");
+
+  // Time-windowed cost query
+  const windowDates = useMemo(() => {
+    const now = new Date();
+    if (costWindow === "week") {
+      const day = now.getDay();
+      const diffToMon = day === 0 ? -6 : 1 - day;
+      const from = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffToMon);
+      return { from: from.toISOString(), to: now.toISOString() };
+    }
+    const from = new Date(now.getFullYear(), now.getMonth(), 1);
+    return { from: from.toISOString(), to: now.toISOString() };
+  }, [costWindow]);
+
+  const { data: windowCost } = useQuery({
+    queryKey: [...queryKeys.costs(selectedCompanyId!), "by-agent-window", agent?.id, costWindow],
+    queryFn: () => costsApi.byAgent(selectedCompanyId!, windowDates.from, windowDates.to),
+    enabled: !!selectedCompanyId && !!agent?.id,
+    select: (rows) => rows.find((r) => r.agentId === agent?.id) ?? null,
+  });
+
   const agentData = agent as any;
   const name = agentData?.name ?? "Agent";
   const slug = resolveSlug(name);
@@ -58,7 +90,8 @@ export function AgentProfile() {
   const accentColor = config?.color ?? "var(--rc-primary)";
   const accentLight = config?.colorLight ?? "var(--rc-on-surface-variant)";
   const avatarUrl = getAgentAvatar(name);
-  const totalCost = agentData?.totalSpendCents ? formatCents(agentData.totalSpendCents) : "$0.42";
+  const totalCostCents = agentCosts?.costCents ?? agentData?.totalSpendCents ?? 0;
+  const totalCost = formatCents(totalCostCents);
   const totalRuns = (runs ?? []).length;
   const recentRuns = useMemo(() => (runs ?? []).filter((r: any) => r.status === "completed" || r.status === "failed").slice(0, 3), [runs]);
 
@@ -144,6 +177,13 @@ export function AgentProfile() {
               <span className="text-2xl md:text-4xl font-extralight tracking-tight tabular-nums">{totalCost}</span>
               <span className="text-[10px] text-[--rc-outline]">total</span>
             </div>
+            {agentCosts && (
+              <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[9px] tabular-nums text-[--rc-on-surface-variant]/60">
+                <span>{formatTokens(agentCosts.inputTokens)} in</span>
+                <span>{formatTokens(agentCosts.outputTokens)} out</span>
+                {agentCosts.cachedInputTokens > 0 && <span>{formatTokens(agentCosts.cachedInputTokens)} cached</span>}
+              </div>
+            )}
           </div>
           <div className="p-4 md:p-8">
             <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Status</p>
@@ -205,6 +245,79 @@ export function AgentProfile() {
             )) : (
               <p className="text-xs text-[--rc-on-surface-variant]/40">No recent completions</p>
             )}
+          </div>
+
+          {/* Cost Attribution */}
+          <div className="mt-8 pt-6 border-t border-[--rc-outline-variant]/10">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold opacity-60">Cost Attribution</h3>
+              <div className="flex rounded-full border border-[--rc-outline-variant]/20 overflow-hidden">
+                <button
+                  onClick={() => setCostWindow("week")}
+                  className={cn(
+                    "px-3 py-1 text-[9px] uppercase tracking-widest font-bold transition-colors",
+                    costWindow === "week"
+                      ? "bg-[--rc-primary] text-[--rc-on-primary]"
+                      : "text-[--rc-on-surface-variant] hover:bg-[--rc-surface-container-high]"
+                  )}
+                >
+                  Week
+                </button>
+                <button
+                  onClick={() => setCostWindow("month")}
+                  className={cn(
+                    "px-3 py-1 text-[9px] uppercase tracking-widest font-bold transition-colors",
+                    costWindow === "month"
+                      ? "bg-[--rc-primary] text-[--rc-on-primary]"
+                      : "text-[--rc-on-surface-variant] hover:bg-[--rc-surface-container-high]"
+                  )}
+                >
+                  Month
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {/* Window spend */}
+              <div className="bg-[--rc-surface-container-low]/50 rounded-xl p-4 border border-[--rc-outline-variant]/10">
+                <p className="text-[9px] uppercase tracking-wider text-[--rc-outline] mb-1">
+                  {costWindow === "week" ? "This Week" : "This Month"}
+                </p>
+                <p className="text-xl font-extralight tabular-nums" style={{ color: accentColor }}>
+                  {windowCost ? formatCents(windowCost.costCents) : "$0.00"}
+                </p>
+              </div>
+
+              {/* Token breakdown */}
+              {(agentCosts || windowCost) && (
+                <div className="grid grid-cols-3 gap-2">
+                  <div className="bg-[--rc-surface-container-low]/50 rounded-lg p-3 border border-[--rc-outline-variant]/10">
+                    <p className="text-[8px] uppercase tracking-wider text-[--rc-outline] mb-1">Input</p>
+                    <p className="text-xs font-medium tabular-nums">
+                      {formatTokens((windowCost ?? agentCosts)?.inputTokens ?? 0)}
+                    </p>
+                  </div>
+                  <div className="bg-[--rc-surface-container-low]/50 rounded-lg p-3 border border-[--rc-outline-variant]/10">
+                    <p className="text-[8px] uppercase tracking-wider text-[--rc-outline] mb-1">Output</p>
+                    <p className="text-xs font-medium tabular-nums">
+                      {formatTokens((windowCost ?? agentCosts)?.outputTokens ?? 0)}
+                    </p>
+                  </div>
+                  <div className="bg-[--rc-surface-container-low]/50 rounded-lg p-3 border border-[--rc-outline-variant]/10">
+                    <p className="text-[8px] uppercase tracking-wider text-[--rc-outline] mb-1">Cached</p>
+                    <p className="text-xs font-medium tabular-nums">
+                      {formatTokens((windowCost ?? agentCosts)?.cachedInputTokens ?? 0)}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Runs */}
+              <div className="flex items-center justify-between text-[10px] text-[--rc-on-surface-variant]/60 px-1">
+                <span>API runs: {windowCost?.apiRunCount ?? agentCosts?.apiRunCount ?? 0}</span>
+                <span>Sub runs: {windowCost?.subscriptionRunCount ?? agentCosts?.subscriptionRunCount ?? 0}</span>
+              </div>
+            </div>
           </div>
 
           {/* System Insight */}

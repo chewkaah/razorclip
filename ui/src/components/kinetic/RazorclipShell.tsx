@@ -51,6 +51,7 @@ const mainNav = [
   { to: "agents/grid", label: "Agents", icon: "smart_toy" },
   { to: "clients", label: "Clients", icon: "group" },
   { to: "approvals/queue", label: "Approvals", icon: "verified" },
+  { to: "focus", label: "Focus", icon: "center_focus_strong" },
   { to: "org", label: "Org Chart", icon: "account_tree" },
 ];
 
