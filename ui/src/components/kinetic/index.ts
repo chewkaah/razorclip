@@ -10,3 +10,4 @@ export { SectionHeader } from "./SectionHeader";
 export { MessageBubble } from "./MessageBubble";
 export { SystemActionCard } from "./SystemActionCard";
 export { LiveExecutionLog } from "./LiveExecutionLog";
+export { BurnBreakdown } from "./BurnBreakdown";

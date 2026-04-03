@@ -8,6 +8,7 @@ import { queryKeys } from "@/lib/queryKeys";
 import { ChatMessageList } from "./ChatMessageList";
 import { ChatInput } from "./ChatInput";
 import { ChatAdapterSelector } from "./ChatAdapterSelector";
+import { ChatAgentSelector } from "./ChatAgentSelector";
 import { useChatStream } from "@/hooks/useChatStream";
 
 interface ChatMessageAreaProps {
@@ -54,7 +55,8 @@ export function ChatMessageArea({ companyId, threadId }: ChatMessageAreaProps) {
     setInputValue("");
     setIsSubmitting(true);
     try {
-      const result = await chatApi.sendMessage(threadId, { content });
+      const agentId = (thread?.adapterConfig as Record<string, unknown>)?.chatAgentId as string | undefined;
+      const result = await chatApi.sendMessage(threadId, { content, agentId });
       setActiveRunId(result.runId);
       refetchMessages();
       queryClient.invalidateQueries({ queryKey: queryKeys.chat.threads(companyId) });
@@ -77,9 +79,18 @@ export function ChatMessageArea({ companyId, threadId }: ChatMessageAreaProps) {
         <h2 className="text-sm font-semibold text-[--rc-on-surface] truncate tracking-tight">
           {thread?.title ?? "Chat"}
         </h2>
-        {thread && (
-          <ChatAdapterSelector threadId={threadId} adapterType={thread.adapterType} model={thread.model} companyId={companyId} />
-        )}
+        <div className="flex items-center gap-2">
+          {thread && (
+            <ChatAgentSelector
+              threadId={threadId}
+              companyId={companyId}
+              chatAgentId={(thread.adapterConfig as Record<string, unknown>)?.chatAgentId as string | undefined}
+            />
+          )}
+          {thread && (
+            <ChatAdapterSelector threadId={threadId} adapterType={thread.adapterType} model={thread.model} companyId={companyId} />
+          )}
+        </div>
       </div>
 
       {/* Messages — full canvas from Stitch */}

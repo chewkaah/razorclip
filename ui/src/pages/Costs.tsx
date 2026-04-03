@@ -12,6 +12,7 @@ import type {
 import { ArrowDownLeft, ArrowUpRight, ChevronDown, ChevronRight, Coins, DollarSign, ReceiptText } from "lucide-react";
 import { budgetsApi } from "../api/budgets";
 import { costsApi } from "../api/costs";
+import { BurnBreakdown } from "../components/kinetic/BurnBreakdown";
 import { BillerSpendCard } from "../components/BillerSpendCard";
 import { BudgetIncidentCard } from "../components/BudgetIncidentCard";
 import { BudgetPolicyCard } from "../components/BudgetPolicyCard";
@@ -622,6 +623,8 @@ export function Costs() {
               icon={ArrowUpRight}
             />
           </div>
+
+          {selectedCompanyId && <BurnBreakdown companyId={selectedCompanyId} />}
       </div>
 
       <Tabs value={mainTab} onValueChange={(value) => setMainTab(value as typeof mainTab)}>

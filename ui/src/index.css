@@ -729,6 +729,74 @@ html:not(.dark) *::-webkit-scrollbar-thumb:hover {
   background: #c8c8da;
 }
 
+/* ═══════════════════════════════════════════════════════
+   RAZORCLIP — Light mode full polish
+   Fix hardcoded dark-only borders, shadows, and glows
+   ═══════════════════════════════════════════════════════ */
+
+/* border-white/5 and border-white/10 are invisible in light mode — replace with visible borders */
+html:not(.dark) .razorclip-shell [class*="border-white/5"],
+html:not(.dark) .razorclip-shell [class*="border-white/10"] {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Glass cards in light mode need more contrast */
+html:not(.dark) .razorclip-shell .glass-card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+/* Primary button shadows use green — adapt for light mode */
+html:not(.dark) .razorclip-shell [class*="shadow-[0_10px_20px_-5px_rgba(0,255,170"],
+html:not(.dark) .razorclip-shell [class*="shadow-[0_20px_40px_-12px_rgba(0,255,170"] {
+  box-shadow: 0 4px 14px -3px rgba(5, 150, 105, 0.25) !important;
+}
+
+/* Status ring glows — softer in light mode */
+html:not(.dark) .razorclip-shell [class*="shadow-[0_0_8px_rgba(0,255,170"] {
+  box-shadow: 0 0 6px rgba(5, 150, 105, 0.3) !important;
+}
+html:not(.dark) .razorclip-shell [class*="shadow-[0_0_15px_rgba(139,92,246"] {
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.2) !important;
+}
+
+/* Sidebar in light mode — cleaner separation */
+html:not(.dark) .razorclip-shell aside {
+  border-color: rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
+}
+
+/* Topbar in light mode */
+html:not(.dark) .razorclip-shell header {
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Mobile bottom nav — light mode */
+html:not(.dark) .razorclip-shell nav.fixed.bottom-0 {
+  background: rgba(249, 250, 251, 0.95) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* bg-white/[0.03] and bg-white/[0.06] used in Focus/other pages — invisible in light */
+html:not(.dark) .razorclip-shell [class*="bg-white/[0.03]"],
+html:not(.dark) .razorclip-shell [class*="bg-white/[0.06]"] {
+  background-color: rgba(0, 0, 0, 0.02) !important;
+}
+html:not(.dark) .razorclip-shell [class*="hover:bg-white/[0.06]"]:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Terminal sections should stay dark even in light mode */
+html:not(.dark) .razorclip-shell [class*="bg-black"] {
+  background-color: #1a1a2e !important;
+}
+
+/* Background glows — almost invisible in light mode */
+html:not(.dark) .razorclip-shell .fixed[class*="blur-"] {
+  opacity: 0.3;
+}
+
 /* Auto-hide scrollbar: always reserves space, thumb visible only on hover */
 .scrollbar-auto-hide::-webkit-scrollbar {
   width: 8px !important;

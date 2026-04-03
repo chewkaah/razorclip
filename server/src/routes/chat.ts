@@ -43,8 +43,8 @@ export function chatRoutes(db: Db) {
     const existing = await svc.getThread(req.params.threadId!);
     if (!existing) throw notFound("Thread not found");
     assertCompanyAccess(req, existing.companyId);
-    const { title, adapterType, model } = req.body;
-    const thread = await svc.updateThread(req.params.threadId!, { title, adapterType, model });
+    const { title, adapterType, model, adapterConfig } = req.body;
+    const thread = await svc.updateThread(req.params.threadId!, { title, adapterType, model, adapterConfig });
     res.json(thread);
   });
 
@@ -71,12 +71,13 @@ export function chatRoutes(db: Db) {
     const thread = await svc.getThread(req.params.threadId!);
     if (!thread) throw notFound("Thread not found");
     assertCompanyAccess(req, thread.companyId);
-    const { content } = req.body;
+    const { content, agentId } = req.body;
     const result = await svc.sendMessage({
       threadId: req.params.threadId!,
       companyId: thread.companyId,
       actorId: req.actor?.userId ?? req.actor?.agentId ?? "anonymous",
       content,
+      agentId: agentId ?? undefined,
     });
     res.status(201).json(result);
   });

@@ -1,15 +1,17 @@
 /**
- * ChatLayout — thread sidebar + message canvas
+ * ChatLayout — thread sidebar + message canvas + context panel
  *
  * Mobile (< md): full-screen chat, no thread sidebar visible.
  * Desktop (>= md): sidebar + message area side by side.
+ * Large (>= lg): sidebar + message area + agent context panel.
  */
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { useNavigate } from "@/lib/router";
 import { ChatThreadSidebar } from "./ChatThreadSidebar";
 import { ChatMessageArea } from "./ChatMessageArea";
+import { ChatContextPanel } from "./ChatContextPanel";
 import { chatApi } from "@/api/chat";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/lib/queryKeys";
 
 interface ChatLayoutProps {
@@ -21,6 +23,12 @@ export function ChatLayout({ companyId, threadId }: ChatLayoutProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const handleThreadSelect = useCallback((id: string) => { navigate(`/chat/${id}`); }, [navigate]);
+
+  const { data: activeThread } = useQuery({
+    queryKey: queryKeys.chat.thread(threadId ?? "__none__"),
+    queryFn: () => chatApi.getThread(threadId!),
+    enabled: !!threadId,
+  });
 
   const handleNewMobileThread = useCallback(async () => {
     const thread = await chatApi.createThread(companyId, { adapterType: "claude_local" });
@@ -56,8 +64,12 @@ export function ChatLayout({ companyId, threadId }: ChatLayoutProps) {
           </div>
         )}
       </div>
-      {/* Swipe sidebar visual cue — from Stitch (desktop only) */}
-      <div className="hidden md:block fixed top-20 right-0 h-2/3 w-1.5 bg-[--rc-primary]/20 rounded-l-full" />
+      {/* Context panel — agent profile, lg+ only */}
+      <div className="hidden lg:block w-[320px] shrink-0">
+        <ChatContextPanel companyId={companyId} thread={activeThread ?? null} />
+      </div>
+      {/* Swipe sidebar visual cue — from Stitch (desktop only, hidden on lg when context panel shows) */}
+      <div className="hidden md:block lg:hidden fixed top-20 right-0 h-2/3 w-1.5 bg-[--rc-primary]/20 rounded-l-full" />
     </div>
   );
 }
