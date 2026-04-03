@@ -1479,6 +1479,90 @@ export function issueService(db: Db) {
       return redactIssueComment(comment, currentUserRedactionOptions.enabled);
     },
 
+    /**
+     * Add comment with retry logic and post-write verification.
+     * Retries up to 3 times with exponential backoff (1s, 2s, 4s).
+     * Verifies the comment exists after successful write.
+     * Logs failures with full body for recovery.
+     */
+    addCommentWithRetry: async (
+      issueId: string,
+      body: string,
+      actor: { agentId?: string; userId?: string },
+      opts?: { maxRetries?: number; onRetry?: (attempt: number, error: Error) => void },
+    ) => {
+      const maxRetries = opts?.maxRetries ?? 3;
+      const backoffMs = [1000, 2000, 4000];
+      let lastError: Error | undefined;
+
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          // Step 1: Post the comment
+          const issue = await db
+            .select({ companyId: issues.companyId })
+            .from(issues)
+            .where(eq(issues.id, issueId))
+            .then((rows) => rows[0] ?? null);
+
+          if (!issue) throw notFound("Issue not found");
+
+          const currentUserRedactionOptions = {
+            enabled: (await instanceSettings.getGeneral()).censorUsernameInLogs,
+          };
+          const redactedBody = redactCurrentUserText(body, currentUserRedactionOptions);
+          const [comment] = await db
+            .insert(issueComments)
+            .values({
+              companyId: issue.companyId,
+              issueId,
+              authorAgentId: actor.agentId ?? null,
+              authorUserId: actor.userId ?? null,
+              body: redactedBody,
+            })
+            .returning();
+
+          // Update issue's updatedAt
+          await db
+            .update(issues)
+            .set({ updatedAt: new Date() })
+            .where(eq(issues.id, issueId));
+
+          // Step 2: Verify the comment exists
+          const verified = await db
+            .select({ id: issueComments.id })
+            .from(issueComments)
+            .where(eq(issueComments.id, comment.id))
+            .then((rows) => rows[0] ?? null);
+
+          if (!verified) {
+            throw new Error(`Comment ${comment.id} was inserted but could not be verified`);
+          }
+
+          return redactIssueComment(comment, currentUserRedactionOptions.enabled);
+        } catch (err) {
+          lastError = err instanceof Error ? err : new Error(String(err));
+
+          if (attempt >= maxRetries) {
+            // Log the failure with full body for recovery
+            console.error(
+              `[issues] Failed to add comment after ${maxRetries + 1} attempts. ` +
+              `issueId=${issueId}, agentId=${actor.agentId ?? "none"}, ` +
+              `error=${lastError.message}, bodyLength=${body.length}`
+            );
+            console.error(`[issues] Failed comment body for recovery:\n${body}`);
+            throw lastError;
+          }
+
+          // Wait before retry
+          const delay = backoffMs[attempt] ?? backoffMs[backoffMs.length - 1];
+          opts?.onRetry?.(attempt + 1, lastError);
+          await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+      }
+
+      throw lastError ?? new Error("Unknown error in retry loop");
+    },
+
     createAttachment: async (input: {
       issueId: string;
       issueCommentId?: string | null;

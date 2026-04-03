@@ -2467,18 +2467,26 @@ export function heartbeatService(db: Db) {
       }
       if (issueId && (executionWorkspace.created || runtimeServices.some((service) => !service.reused))) {
         try {
-          await issuesSvc.addComment(
+          await issuesSvc.addCommentWithRetry(
             issueId,
             buildWorkspaceReadyComment({
               workspace: executionWorkspace,
               runtimeServices,
             }),
             { agentId: agent.id },
+            {
+              onRetry: (attempt, error) => {
+                onLog(
+                  "stderr",
+                  `[paperclip] Workspace-ready comment failed (attempt ${attempt}): ${error.message}. Retrying...\n`,
+                ).catch(() => {});
+              },
+            },
           );
         } catch (err) {
           await onLog(
             "stderr",
-            `[paperclip] Failed to post workspace-ready comment: ${err instanceof Error ? err.message : String(err)}\n`,
+            `[paperclip] Failed to post workspace-ready comment after retries: ${err instanceof Error ? err.message : String(err)}\n`,
           );
         }
       }
@@ -2557,18 +2565,26 @@ export function heartbeatService(db: Db) {
           .where(eq(heartbeatRuns.id, run.id));
         if (issueId) {
           try {
-            await issuesSvc.addComment(
+            await issuesSvc.addCommentWithRetry(
               issueId,
               buildWorkspaceReadyComment({
                 workspace: executionWorkspace,
                 runtimeServices: adapterManagedRuntimeServices,
               }),
               { agentId: agent.id },
+              {
+                onRetry: (attempt, error) => {
+                  onLog(
+                    "stderr",
+                    `[paperclip] Adapter-managed runtime comment failed (attempt ${attempt}): ${error.message}. Retrying...\n`,
+                  ).catch(() => {});
+                },
+              },
             );
           } catch (err) {
             await onLog(
               "stderr",
-              `[paperclip] Failed to post adapter-managed runtime comment: ${err instanceof Error ? err.message : String(err)}\n`,
+              `[paperclip] Failed to post adapter-managed runtime comment after retries: ${err instanceof Error ? err.message : String(err)}\n`,
             );
           }
         }
