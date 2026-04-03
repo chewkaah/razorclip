@@ -112,6 +112,13 @@ export function Health() {
     enabled: !!selectedCompanyId,
   });
 
+  const { data: traffic } = useQuery({
+    queryKey: ["bi-traffic", selectedCompanyId],
+    queryFn: () => biApi.traffic(selectedCompanyId!),
+    enabled: !!selectedCompanyId,
+    staleTime: 5 * 60_000,
+  });
+
   const greeting = (() => {
     const h = new Date().getHours();
     if (h < 12) return "Good morning";
@@ -252,14 +259,64 @@ export function Health() {
         )}
       </section>
 
-      {/* Website Traffic — placeholder until Vercel Analytics / GA4 connected */}
+      {/* Website Traffic — LIVE from Vercel Analytics when connected */}
       <section className="space-y-4">
-        <h3 className="text-lg font-light tracking-tight px-2">Website Traffic</h3>
-        <div className="glass-card p-6 rounded-[2rem] border border-white/5 text-center">
-          <span className="material-symbols-outlined text-2xl text-[--rc-on-surface-variant]/30 mb-2 block" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>analytics</span>
-          <p className="text-sm text-[--rc-on-surface-variant]/50">Connect Vercel Analytics or GA4 in Connections to see traffic data.</p>
-          <p className="text-[10px] text-[--rc-on-surface-variant]/30 mt-2">Properties: integral.studio • symphony.to • tracker.integral.sh</p>
+        <div className="flex justify-between items-end px-2">
+          <h3 className="text-lg font-light tracking-tight">Website Traffic</h3>
+          {traffic?.data && (
+            <span className="text-[10px] text-[--rc-primary] uppercase tracking-widest font-medium tabular-nums">
+              Last {traffic.data.period}
+            </span>
+          )}
         </div>
+        {traffic?.connected && traffic.data ? (
+          <div className="glass-card p-6 rounded-[2rem] border border-white/5 space-y-5">
+            {/* Hero metrics */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-1">Visitors</p>
+                <span className="text-2xl font-light tracking-tight tabular-nums">{traffic.data.visitors.toLocaleString()}</span>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-1">Page Views</p>
+                <span className="text-2xl font-light tracking-tight tabular-nums">{traffic.data.pageViews.toLocaleString()}</span>
+              </div>
+            </div>
+            {/* Top pages */}
+            {traffic.data.topPages.length > 0 && (
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2">Top Pages</p>
+                <div className="space-y-1.5">
+                  {traffic.data.topPages.slice(0, 5).map((page) => (
+                    <div key={page.path} className="flex justify-between items-center text-xs">
+                      <span className="text-[--rc-on-surface]/80 truncate mr-4 font-mono">{page.path}</span>
+                      <span className="text-[--rc-on-surface-variant] tabular-nums shrink-0">{page.views.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* Top referrers */}
+            {traffic.data.topReferrers.length > 0 && (
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2">Top Referrers</p>
+                <div className="flex flex-wrap gap-2">
+                  {traffic.data.topReferrers.map((ref) => (
+                    <span key={ref.referrer} className="px-2.5 py-1 rounded-full bg-[--rc-surface-container-low] text-[10px] text-[--rc-on-surface-variant] border border-[--rc-outline-variant]/10">
+                      {ref.referrer || "Direct"} • {ref.views}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="glass-card p-6 rounded-[2rem] border border-white/5 text-center">
+            <span className="material-symbols-outlined text-2xl text-[--rc-on-surface-variant]/30 mb-2 block" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>analytics</span>
+            <p className="text-sm text-[--rc-on-surface-variant]/50">Connect Vercel Analytics or GA4 in Connections to see traffic data.</p>
+            <p className="text-[10px] text-[--rc-on-surface-variant]/30 mt-2">Properties: integral.studio • symphony.to • tracker.integral.sh</p>
+          </div>
+        )}
       </section>
 
       {/* LinkedIn Presence — placeholder until LinkedIn connected */}
