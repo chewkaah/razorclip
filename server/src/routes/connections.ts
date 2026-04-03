@@ -230,11 +230,18 @@ export function connectionRoutes(db: Db) {
       return;
     }
 
+    const { databaseId, organizationId, propertyId, projectId, teamId } = req.body;
+
     const existingMeta = (conn.metadata ?? {}) as Record<string, unknown>;
     const newMeta = { ...existingMeta };
     if (apiKey) newMeta.apiKey = apiKey;
     if (bearerToken) newMeta.bearerToken = bearerToken;
     if (oauthToken) newMeta.oauthToken = oauthToken;
+    if (databaseId) newMeta.databaseId = databaseId;
+    if (organizationId) newMeta.organizationId = organizationId;
+    if (propertyId) newMeta.propertyId = propertyId;
+    if (projectId) newMeta.projectId = projectId;
+    if (teamId) newMeta.teamId = teamId;
 
     // If a 1Password op:// reference is provided, store it in secretRef column
     // and don't store the raw key in metadata

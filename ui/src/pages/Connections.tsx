@@ -88,7 +88,7 @@ export function Connections() {
   // Configure credentials state
   const [configSlug, setConfigSlug] = useState<string | null>(null);
   const [configKey, setConfigKey] = useState("");
-  const configSlot = configSlug ? PREDEFINED_SLOTS.find(s => s.slug === configSlug) : null;
+  const [configExtra, setConfigExtra] = useState("");
 
   const createMutation = useMutation({
     mutationFn: (data: { slug: string; displayName: string; category: string }) =>
@@ -103,12 +103,20 @@ export function Connections() {
   });
 
   const configureMutation = useMutation({
-    mutationFn: ({ slug, credentials }: { slug: string; credentials: { apiKey?: string; bearerToken?: string } }) =>
-      connectionsApi.configure(selectedCompanyId!, slug, credentials),
+    mutationFn: ({ slug, credentials }: { slug: string; credentials: Record<string, string> }) =>
+      connectionsApi.configure(selectedCompanyId!, slug, credentials as any),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["connections", selectedCompanyId] });
       setConfigSlug(null);
       setConfigKey("");
+      setConfigExtra("");
+    },
+  });
+
+  const disconnectMutation = useMutation({
+    mutationFn: (slug: string) => connectionsApi.disable(selectedCompanyId!, slug),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["connections", selectedCompanyId] });
     },
   });
 
@@ -188,6 +196,8 @@ export function Connections() {
 
     return slots;
   }, [apiConnections, plugins]);
+
+  const configSlot = configSlug ? PREDEFINED_SLOTS.find(s => s.slug === configSlug) ?? allSlots.find(s => s.slug === configSlug) : null;
 
   const filtered = search
     ? allSlots.filter(s => s.displayName.toLowerCase().includes(search.toLowerCase()) || s.category.toLowerCase().includes(search.toLowerCase()))
@@ -289,7 +299,7 @@ export function Connections() {
         </div>
       )}
 
-      {/* Configure Credentials Modal */}
+      {/* Configure Credentials Modal — handles all auth types */}
       {configSlug && configSlot && (
         <div className="glass-card rounded-2xl p-6 border border-[--rc-primary]/20 space-y-4">
           <div className="flex items-center justify-between">
@@ -302,44 +312,123 @@ export function Connections() {
                 <p className="text-[10px] text-[--rc-on-surface-variant]">{configSlot.description}</p>
               </div>
             </div>
-            <button onClick={() => { setConfigSlug(null); setConfigKey(""); }} className="text-[--rc-on-surface-variant] hover:text-[--rc-on-surface]">
+            <button onClick={() => { setConfigSlug(null); setConfigKey(""); setConfigExtra(""); }} className="text-[--rc-on-surface-variant] hover:text-[--rc-on-surface]">
               <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>close</span>
             </button>
           </div>
-          <div>
-            <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">
-              {configSlot.authMechanism === "bearer_token" ? "Bearer Token" : configSlot.authMechanism === "oauth2" ? "OAuth Token" : "API Key"}
-            </label>
-            <input
-              type="password"
-              value={configKey}
-              onChange={e => setConfigKey(e.target.value)}
-              placeholder={configSlot.authMechanism === "bearer_token" ? "Bearer token..." : configSlot.slug === "stripe-bi" ? "sk_live_..." : "API key..."}
-              className="w-full bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/20 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40 focus:outline-none focus:border-[--rc-primary]/40 transition-all font-mono"
-            />
-          </div>
+
+          {/* Auth-specific fields */}
+          {configSlot.authMechanism === "oauth2" ? (
+            <div className="space-y-3">
+              <p className="text-xs text-[--rc-on-surface-variant] leading-relaxed">
+                Paste an OAuth access token or a 1Password reference (<code className="text-[--rc-primary] text-[10px]">op://vault/item/field</code>).
+              </p>
+              <div>
+                <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">Access Token</label>
+                <input type="password" value={configKey} onChange={e => setConfigKey(e.target.value)}
+                  placeholder="OAuth access token or op://..."
+                  className="w-full bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/20 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40 focus:outline-none focus:border-[--rc-primary]/40 transition-all font-mono" />
+              </div>
+              {(configSlot.slug === "notion" || configSlot.slug === "ga4") && (
+                <div>
+                  <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">
+                    {configSlot.slug === "notion" ? "Database ID (for CRM sync)" : "Property ID"}
+                  </label>
+                  <input type="text" value={configExtra} onChange={e => setConfigExtra(e.target.value)}
+                    placeholder={configSlot.slug === "notion" ? "Notion database ID..." : "GA4 property ID..."}
+                    className="w-full bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/20 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40 focus:outline-none focus:border-[--rc-primary]/40 transition-all font-mono" />
+                </div>
+              )}
+              {configSlot.slug === "linkedin" && (
+                <div>
+                  <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">Organization ID (optional)</label>
+                  <input type="text" value={configExtra} onChange={e => setConfigExtra(e.target.value)}
+                    placeholder="LinkedIn org ID for company page metrics..."
+                    className="w-full bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/20 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40 focus:outline-none focus:border-[--rc-primary]/40 transition-all font-mono" />
+                </div>
+              )}
+            </div>
+          ) : configSlot.authMechanism === "local" ? (
+            <div className="space-y-3">
+              <p className="text-xs text-[--rc-on-surface-variant] leading-relaxed">
+                This connection runs locally. It&apos;s managed by the MCP server process.
+              </p>
+              <div className="p-3 rounded-xl bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/10 flex items-center gap-2">
+                <span className="material-symbols-outlined text-sm text-emerald-400" style={{ fontVariationSettings: "'FILL' 1, 'wght' 300" }}>check_circle</span>
+                <span className="text-xs text-[--rc-on-surface-variant]">Running locally — no credentials required</span>
+              </div>
+            </div>
+          ) : configSlot.connectionType === "mcp_server" ? (
+            <div className="space-y-3">
+              <p className="text-xs text-[--rc-on-surface-variant] leading-relaxed">
+                This MCP server may require an API key or token to authenticate with the external service.
+              </p>
+              <div>
+                <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">
+                  {configSlot.authMechanism === "bearer_token" ? "Bearer Token" : "API Key"}
+                </label>
+                <input type="password" value={configKey} onChange={e => setConfigKey(e.target.value)}
+                  placeholder={configSlot.authMechanism === "bearer_token" ? "Bearer token..." : "API key..."}
+                  className="w-full bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/20 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40 focus:outline-none focus:border-[--rc-primary]/40 transition-all font-mono" />
+              </div>
+            </div>
+          ) : (
+            <div>
+              <label className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-2 block">
+                {configSlot.authMechanism === "bearer_token" ? "Bearer Token" : "API Key"}
+              </label>
+              <input type="password" value={configKey} onChange={e => setConfigKey(e.target.value)}
+                placeholder={configSlot.slug === "stripe-bi" ? "sk_live_..." : configSlot.authMechanism === "bearer_token" ? "Bearer token..." : "API key..."}
+                className="w-full bg-[--rc-surface-container-low] border border-[--rc-outline-variant]/20 rounded-xl px-4 py-3 text-sm text-[--rc-on-surface] placeholder:text-[--rc-on-surface-variant]/40 focus:outline-none focus:border-[--rc-primary]/40 transition-all font-mono" />
+            </div>
+          )}
+
+          {/* 1Password hint */}
+          <p className="text-[10px] text-[--rc-on-surface-variant]/40">
+            Tip: Use a 1Password reference (<code className="text-[--rc-primary]/60">op://vault/item/field</code>) instead of pasting raw keys.
+          </p>
+
           {configureMutation.error && (
             <p className="text-xs text-[#ffb4ab]">{(configureMutation.error as Error).message}</p>
           )}
           <div className="flex gap-3">
             <button
-              onClick={() => { setConfigSlug(null); setConfigKey(""); }}
+              onClick={() => { setConfigSlug(null); setConfigKey(""); setConfigExtra(""); }}
               className="px-4 py-2 rounded-xl text-xs font-bold text-[--rc-on-surface-variant] border border-[--rc-outline-variant]/20 hover:bg-[--rc-surface-container-high] transition-all"
             >
               Cancel
             </button>
-            <button
-              disabled={!configKey.trim() || configureMutation.isPending}
-              onClick={() => {
-                const creds = configSlot.authMechanism === "bearer_token"
-                  ? { bearerToken: configKey.trim() }
-                  : { apiKey: configKey.trim() };
-                configureMutation.mutate({ slug: configSlug, credentials: creds });
-              }}
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-[--rc-primary] text-[--rc-on-primary] hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
-            >
-              {configureMutation.isPending ? "Saving..." : "Save & Connect"}
-            </button>
+            {configSlot.authMechanism !== "local" && (
+              <button
+                disabled={!configKey.trim() || configureMutation.isPending}
+                onClick={() => {
+                  const isOpRef = configKey.trim().startsWith("op://");
+                  const creds: Record<string, string> = {};
+
+                  if (isOpRef) {
+                    (creds as any).secretRef = configKey.trim();
+                  } else if (configSlot.authMechanism === "oauth2") {
+                    creds.oauthToken = configKey.trim();
+                  } else if (configSlot.authMechanism === "bearer_token") {
+                    creds.bearerToken = configKey.trim();
+                  } else {
+                    creds.apiKey = configKey.trim();
+                  }
+
+                  // Include extra metadata (databaseId, organizationId, propertyId)
+                  if (configExtra.trim()) {
+                    if (configSlot.slug === "notion") creds.databaseId = configExtra.trim();
+                    else if (configSlot.slug === "linkedin") creds.organizationId = configExtra.trim();
+                    else if (configSlot.slug === "ga4") creds.propertyId = configExtra.trim();
+                  }
+
+                  configureMutation.mutate({ slug: configSlug, credentials: creds as any });
+                }}
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-[--rc-primary] text-[--rc-on-primary] hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+              >
+                {configureMutation.isPending ? "Saving..." : "Save & Connect"}
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -398,39 +487,44 @@ export function Connections() {
                   }`}>
                     {slot.status === "connected" || slot.status === "running" ? "● Connected" : slot.status === "error" ? "● Error" : "○ Not connected"}
                   </span>
-                  {slot.status === "connected" || slot.status === "running" ? (
-                    <button
-                      onClick={() => testMutation.mutate(slot.slug)}
-                      disabled={testMutation.isPending}
-                      className="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-500/20 transition-all"
-                    >
-                      {testMutation.isPending ? "Testing..." : "Test"}
-                    </button>
-                  ) : slot.connectionType === "bi_integration" || slot.authMechanism === "api_key" || slot.authMechanism === "bearer_token" ? (
-                    <button
-                      onClick={() => {
-                        setConfigSlug(slot.slug);
-                        setConfigKey("");
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                      className="px-3 py-1.5 rounded-lg bg-[--rc-primary]/10 text-[--rc-primary] text-[10px] font-bold uppercase tracking-widest hover:bg-[--rc-primary]/20 transition-all"
-                    >
-                      Configure
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        setNewName(slot.displayName);
-                        setNewSlug(slot.slug);
-                        setNewCategory(slot.category);
-                        setShowAddForm(true);
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                      className="px-3 py-1.5 rounded-lg bg-[--rc-primary]/10 text-[--rc-primary] text-[10px] font-bold uppercase tracking-widest hover:bg-[--rc-primary]/20 transition-all"
-                    >
-                      Connect
-                    </button>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {(slot.status === "connected" || slot.status === "running") ? (
+                      <>
+                        <button
+                          onClick={() => testMutation.mutate(slot.slug)}
+                          disabled={testMutation.isPending}
+                          className="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-500/20 transition-all"
+                        >
+                          {testMutation.isPending ? "Testing..." : "Test"}
+                        </button>
+                        {slot.authMechanism !== "local" && (
+                          <button
+                            onClick={() => {
+                              setConfigSlug(slot.slug);
+                              setConfigKey("");
+                              setConfigExtra("");
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            }}
+                            className="px-3 py-1.5 rounded-lg bg-[--rc-surface-container-high] text-[--rc-on-surface-variant] text-[10px] font-bold uppercase tracking-widest hover:bg-[--rc-surface-container-highest] transition-all"
+                          >
+                            Edit
+                          </button>
+                        )}
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setConfigSlug(slot.slug);
+                          setConfigKey("");
+                          setConfigExtra("");
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-[--rc-primary]/10 text-[--rc-primary] text-[10px] font-bold uppercase tracking-widest hover:bg-[--rc-primary]/20 transition-all"
+                      >
+                        Configure
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
