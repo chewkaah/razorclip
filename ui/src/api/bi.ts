@@ -67,4 +67,11 @@ export const biApi = {
 
   traffic: (companyId: string) =>
     api.get<BITraffic>(`/companies/${companyId}/bi/traffic`),
+
+  linkedin: (companyId: string) =>
+    api.get<{
+      connected: boolean;
+      data: { followers: number; impressions: number; engagementRate: number; postsThisWeek: number; profileViews: number; period: string } | null;
+      error?: string;
+    }>(`/companies/${companyId}/bi/social/linkedin`),
 };

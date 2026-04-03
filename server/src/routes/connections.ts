@@ -7,6 +7,7 @@ import { checkStripeHealth } from "../services/stripe-bi.js";
 import { checkMercuryHealth } from "../services/mercury-bi.js";
 import { checkNotionHealth } from "../services/notion-bi.js";
 import { checkVercelHealth } from "../services/vercel-bi.js";
+import { checkLinkedInHealth } from "../services/linkedin-bi.js";
 
 export function connectionRoutes(db: Db) {
   const router = Router();
@@ -178,6 +179,24 @@ export function connectionRoutes(db: Db) {
       const result = await checkVercelHealth(key);
       if (result.ok) {
         const updated = await svc.updateStatus(companyId, slug, "connected", { metadata: { ...meta, userName: result.userName } });
+        res.json(updated);
+      } else {
+        const updated = await svc.updateStatus(companyId, slug, "error", { lastError: result.error, errorCode: "invalid_credentials" });
+        res.json(updated);
+      }
+      return;
+    }
+
+    if (slug === "linkedin") {
+      const key = (meta.oauthToken as string) ?? (meta.bearerToken as string) ?? apiKey;
+      if (!key) {
+        const updated = await svc.updateStatus(companyId, slug, "error", { lastError: "No access token configured", errorCode: "invalid_credentials" });
+        res.json(updated);
+        return;
+      }
+      const result = await checkLinkedInHealth(key);
+      if (result.ok) {
+        const updated = await svc.updateStatus(companyId, slug, "connected", { metadata: { ...meta, profileName: result.name } });
         res.json(updated);
       } else {
         const updated = await svc.updateStatus(companyId, slug, "error", { lastError: result.error, errorCode: "invalid_credentials" });

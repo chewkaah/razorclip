@@ -119,6 +119,13 @@ export function Health() {
     staleTime: 5 * 60_000,
   });
 
+  const { data: linkedin } = useQuery({
+    queryKey: ["bi-linkedin", selectedCompanyId],
+    queryFn: () => biApi.linkedin(selectedCompanyId!),
+    enabled: !!selectedCompanyId,
+    staleTime: 5 * 60_000,
+  });
+
   const greeting = (() => {
     const h = new Date().getHours();
     if (h < 12) return "Good morning";
@@ -319,13 +326,36 @@ export function Health() {
         )}
       </section>
 
-      {/* LinkedIn Presence — placeholder until LinkedIn connected */}
+      {/* LinkedIn Presence — LIVE when connected */}
       <section className="space-y-4">
         <h3 className="text-lg font-light tracking-tight px-2">LinkedIn Presence</h3>
-        <div className="glass-card p-6 rounded-[2rem] border border-white/5 text-center">
-          <span className="material-symbols-outlined text-2xl text-[--rc-on-surface-variant]/30 mb-2 block" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>share</span>
-          <p className="text-sm text-[--rc-on-surface-variant]/50">Connect LinkedIn in Connections to see profile views, post performance, and SSI score.</p>
-        </div>
+        {linkedin?.connected && linkedin.data ? (
+          <div className="glass-card p-6 rounded-[2rem] border border-white/5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-1">Followers</p>
+                <span className="text-2xl font-light tracking-tight tabular-nums">{linkedin.data.followers.toLocaleString()}</span>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-1">Impressions</p>
+                <span className="text-2xl font-light tracking-tight tabular-nums">{linkedin.data.impressions.toLocaleString()}</span>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-1">Engagement</p>
+                <span className="text-2xl font-light tracking-tight tabular-nums">{linkedin.data.engagementRate > 0 ? `${(linkedin.data.engagementRate * 100).toFixed(1)}%` : "—"}</span>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-[--rc-on-surface-variant] mb-1">Posts</p>
+                <span className="text-2xl font-light tracking-tight tabular-nums">{linkedin.data.postsThisWeek}</span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="glass-card p-6 rounded-[2rem] border border-white/5 text-center">
+            <span className="material-symbols-outlined text-2xl text-[--rc-on-surface-variant]/30 mb-2 block" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>share</span>
+            <p className="text-sm text-[--rc-on-surface-variant]/50">Connect LinkedIn in Connections to see followers, impressions, and engagement.</p>
+          </div>
+        )}
       </section>
 
       {/* Getting Started callout when no data sources are connected */}
