@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 import type { Db } from "@paperclipai/db";
 import { assertBoard, assertCompanyAccess } from "./authz.js";
 import { connectionsService } from "../services/connections.js";
@@ -40,14 +40,15 @@ export function connectionRoutes(db: Db) {
 
     const cleanSlug = (slug || displayName).toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
 
-    // If it looks like an npm package, try to add it as an MCP via Claude CLI
-    const isNpmPackage = cleanSlug.startsWith("@") || cleanSlug.includes("/") || slug?.includes("@");
+    // Validate slug is a safe npm package name before any shell interaction
+    const NPM_PKG_RE = /^(@[a-z0-9\-~][a-z0-9\-._~]*\/)?[a-z0-9\-~][a-z0-9\-._~]*$/;
+    const isNpmPackage = slug && NPM_PKG_RE.test(slug);
     let mcpInstalled = false;
 
-    if (isNpmPackage && slug) {
+    if (isNpmPackage) {
       try {
-        // Use claude mcp add to register the MCP server
-        execSync(`claude mcp add "${cleanSlug}" -- npx -y "${slug}"`, {
+        // Use execFileSync with arg array to prevent command injection
+        execFileSync("claude", ["mcp", "add", cleanSlug, "--", "npx", "-y", slug], {
           timeout: 30000,
           stdio: "pipe",
         });

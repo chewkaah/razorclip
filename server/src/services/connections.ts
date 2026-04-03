@@ -3,6 +3,19 @@ import type { Db } from "@paperclipai/db";
 import { connections, connectionSyncLogs } from "@paperclipai/db";
 import { randomUUID } from "crypto";
 
+/** Redact secret fields from metadata before sending to client. */
+function redactMetadata(meta: unknown): Record<string, unknown> {
+  if (!meta || typeof meta !== "object") return {};
+  const clean = { ...(meta as Record<string, unknown>) };
+  const SECRET_KEYS = ["apiKey", "bearerToken", "oauthToken", "accessToken", "secretKey"];
+  for (const key of SECRET_KEYS) {
+    if (key in clean && typeof clean[key] === "string") {
+      clean[key] = "***";
+    }
+  }
+  return clean;
+}
+
 function toConnection(row: typeof connections.$inferSelect) {
   return {
     id: row.id,
@@ -14,13 +27,13 @@ function toConnection(row: typeof connections.$inferSelect) {
     authMechanism: row.authMechanism,
     status: row.status,
     pluginId: row.pluginId,
-    secretRef: row.secretRef,
+    hasSecretRef: !!row.secretRef,
     oauthScopes: row.oauthScopes,
     lastSyncAt: row.lastSyncAt?.toISOString() ?? null,
     lastHealthCheckAt: row.lastHealthCheckAt?.toISOString() ?? null,
     lastError: row.lastError,
     errorCode: row.errorCode,
-    metadata: row.metadata,
+    metadata: redactMetadata(row.metadata),
     sortOrder: row.sortOrder,
     isEnabled: row.isEnabled,
     createdAt: row.createdAt.toISOString(),

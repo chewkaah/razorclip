@@ -109,8 +109,8 @@ export function biService(db: Db) {
     return rows.map(toAlert);
   }
 
-  async function acknowledgeAlert(alertId: string) {
-    await db.update(biAlerts).set({ acknowledged: true }).where(eq(biAlerts.id, alertId));
+  async function acknowledgeAlert(alertId: string, companyId: string) {
+    await db.update(biAlerts).set({ acknowledged: true }).where(and(eq(biAlerts.id, alertId), eq(biAlerts.companyId, companyId)));
   }
 
   return { getPulse, listClients, listAlerts, acknowledgeAlert };
