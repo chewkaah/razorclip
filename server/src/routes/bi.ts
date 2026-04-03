@@ -5,6 +5,8 @@ import { connections } from "@paperclipai/db";
 import { assertBoard, assertCompanyAccess } from "./authz.js";
 import { biService } from "../services/bi.js";
 import { fetchVercelTraffic } from "../services/vercel-bi.js";
+import { fetchLinkedInPresence } from "../services/linkedin-bi.js";
+import { resolveConnectionKey } from "../services/onepassword.js";
 
 export function biRoutes(db: Db) {
   const router = Router();
@@ -70,6 +72,41 @@ export function biRoutes(db: Db) {
     try {
       const traffic = await fetchVercelTraffic(token, projectId, teamId);
       res.json({ connected: true, data: traffic });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      res.json({ connected: true, data: null, error: msg });
+    }
+  });
+
+  /** GET /companies/:companyId/bi/social/linkedin — LinkedIn presence metrics */
+  router.get("/companies/:companyId/bi/social/linkedin", async (req, res) => {
+    assertBoard(req);
+    const companyId = req.params.companyId as string;
+    assertCompanyAccess(req, companyId);
+
+    const rows = await db
+      .select({ metadata: connections.metadata, secretRef: connections.secretRef, status: connections.status })
+      .from(connections)
+      .where(and(eq(connections.companyId, companyId), eq(connections.slug, "linkedin")))
+      .limit(1);
+    const conn = rows[0];
+    if (!conn || conn.status !== "connected") {
+      res.json({ connected: false, data: null });
+      return;
+    }
+
+    const token = resolveConnectionKey(conn) ?? process.env.LINKEDIN_ACCESS_TOKEN;
+    if (!token) {
+      res.json({ connected: true, data: null, error: "No access token" });
+      return;
+    }
+
+    const meta = (conn.metadata ?? {}) as Record<string, unknown>;
+    const orgId = (meta.organizationId as string) ?? undefined;
+
+    try {
+      const presence = await fetchLinkedInPresence(token, orgId);
+      res.json({ connected: true, data: presence });
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Unknown error";
       res.json({ connected: true, data: null, error: msg });
