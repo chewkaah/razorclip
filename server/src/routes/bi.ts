@@ -45,22 +45,24 @@ export function biRoutes(db: Db) {
     const companyId = req.params.companyId as string;
     assertCompanyAccess(req, companyId);
 
-    // Resolve Vercel token from connections or env
+    // Resolve Vercel token from connections (supports op:// refs) or env
     const rows = await db
-      .select({ metadata: connections.metadata, status: connections.status })
+      .select({ metadata: connections.metadata, secretRef: connections.secretRef, status: connections.status })
       .from(connections)
       .where(and(eq(connections.companyId, companyId), eq(connections.slug, "vercel-analytics")))
       .limit(1);
     const conn = rows[0];
-    const meta = (conn?.metadata ?? {}) as Record<string, unknown>;
-    const token = (meta.bearerToken as string) ?? (meta.apiKey as string) ?? process.env.VERCEL_API_TOKEN;
-
-    if (!token || conn?.status !== "connected") {
+    if (!conn || conn.status !== "connected") {
+      res.json({ connected: false, data: null });
+      return;
+    }
+    const token = resolveConnectionKey(conn) ?? process.env.VERCEL_API_TOKEN;
+    if (!token) {
       res.json({ connected: false, data: null });
       return;
     }
 
-    // projectId and teamId stored in connection metadata during configure
+    const meta = (conn.metadata ?? {}) as Record<string, unknown>;
     const projectId = (meta.projectId as string) ?? undefined;
     const teamId = (meta.teamId as string) ?? undefined;
 
@@ -118,7 +120,7 @@ export function biRoutes(db: Db) {
     assertBoard(req);
     const { companyId, alertId } = req.params;
     assertCompanyAccess(req, companyId);
-    await svc.acknowledgeAlert(alertId);
+    await svc.acknowledgeAlert(alertId, companyId);
     res.json({ ok: true });
   });
 

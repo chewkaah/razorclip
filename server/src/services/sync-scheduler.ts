@@ -13,6 +13,7 @@ import { resolveConnectionKey } from "./onepassword.js";
 
 const SYNC_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
 let timer: ReturnType<typeof setInterval> | null = null;
+let isSyncing = false;
 
 /** Sync Notion CRM clients into bi_clients table. */
 async function syncNotionClients(db: Db, companyId: string, token: string, databaseId: string, connectionId: string) {
@@ -100,6 +101,12 @@ async function syncNotionClients(db: Db, companyId: string, token: string, datab
 
 /** Run one sync cycle across all companies and their connected BI sources. */
 async function runSyncCycle(db: Db) {
+  if (isSyncing) {
+    console.log("[sync] Previous cycle still running, skipping");
+    return;
+  }
+  isSyncing = true;
+  try {
   // Find all enabled BI connections
   const biConns = await db
     .select()
@@ -125,8 +132,9 @@ async function runSyncCycle(db: Db) {
     }
 
     // Future: add more sync handlers here for other BI sources
-    // if (conn.slug === "vercel-analytics") { ... }
-    // if (conn.slug === "ga4") { ... }
+  }
+  } finally {
+    isSyncing = false;
   }
 }
 
