@@ -72,10 +72,10 @@ export function AgentProfile() {
   return (
     <div className="-m-4 md:-m-8 flex flex-col md:flex-row gap-0 md:h-[calc(100vh-4rem)]">
       {/* Left Column: Hero Profile — from Stitch */}
-      <section className="w-full md:w-[380px] md:h-full border-r border-[--rc-outline-variant]/10 flex flex-col p-8 overflow-y-auto shrink-0">
+      <section className="w-full md:w-[380px] md:h-full md:border-r border-b md:border-b-0 border-[--rc-outline-variant]/10 flex flex-col p-5 md:p-8 overflow-y-auto shrink-0">
         {/* Avatar with status ring */}
-        <div className="relative group mb-10">
-          <div className="w-48 h-48 mx-auto relative">
+        <div className="relative group mb-6 md:mb-10">
+          <div className="w-32 h-32 md:w-48 md:h-48 mx-auto relative">
             <div className="absolute inset-0 rounded-full border-[3px] animate-pulse" style={{ borderColor: `${accentColor}15` }} />
             <div className="absolute inset-2 rounded-full border" style={{ borderColor: `${accentColor}30` }} />
             <div className="absolute -inset-1 rounded-full opacity-40 blur-sm" style={{ background: `linear-gradient(to top right, ${accentColor}, transparent, ${accentLight})` }} />
@@ -91,7 +91,7 @@ export function AgentProfile() {
         <div className="space-y-6">
           {/* Name + Role */}
           <div className="text-center">
-            <h1 className="text-4xl font-extralight tracking-tighter text-[--rc-on-surface] uppercase mb-1">{name}</h1>
+            <h1 className="text-2xl md:text-4xl font-extralight tracking-tighter text-[--rc-on-surface] uppercase mb-1">{name}</h1>
             <div className="inline-flex items-center px-3 py-1 rounded-full border" style={{ backgroundColor: `${accentColor}10`, borderColor: `${accentColor}20` }}>
               <span className="text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: accentLight }}>{agentData.title || roleLabels[agentData.role] || agentData.role}</span>
             </div>
@@ -116,7 +116,7 @@ export function AgentProfile() {
           </div>
 
           {/* Skills */}
-          <div className="pt-8 space-y-4">
+          <div className="pt-4 md:pt-8 space-y-4">
             <h3 className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold opacity-60">Neural Core Skills</h3>
             <div className="flex flex-wrap gap-2">
               {(agentData.title || name).split(/[,&\-]/).map((s: string, i: number) => (
@@ -130,31 +130,31 @@ export function AgentProfile() {
       {/* Middle Column: Performance + Terminal — from Stitch */}
       <section className="flex-1 bg-[--rc-surface-container-lowest]/30 flex flex-col min-w-0">
         {/* Stats Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border-b border-[--rc-outline-variant]/10">
-          <div className="p-8 border-r border-[--rc-outline-variant]/10">
-            <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Tasks Orchestrated</p>
+        <div className="grid grid-cols-3 gap-0 border-b border-[--rc-outline-variant]/10">
+          <div className="p-4 md:p-8 border-r border-[--rc-outline-variant]/10">
+            <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Tasks</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-4xl font-extralight tracking-tight tabular-nums">{totalRuns.toLocaleString()}</span>
+              <span className="text-2xl md:text-4xl font-extralight tracking-tight tabular-nums">{totalRuns.toLocaleString()}</span>
               <span className="text-[10px] text-[--rc-primary]">+12.4%</span>
             </div>
           </div>
-          <div className="p-8 border-r border-[--rc-outline-variant]/10">
-            <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Cost Optimization</p>
+          <div className="p-4 md:p-8 border-r border-[--rc-outline-variant]/10">
+            <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Cost</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-4xl font-extralight tracking-tight tabular-nums">{totalCost}</span>
+              <span className="text-2xl md:text-4xl font-extralight tracking-tight tabular-nums">{totalCost}</span>
               <span className="text-[10px] text-[--rc-outline]">total</span>
             </div>
           </div>
-          <div className="p-8">
+          <div className="p-4 md:p-8">
             <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Status</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-4xl font-extralight tracking-tight capitalize">{agentData.status}</span>
+              <span className="text-2xl md:text-4xl font-extralight tracking-tight capitalize">{agentData.status}</span>
             </div>
           </div>
         </div>
 
         {/* Terminal — from Stitch */}
-        <div className="flex-1 flex flex-col p-8 gap-4 overflow-hidden">
+        <div className="flex-1 flex flex-col p-5 md:p-8 gap-4 overflow-hidden max-h-[280px] md:max-h-none">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="material-symbols-outlined text-[--rc-primary] text-sm" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>terminal</span>
@@ -183,8 +183,8 @@ export function AgentProfile() {
       </section>
 
       {/* Right Column: History + CTA — from Stitch */}
-      <section className="w-full md:w-[340px] md:h-full border-l border-[--rc-outline-variant]/10 flex flex-col bg-[--rc-surface-container-lowest]/50 shrink-0">
-        <div className="p-8 flex-1 overflow-y-auto no-scrollbar">
+      <section className="w-full md:w-[340px] md:h-full border-t md:border-t-0 md:border-l border-[--rc-outline-variant]/10 flex flex-col bg-[--rc-surface-container-lowest]/50 shrink-0">
+        <div className="p-5 md:p-8 flex-1 overflow-y-auto no-scrollbar">
           <h3 className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold opacity-60 mb-6">Recent Completions</h3>
           <div className="space-y-4">
             {recentRuns.length > 0 ? recentRuns.map((run: any) => (
@@ -219,7 +219,7 @@ export function AgentProfile() {
         </div>
 
         {/* Chat CTA — from Stitch */}
-        <div className="p-8 bg-[--rc-surface-container-low]/30 backdrop-blur-md">
+        <div className="p-5 md:p-8 bg-[--rc-surface-container-low]/30 backdrop-blur-md">
           <Link
             to="/chat"
             className="no-underline w-full bg-[--rc-primary] hover:bg-[#e2dfff] text-[--rc-on-primary] font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] flex items-center justify-center gap-3 group shadow-[0_20px_40px_-12px_rgba(0,255,170,0.2)]"
