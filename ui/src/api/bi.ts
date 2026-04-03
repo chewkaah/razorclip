@@ -8,6 +8,26 @@ export interface BIPulse {
   netMargin: number;
   cashPosition: number;
   pipelineValue: number;
+  // Mercury additions
+  monthlyRevenue?: number;
+  monthlyBurn?: number;
+  availableBalance?: number;
+  runwayDays?: number;
+  mrr?: number;
+  activeSubscriptions?: number;
+  churnedThisMonth?: number;
+}
+
+export interface BITraffic {
+  connected: boolean;
+  data: {
+    visitors: number;
+    pageViews: number;
+    topPages: { path: string; views: number }[];
+    topReferrers: { referrer: string; views: number }[];
+    period: string;
+  } | null;
+  error?: string;
 }
 
 export interface BIClient {
@@ -44,4 +64,7 @@ export const biApi = {
 
   acknowledgeAlert: (companyId: string, alertId: string) =>
     api.post<{ ok: boolean }>(`/companies/${companyId}/bi/alerts/${alertId}/acknowledge`, {}),
+
+  traffic: (companyId: string) =>
+    api.get<BITraffic>(`/companies/${companyId}/bi/traffic`),
 };
