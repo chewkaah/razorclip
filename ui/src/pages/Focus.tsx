@@ -239,7 +239,7 @@ export function Focus() {
                   return (
                     <Link
                       key={issue.id}
-                      to={`issues/${issue.id}`}
+                      to={`/issues/${issue.id}`}
                       className="block group"
                     >
                       <div className="relative rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/10 hover:bg-white/[0.06] transition-all duration-200 overflow-hidden">

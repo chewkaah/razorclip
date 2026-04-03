@@ -82,6 +82,14 @@ export function chatService(db: Db) {
     if (patch.adapterType !== undefined) setValues.adapterType = patch.adapterType;
     if (patch.model !== undefined) setValues.model = patch.model;
     if (patch.adapterConfig !== undefined) {
+      // Sanitize — strip prototype pollution keys
+      const BANNED_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+      const sanitized: Record<string, unknown> = {};
+      if (typeof patch.adapterConfig === "object" && patch.adapterConfig !== null) {
+        for (const [k, v] of Object.entries(patch.adapterConfig)) {
+          if (!BANNED_KEYS.has(k)) sanitized[k] = v;
+        }
+      }
       // Merge with existing config so we don't clobber other fields
       const existing = await db
         .select()
@@ -89,7 +97,7 @@ export function chatService(db: Db) {
         .where(eq(chatThreads.id, threadId))
         .then((rows) => rows[0] ?? null);
       const existingConfig = (existing?.adapterConfig ?? {}) as Record<string, unknown>;
-      setValues.adapterConfig = { ...existingConfig, ...patch.adapterConfig };
+      setValues.adapterConfig = { ...existingConfig, ...sanitized };
     }
     const [row] = await db
       .update(chatThreads)

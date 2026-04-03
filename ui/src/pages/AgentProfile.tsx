@@ -168,7 +168,7 @@ export function AgentProfile() {
             <p className="text-[--rc-on-surface-variant] uppercase tracking-widest text-[10px] font-bold mb-2">Tasks</p>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl md:text-4xl font-extralight tracking-tight tabular-nums">{totalRuns.toLocaleString()}</span>
-              <span className="text-[10px] text-[--rc-primary]">+12.4%</span>
+              <span className="text-[10px] text-[--rc-outline]">total</span>
             </div>
           </div>
           <div className="p-4 md:p-8 border-r border-[--rc-outline-variant]/10">

@@ -72,11 +72,25 @@ export function chatRoutes(db: Db) {
     if (!thread) throw notFound("Thread not found");
     assertCompanyAccess(req, thread.companyId);
     const { content, agentId } = req.body;
+
+    // Validate content is a non-empty string
+    if (typeof content !== "string" || content.trim().length === 0) {
+      res.status(400).json({ error: "content must be a non-empty string" });
+      return;
+    }
+
+    // Validate agentId is a UUID if provided
+    const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (agentId !== undefined && agentId !== null && (typeof agentId !== "string" || !UUID_RE.test(agentId))) {
+      res.status(400).json({ error: "agentId must be a valid UUID" });
+      return;
+    }
+
     const result = await svc.sendMessage({
       threadId: req.params.threadId!,
       companyId: thread.companyId,
       actorId: req.actor?.userId ?? req.actor?.agentId ?? "anonymous",
-      content,
+      content: content.trim(),
       agentId: agentId ?? undefined,
     });
     res.status(201).json(result);

@@ -22,11 +22,11 @@ function PipelineFunnel({ clients }: { clients: BIClient[] }) {
     const grouped = new Map<string, BIClient[]>();
     for (const stage of STAGES) grouped.set(stage.key, []);
     for (const c of clients) {
-      const key = c.status === "active" ? "active"
-        : c.status === "onboarding" ? "onboarding"
-        : c.healthScore === "red" || c.status === "at-risk" ? "at-risk"
-        : c.status === "paused" ? "paused"
+      // Check healthScore first so active clients flagged red land in at-risk
+      const key = c.healthScore === "red" || c.status === "at-risk" ? "at-risk"
         : c.status === "churned" ? "churned"
+        : c.status === "paused" ? "paused"
+        : c.status === "onboarding" ? "onboarding"
         : "active";
       const arr = grouped.get(key) ?? [];
       arr.push(c);

@@ -31,6 +31,7 @@ export function ChatContextPanel({ companyId, thread }: ChatContextPanelProps) {
   const { data: agents } = useQuery({
     queryKey: queryKeys.agents.list(companyId),
     queryFn: () => agentsApi.list(companyId),
+    enabled: !!companyId,
   });
 
   const agent = chatAgentId
