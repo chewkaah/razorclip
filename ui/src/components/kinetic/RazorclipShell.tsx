@@ -165,14 +165,14 @@ function SidebarAgentList() {
 /* ── Mobile Bottom Nav ─────────────────────────────── */
 const mobileNavItems = [
   { to: "home", label: "Home", icon: "home" },
+  { to: "inbox/mine", label: "Inbox", icon: "inbox" },
+  { to: "issues", label: "Issues", icon: "error" },
   { to: "chat", label: "Chat", icon: "chat_bubble" },
-  { to: "agents/grid", label: "Agents", icon: "smart_toy" },
-  { to: "health", label: "Health", icon: "monitor_heart" },
 ];
 
 const moreDrawerItems = [
-  { to: "inbox/mine", label: "Inbox", icon: "inbox" },
-  { to: "issues", label: "Issues", icon: "error" },
+  { to: "agents/grid", label: "Agents", icon: "smart_toy" },
+  { to: "health", label: "Health", icon: "monitor_heart" },
   { to: "routines", label: "Routines", icon: "sync" },
   { to: "goals", label: "Goals", icon: "target" },
   { to: "projects", label: "Projects", icon: "folder" },

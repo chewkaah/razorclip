@@ -55,7 +55,7 @@ const PREDEFINED_SLOTS: ConnectionSlot[] = [
   // Infrastructure
   { slug: "scheduled-tasks", displayName: "Scheduled Tasks", category: "Infrastructure", connectionType: "mcp_server", authMechanism: "local", status: "connected", description: "Cron-style scheduled agent tasks", icon: "schedule" },
   { slug: "mcp-registry", displayName: "MCP Registry", category: "Infrastructure", connectionType: "mcp_server", authMechanism: "local", status: "connected", description: "Search and discover MCP connectors", icon: "hub" },
-  { slug: "inmotion", displayName: "InMotion", category: "Infrastructure", connectionType: "api_key", authMechanism: "api_key", status: "disconnected", description: "Web hosting, domains, server management", icon: "dns" },
+  { slug: "remotion", displayName: "Remotion", category: "Creative", connectionType: "mcp_server", authMechanism: "api_key", status: "connected", description: "Code-driven video rendering and generation", icon: "movie" },
   // Financial (BI)
   { slug: "stripe-bi", displayName: "Stripe (Financial)", category: "Financial", connectionType: "bi_integration", authMechanism: "api_key", status: "disconnected", description: "Revenue, MRR, churn, payments", icon: "payments" },
   { slug: "mercury", displayName: "Mercury", category: "Financial", connectionType: "bi_integration", authMechanism: "api_key", status: "disconnected", description: "Banking, cash position, runway", icon: "account_balance" },

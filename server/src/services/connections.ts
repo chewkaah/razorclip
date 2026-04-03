@@ -67,6 +67,7 @@ const DEFAULT_CONNECTIONS = [
   { slug: "vercel", displayName: "Vercel", category: "Dev & Deploy", connectionType: "mcp_server", authMechanism: "bearer_token" },
   { slug: "stripe-mcp", displayName: "Stripe", category: "Dev & Deploy", connectionType: "mcp_server", authMechanism: "api_key" },
   { slug: "canva", displayName: "Canva", category: "Creative", connectionType: "mcp_server", authMechanism: "oauth2" },
+  { slug: "remotion", displayName: "Remotion", category: "Creative", connectionType: "mcp_server", authMechanism: "api_key" },
   { slug: "stripe-bi", displayName: "Stripe (Financial)", category: "Financial", connectionType: "bi_integration", authMechanism: "api_key" },
   { slug: "mercury", displayName: "Mercury", category: "Financial", connectionType: "bi_integration", authMechanism: "api_key" },
   { slug: "vercel-analytics", displayName: "Vercel Analytics", category: "Analytics", connectionType: "bi_integration", authMechanism: "bearer_token" },
