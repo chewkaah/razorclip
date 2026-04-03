@@ -56,6 +56,6 @@ export const connectionsApi = {
   create: (companyId: string, data: { slug: string; displayName: string; category?: string; connectionType?: string; authMechanism?: string }) =>
     api.post<Connection>(`/companies/${companyId}/connections`, data),
 
-  configure: (companyId: string, slug: string, credentials: { apiKey?: string; bearerToken?: string; oauthToken?: string }) =>
+  configure: (companyId: string, slug: string, credentials: Record<string, string>) =>
     api.post<Connection>(`/companies/${companyId}/connections/${slug}/configure`, credentials),
 };
