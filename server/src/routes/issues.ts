@@ -1387,7 +1387,7 @@ export function issueRoutes(db: Db, storage: StorageService) {
       }
     }
 
-    const comment = await svc.addComment(id, req.body.body, {
+    const comment = await svc.addCommentWithRetry(id, req.body.body, {
       agentId: actor.agentId ?? undefined,
       userId: actor.actorType === "user" ? actor.actorId : undefined,
     });
