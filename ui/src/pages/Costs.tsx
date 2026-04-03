@@ -541,8 +541,15 @@ export function Costs() {
       <div className="space-y-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-                <h1 className="text-3xl font-semibold tracking-tight">Costs</h1>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+                <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] mb-2">
+                  <span>Razorclip</span>
+                  <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chevron_right</span>
+                  <span className="text-[--rc-primary]">Costs</span>
+                </nav>
+                <h1 className="text-3xl font-light tracking-tight text-[--rc-on-surface]">
+                  Agent <span className="font-bold">Costs</span>
+                </h1>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-[--rc-on-surface-variant]">
                   Inference spend, platform fees, credits, and live quota windows.
                 </p>
             </div>
