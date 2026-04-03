@@ -4,6 +4,7 @@ import type { Db } from "@paperclipai/db";
 import { assertBoard, assertCompanyAccess } from "./authz.js";
 import { connectionsService } from "../services/connections.js";
 import { checkStripeHealth } from "../services/stripe-bi.js";
+import { checkMercuryHealth } from "../services/mercury-bi.js";
 
 export function connectionRoutes(db: Db) {
   const router = Router();
@@ -121,6 +122,24 @@ export function connectionRoutes(db: Db) {
       const result = await checkStripeHealth(key);
       if (result.ok) {
         const updated = await svc.updateStatus(companyId, slug, "connected", { metadata: { ...meta, accountName: result.accountName } });
+        res.json(updated);
+      } else {
+        const updated = await svc.updateStatus(companyId, slug, "error", { lastError: result.error, errorCode: "invalid_credentials" });
+        res.json(updated);
+      }
+      return;
+    }
+
+    if (slug === "mercury") {
+      const key = apiKey ?? process.env.MERCURY_API_KEY;
+      if (!key) {
+        const updated = await svc.updateStatus(companyId, slug, "error", { lastError: "No API key configured", errorCode: "invalid_credentials" });
+        res.json(updated);
+        return;
+      }
+      const result = await checkMercuryHealth(key);
+      if (result.ok) {
+        const updated = await svc.updateStatus(companyId, slug, "connected", { metadata: { ...meta, accountCount: result.accountCount } });
         res.json(updated);
       } else {
         const updated = await svc.updateStatus(companyId, slug, "error", { lastError: result.error, errorCode: "invalid_credentials" });
