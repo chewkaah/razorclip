@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Daily auth healthcheck for the razorclip agent runtime.
+  Install with:
+    cp scripts/com.agent.auth-healthcheck.plist ~/Library/LaunchAgents/
+    chmod +x scripts/auth-healthcheck.sh
+    launchctl load ~/Library/LaunchAgents/com.agent.auth-healthcheck.plist
+  Runs at 08:00 every day. See scripts/auth-healthcheck.sh for what it checks.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.agent.auth-healthcheck</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/agent0/Dev/razorclip/scripts/auth-healthcheck.sh</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>8</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/agent0/agent/auth-healthcheck-out.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/agent0/agent/auth-healthcheck-error.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>RAZORCLIP_CONTAINER</key>
+        <string>razorclip-server-1</string>
+        <key>HERMES_TG_URL</key>
+        <string>http://localhost:8765/telegram/send</string>
+    </dict>
+</dict>
+</plist>
