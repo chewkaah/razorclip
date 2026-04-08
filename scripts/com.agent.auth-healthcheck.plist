@@ -41,8 +41,10 @@
         <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
         <key>RAZORCLIP_CONTAINER</key>
         <string>razorclip-server-1</string>
-        <key>HERMES_TG_URL</key>
-        <string>http://localhost:8765/telegram/send</string>
+        <key>HERMES_ENV_FILE</key>
+        <string>/Users/agent0/.hermes/.env</string>
+        <key>TELEGRAM_CHAT_ID</key>
+        <string>1870056157</string>
     </dict>
 </dict>
 </plist>
