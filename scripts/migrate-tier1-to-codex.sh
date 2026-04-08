@@ -7,105 +7,82 @@
 # blast radius. See 03-Infrastructure/Agent-Runtime.md, "Tier 1: Codex
 # Subscription (Dev Agents)" in the obsidian vault.
 #
-# Prereqs:
-#   - Run on the mac mini (the box that hosts paperclip).
-#   - paperclip CLI is installed and authenticated (`paperclip agent list` works).
-#   - codex login completed inside the server container (see persistence plan
-#     fix #3 in the runtime doc).
-#   - jq installed.
+# Approach: writes directly to the paperclip postgres via the db container.
+# We don't have a host paperclipai CLI installed and the server is in
+# authenticated/private mode behind better-auth -- direct DB write is the
+# simplest path that needs no token plumbing. The codex_local adapter only
+# needs `{model: "..."}` to function; defaults like `command: "codex"` are
+# applied at execute time, so no normalization is being skipped that matters.
 #
-# Idempotent: re-running just re-applies the same PATCH. No-op if already on
-# codex_local with the same model.
+# Idempotent: re-running just re-applies the same UPDATE.
+#
+# After running: restart the server container so any in-memory agent config
+# cache is dropped:
+#   docker compose -f ~/Dev/razorclip/docker-compose.yml restart server
 
 set -euo pipefail
 
-API_BASE="${PAPERCLIP_API_URL:-http://localhost:3100}"
-AUTH_FILE="${PAPERCLIP_HOME:-$HOME/.paperclip}/auth.json"
+DB_CONTAINER="${RAZORCLIP_DB_CONTAINER:-razorclip-db-1}"
+DB_USER="${RAZORCLIP_DB_USER:-paperclip}"
+DB_NAME="${RAZORCLIP_DB_NAME:-paperclip}"
+DOCKER_BIN="${DOCKER_BIN:-/usr/local/bin/docker}"
 
-if ! command -v jq >/dev/null 2>&1; then
-  echo "error: jq is required" >&2
-  exit 1
-fi
-if [[ ! -f "$AUTH_FILE" ]]; then
-  echo "error: paperclip auth file not found at $AUTH_FILE -- run 'paperclip auth login' first" >&2
-  exit 1
-fi
-
-# Pull the bearer token for this api base out of the CLI auth store.
-TOKEN=$(jq -r --arg base "$API_BASE" '
-  .credentials
-  | to_entries
-  | map(select(.key as $k | ($k | rtrimstr("/")) == ($base | rtrimstr("/"))))
-  | .[0].value.token // empty
-' "$AUTH_FILE")
-
-if [[ -z "$TOKEN" ]]; then
-  echo "error: no stored credential for $API_BASE in $AUTH_FILE" >&2
-  echo "       run: paperclip auth login --api-base $API_BASE" >&2
+if ! "$DOCKER_BIN" inspect -f '{{.State.Running}}' "$DB_CONTAINER" 2>/dev/null | grep -q true; then
+  echo "error: db container $DB_CONTAINER is not running" >&2
   exit 1
 fi
 
-auth_curl() {
-  curl -fsS -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" "$@"
+psql() {
+  "$DOCKER_BIN" exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME" -v ON_ERROR_STOP=1 "$@"
 }
 
-# Per-agent target adapter config. Quinn gets a smaller reasoning model for QA;
-# Bob and Chen get the strongest dev model. Adjust models here if you want to
-# pin different ones -- everything else in the script is generic.
+# Per-agent target model. Quinn gets a smaller reasoning model for QA;
+# Bob and Chen get the strongest dev model. Edit if you want different pins.
 declare -A AGENT_MODEL=(
   [bob]="gpt-5"
   [quinn]="o4-mini"
   [chen]="gpt-5"
 )
 
-# Discover companies the user has access to. We patch agents in every company
-# that contains a name match -- in practice there's only one (Razorclip).
-COMPANIES_JSON=$(auth_curl "$API_BASE/api/companies")
-COMPANY_IDS=$(echo "$COMPANIES_JSON" | jq -r '(.companies // .) | .[].id')
-
-if [[ -z "$COMPANY_IDS" ]]; then
-  echo "error: no companies returned from $API_BASE/api/companies" >&2
-  exit 1
-fi
-
 migrate_agent() {
-  local agent_id="$1" agent_name="$2" model="$3"
-  echo "  -> patching $agent_name ($agent_id) to codex_local / $model"
-  local payload
-  payload=$(jq -nc \
-    --arg model "$model" \
-    '{adapterType: "codex_local", adapterConfig: {model: $model}, replaceAdapterConfig: false}')
-  auth_curl -X PATCH \
-    -d "$payload" \
-    "$API_BASE/api/agents/$agent_id" >/dev/null
-  echo "     ok"
+  local name="$1" model="$2"
+  local matches
+  matches=$(psql -tA -c "SELECT id || '|' || name || '|' || adapter_type FROM agents WHERE LOWER(name) = LOWER('$name');")
+  if [[ -z "$matches" ]]; then
+    echo "  -- no agent named $name, skipping"
+    return
+  fi
+  local count
+  count=$(printf '%s\n' "$matches" | wc -l | tr -d ' ')
+  if [[ "$count" -gt 1 ]]; then
+    echo "  !! multiple agents named $name, refusing to guess:" >&2
+    printf '%s\n' "$matches" >&2
+    return
+  fi
+  local id pretty_name current_adapter
+  id=$(printf '%s' "$matches" | awk -F'|' '{print $1}')
+  pretty_name=$(printf '%s' "$matches" | awk -F'|' '{print $2}')
+  current_adapter=$(printf '%s' "$matches" | awk -F'|' '{print $3}')
+  echo "  -> $pretty_name ($id): $current_adapter -> codex_local / $model"
+  local config_json="{\"model\":\"$model\"}"
+  psql -v "id=$id" -v "cfg=$config_json" <<'SQL' >/dev/null
+UPDATE agents
+SET adapter_type = 'codex_local',
+    adapter_config = :'cfg'::jsonb,
+    updated_at = NOW()
+WHERE id = :'id'::uuid;
+SQL
 }
 
-for company_id in $COMPANY_IDS; do
-  echo "company $company_id:"
-  agents_json=$(auth_curl "$API_BASE/api/companies/$company_id/agents")
-  for key in "${!AGENT_MODEL[@]}"; do
-    model="${AGENT_MODEL[$key]}"
-    matches=$(echo "$agents_json" | jq -c --arg n "$key" '
-      (.agents // .) | map(select((.name // "") | ascii_downcase == $n))
-    ')
-    count=$(echo "$matches" | jq 'length')
-    if [[ "$count" == "0" ]]; then
-      echo "  -- no agent named $key in this company, skipping"
-      continue
-    fi
-    if [[ "$count" -gt 1 ]]; then
-      echo "  !! multiple agents named $key in this company, refusing to guess" >&2
-      continue
-    fi
-    agent_id=$(echo "$matches" | jq -r '.[0].id')
-    current_adapter=$(echo "$matches" | jq -r '.[0].adapterType')
-    if [[ "$current_adapter" == "codex_local" ]]; then
-      echo "  == $key already on codex_local, re-patching to ensure model=$model"
-    fi
-    migrate_agent "$agent_id" "$key" "$model"
-  done
+echo "migrating tier 1 dev agents to codex_local..."
+for name in "${!AGENT_MODEL[@]}"; do
+  migrate_agent "$name" "${AGENT_MODEL[$name]}"
 done
 
 echo
-echo "done. verify with: paperclip agent list --json | jq '.[] | {name, adapterType, adapterConfig}'"
+echo "current state of tier 1 agents:"
+psql -c "SELECT name, adapter_type, adapter_config FROM agents WHERE LOWER(name) IN ('bob','quinn','chen') ORDER BY name;"
+
+echo
+echo "remember to restart the server container so it drops any cached config:"
+echo "  docker compose -f ~/Dev/razorclip/docker-compose.yml restart server"
