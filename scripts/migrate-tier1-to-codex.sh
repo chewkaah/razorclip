@@ -38,11 +38,9 @@ psql() {
 
 # Per-agent target model. Quinn gets a smaller reasoning model for QA;
 # Bob and Chen get the strongest dev model. Edit if you want different pins.
-declare -A AGENT_MODEL=(
-  [bob]="gpt-5"
-  [quinn]="o4-mini"
-  [chen]="gpt-5"
-)
+# Parallel arrays (bash 3.2 on macOS lacks associative arrays).
+AGENT_NAMES=(bob quinn chen)
+AGENT_MODELS=("gpt-5" "o4-mini" "gpt-5")
 
 migrate_agent() {
   local name="$1" model="$2"
@@ -75,8 +73,10 @@ SQL
 }
 
 echo "migrating tier 1 dev agents to codex_local..."
-for name in "${!AGENT_MODEL[@]}"; do
-  migrate_agent "$name" "${AGENT_MODEL[$name]}"
+i=0
+while [ $i -lt ${#AGENT_NAMES[@]} ]; do
+  migrate_agent "${AGENT_NAMES[$i]}" "${AGENT_MODELS[$i]}"
+  i=$((i + 1))
 done
 
 echo
