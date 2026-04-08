@@ -27,8 +27,18 @@ services:
       PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
       PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://localhost:3100}"
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}"
+      # Pin CLI auth dirs so claude_local / codex_local adapters find host tokens.
+      # Container HOME is /paperclip (see Dockerfile), so the CLIs look here by default,
+      # but we set the env vars explicitly to survive any future HOME changes.
+      CLAUDE_CONFIG_DIR: /paperclip/.claude
+      CODEX_HOME: /paperclip/.codex
     volumes:
       - paperclip-data:/paperclip
+      # Bind-mount host CLI auth into the container so subscription logins
+      # done in Terminal.app on the host are visible to in-container agents.
+      # See 03-Infrastructure/Agent-Runtime.md for the full plan.
+      - /Users/agent0/.claude:/paperclip/.claude
+      - /Users/agent0/.codex:/paperclip/.codex
     depends_on:
       db:
         condition: service_healthy
