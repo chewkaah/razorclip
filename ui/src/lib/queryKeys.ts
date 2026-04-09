@@ -1,4 +1,9 @@
 export const queryKeys = {
+  chat: {
+    threads: (companyId: string) => ["chat", "threads", companyId] as const,
+    thread: (threadId: string) => ["chat", "thread", threadId] as const,
+    messages: (threadId: string) => ["chat", "messages", threadId] as const,
+  },
   companies: {
     all: ["companies"] as const,
     detail: (id: string) => ["companies", id] as const,

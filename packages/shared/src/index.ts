@@ -358,6 +358,9 @@ export type {
   PluginWebhookDeliveryRecord,
   QuotaWindow,
   ProviderQuotaResult,
+  ChatThread,
+  ChatMessage,
+  SendMessageResult,
 } from "./types/index.js";
 
 export {

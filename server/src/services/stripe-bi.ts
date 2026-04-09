@@ -18,7 +18,7 @@ export interface StripeHealthCheck {
 /** Create a Stripe client from an API key. Returns null if key is missing. */
 function makeClient(apiKey: string | undefined): Stripe | null {
   if (!apiKey || apiKey.length < 10) return null;
-  return new Stripe(apiKey, { apiVersion: "2025-03-31.basil" });
+  return new Stripe(apiKey, { apiVersion: "2026-03-25.dahlia" });
 }
 
 /** Fetch weekly + monthly revenue, MRR, active subs, and churn. */

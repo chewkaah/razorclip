@@ -225,3 +225,4 @@ export type {
   PluginJobRunRecord,
   PluginWebhookDeliveryRecord,
 } from "./plugin.js";
+export type { ChatThread, ChatMessage, SendMessageResult } from "./chat.js";
