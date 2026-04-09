@@ -501,8 +501,14 @@ export async function execute(ctx: AdapterExecutionContext): Promise<AdapterExec
 
   const buildArgs = (resumeSessionId: string | null) => {
     const args = ["exec", "--json"];
+    args.push("--skip-git-repo-check");
     if (search) args.unshift("--search");
-    if (bypass) args.push("--dangerously-bypass-approvals-and-sandbox");
+    if (bypass) {
+      args.push("--dangerously-bypass-approvals-and-sandbox");
+    } else {
+      // Allow reading host repos bind-mounted into the container (INT-57)
+      args.push("-c", 'sandbox_permissions=["disk-full-read-access"]');
+    }
     if (model) args.push("--model", model);
     if (modelReasoningEffort) args.push("-c", `model_reasoning_effort=${JSON.stringify(modelReasoningEffort)}`);
     if (extraArgs.length > 0) args.push(...extraArgs);

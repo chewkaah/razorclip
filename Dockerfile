@@ -48,7 +48,9 @@ RUN npm install --global --omit=dev @anthropic-ai/claude-code@latest @openai/cod
 # bind-mounted via docker-compose. See Obsidian note
 # 03-Infrastructure/Hermes-Install-Per-Machine.md for the per-host setup.
 COPY docker/hermes-shim.sh /usr/local/bin/hermes
-RUN chmod +x /usr/local/bin/hermes \
+# paperclip-post-comment: retry-safe comment posting for codex_local agents (INT-58)
+COPY docker/paperclip-post-comment.py /usr/local/bin/paperclip-post-comment
+RUN chmod +x /usr/local/bin/hermes /usr/local/bin/paperclip-post-comment \
   && mkdir -p /Users/agent0/.local/bin \
   && ln -sf /usr/local/bin/hermes /Users/agent0/.local/bin/hermes \
   && chown -R node:node /Users/agent0
