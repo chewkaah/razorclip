@@ -50,3 +50,7 @@ tests/release-smoke/test-results/
 tests/release-smoke/playwright-report/
 .superset/
 .claude/worktrees/
+
+# Internal deploy tooling — not for public fork
+deploy.sh
+.claude/skills/deploy-razorclip.md

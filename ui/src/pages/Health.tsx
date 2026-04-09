@@ -321,7 +321,7 @@ export function Health() {
           <div className="glass-card p-6 rounded-[2rem] border border-white/5 text-center">
             <span className="material-symbols-outlined text-2xl text-[--rc-on-surface-variant]/30 mb-2 block" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>analytics</span>
             <p className="text-sm text-[--rc-on-surface-variant]/50">Connect Vercel Analytics or GA4 in Connections to see traffic data.</p>
-            <p className="text-[10px] text-[--rc-on-surface-variant]/30 mt-2">Properties: example.com</p>
+            <p className="text-[10px] text-[--rc-on-surface-variant]/30 mt-2">Connect your domains in Connections to see properties here.</p>
           </div>
         )}
       </section>
