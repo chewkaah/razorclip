@@ -1,6 +1,6 @@
 FROM node:lts-trixie-slim AS base
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends ca-certificates curl git python3 python3-pip \
+  && apt-get install -y --no-install-recommends ca-certificates curl git python3 python3-pip openssh-client \
   && rm -rf /var/lib/apt/lists/*
 RUN corepack enable
 
@@ -38,9 +38,20 @@ FROM base AS production
 WORKDIR /app
 COPY --chown=node:node --from=build /app /app
 RUN npm install --global --omit=dev @anthropic-ai/claude-code@latest @openai/codex@latest opencode-ai \
-  && pip3 install --break-system-packages git+https://github.com/NousResearch/hermes-agent.git \
   && mkdir -p /paperclip \
   && chown node:node /paperclip
+
+# Hermes is not installed in the container. The hermes_local adapter (Victor)
+# spawns /Users/agent0/.local/bin/hermes, which we provide as a shim that SSHes
+# to the host and runs the host-native hermes. This gives Victor full mac
+# capabilities (Obsidian vault, MCPs, filesystem). The host-side SSH key is
+# bind-mounted via docker-compose. See Obsidian note
+# 03-Infrastructure/Hermes-Install-Per-Machine.md for the per-host setup.
+COPY docker/hermes-shim.sh /usr/local/bin/hermes
+RUN chmod +x /usr/local/bin/hermes \
+  && mkdir -p /Users/agent0/.local/bin \
+  && ln -sf /usr/local/bin/hermes /Users/agent0/.local/bin/hermes \
+  && chown -R node:node /Users/agent0
 
 ENV NODE_ENV=production \
   HOME=/paperclip \
