@@ -2,8 +2,6 @@ import { Navigate, Outlet, Route, Routes, useLocation, useParams } from "@/lib/r
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Layout } from "./components/Layout";
-import { RazorclipShell } from "./components/kinetic/RazorclipShell";
-import { InstanceShell } from "./components/kinetic/InstanceShell";
 import { OnboardingWizard } from "./components/OnboardingWizard";
 import { authApi } from "./api/auth";
 import { healthApi } from "./api/health";
@@ -13,6 +11,7 @@ import { Agents } from "./pages/Agents";
 import { AgentDetail } from "./pages/AgentDetail";
 import { Projects } from "./pages/Projects";
 import { ProjectDetail } from "./pages/ProjectDetail";
+import { ProjectWorkspaceDetail } from "./pages/ProjectWorkspaceDetail";
 import { Issues } from "./pages/Issues";
 import { IssueDetail } from "./pages/IssueDetail";
 import { Routines } from "./pages/Routines";
@@ -35,7 +34,9 @@ import { InstanceSettings } from "./pages/InstanceSettings";
 import { InstanceExperimentalSettings } from "./pages/InstanceExperimentalSettings";
 import { PluginManager } from "./pages/PluginManager";
 import { PluginSettings } from "./pages/PluginSettings";
+import { AdapterManager } from "./pages/AdapterManager";
 import { PluginPage } from "./pages/PluginPage";
+import { IssueChatUxLab } from "./pages/IssueChatUxLab";
 import { RunTranscriptUxLab } from "./pages/RunTranscriptUxLab";
 import { OrgChart } from "./pages/OrgChart";
 import { NewAgent } from "./pages/NewAgent";
@@ -43,18 +44,6 @@ import { AuthPage } from "./pages/Auth";
 import { BoardClaimPage } from "./pages/BoardClaim";
 import { CliAuthPage } from "./pages/CliAuth";
 import { InviteLandingPage } from "./pages/InviteLanding";
-import { Chat } from "./pages/Chat";
-import { Home } from "./pages/Home";
-import { Health } from "./pages/Health";
-import { Connections } from "./pages/Connections";
-import { AgentGrid } from "./pages/AgentGrid";
-import { ApprovalQueue } from "./pages/ApprovalQueue";
-import { TicketThread } from "./pages/TicketThread";
-import { AgentProfile } from "./pages/AgentProfile";
-import { IssueThread } from "./pages/IssueThread";
-import { ActiveClients } from "./pages/ActiveClients";
-import { Focus } from "./pages/Focus";
-import { UserProfilePage } from "./pages/UserProfile";
 import { NotFoundPage } from "./pages/NotFound";
 import { queryKeys } from "./lib/queryKeys";
 import { useCompany } from "./context/CompanyContext";
@@ -132,12 +121,7 @@ function CloudAccessGate() {
 function boardRoutes() {
   return (
     <>
-      <Route index element={<Navigate to="home" replace />} />
-      <Route path="home" element={<Home />} />
-      <Route path="health" element={<Health />} />
-      <Route path="connections" element={<Connections />} />
-      <Route path="clients" element={<ActiveClients />} />
-      <Route path="profile" element={<UserProfilePage />} />
+      <Route index element={<Navigate to="dashboard" replace />} />
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="onboarding" element={<OnboardingRoutePage />} />
       <Route path="companies" element={<Companies />} />
@@ -149,15 +133,13 @@ function boardRoutes() {
       <Route path="settings/*" element={<LegacySettingsRedirect />} />
       <Route path="plugins/:pluginId" element={<PluginPage />} />
       <Route path="org" element={<OrgChart />} />
-      <Route path="agents" element={<Navigate to="/agents/grid" replace />} />
-      <Route path="agents/grid" element={<AgentGrid />} />
-      <Route path="agents/all" element={<Agents />} /> {/* legacy */}
+      <Route path="agents" element={<Navigate to="/agents/all" replace />} />
+      <Route path="agents/all" element={<Agents />} />
       <Route path="agents/active" element={<Agents />} />
       <Route path="agents/paused" element={<Agents />} />
       <Route path="agents/error" element={<Agents />} />
       <Route path="agents/new" element={<NewAgent />} />
       <Route path="agents/:agentId" element={<AgentDetail />} />
-      <Route path="agents/:agentId/profile" element={<AgentProfile />} />
       <Route path="agents/:agentId/:tab" element={<AgentDetail />} />
       <Route path="agents/:agentId/runs/:runId" element={<AgentDetail />} />
       <Route path="projects" element={<Projects />} />
@@ -165,6 +147,8 @@ function boardRoutes() {
       <Route path="projects/:projectId/overview" element={<ProjectDetail />} />
       <Route path="projects/:projectId/issues" element={<ProjectDetail />} />
       <Route path="projects/:projectId/issues/:filter" element={<ProjectDetail />} />
+      <Route path="projects/:projectId/workspaces/:workspaceId" element={<ProjectWorkspaceDetail />} />
+      <Route path="projects/:projectId/workspaces" element={<ProjectDetail />} />
       <Route path="projects/:projectId/configuration" element={<ProjectDetail />} />
       <Route path="projects/:projectId/budget" element={<ProjectDetail />} />
       <Route path="issues" element={<Issues />} />
@@ -174,19 +158,15 @@ function boardRoutes() {
       <Route path="issues/done" element={<Navigate to="/issues" replace />} />
       <Route path="issues/recent" element={<Navigate to="/issues" replace />} />
       <Route path="issues/:issueId" element={<IssueDetail />} />
-      <Route path="issues/:issueId/thread" element={<TicketThread />} />
-      <Route path="issues/:issueId/thread-view" element={<IssueThread />} />
       <Route path="routines" element={<Routines />} />
       <Route path="routines/:routineId" element={<RoutineDetail />} />
       <Route path="execution-workspaces/:workspaceId" element={<ExecutionWorkspaceDetail />} />
       <Route path="goals" element={<Goals />} />
       <Route path="goals/:goalId" element={<GoalDetail />} />
-      <Route path="approvals" element={<Navigate to="/approvals/queue" replace />} />
-      <Route path="approvals/queue" element={<ApprovalQueue />} />
+      <Route path="approvals" element={<Navigate to="/approvals/pending" replace />} />
       <Route path="approvals/pending" element={<Approvals />} />
       <Route path="approvals/all" element={<Approvals />} />
       <Route path="approvals/:approvalId" element={<ApprovalDetail />} />
-      <Route path="focus" element={<Focus />} />
       <Route path="costs" element={<Costs />} />
       <Route path="activity" element={<Activity />} />
       <Route path="inbox" element={<InboxRootRedirect />} />
@@ -195,10 +175,10 @@ function boardRoutes() {
       <Route path="inbox/unread" element={<Inbox />} />
       <Route path="inbox/all" element={<Inbox />} />
       <Route path="inbox/new" element={<Navigate to="/inbox/mine" replace />} />
-      <Route path="chat" element={<Chat />} />
-      <Route path="chat/:threadId" element={<Chat />} />
       <Route path="design-guide" element={<DesignGuide />} />
+      <Route path="tests/ux/chat" element={<IssueChatUxLab />} />
       <Route path="tests/ux/runs" element={<RunTranscriptUxLab />} />
+      <Route path="instance/settings/adapters" element={<AdapterManager />} />
       <Route path=":pluginRoutePath" element={<PluginPage />} />
       <Route path="*" element={<NotFoundPage scope="board" />} />
     </>
@@ -275,7 +255,7 @@ function CompanyRootRedirect() {
     return <NoCompaniesStartPage />;
   }
 
-  return <Navigate to={`/${targetCompany.issuePrefix}/home`} replace />;
+  return <Navigate to={`/${targetCompany.issuePrefix}/dashboard`} replace />;
 }
 
 function UnprefixedBoardRedirect() {
@@ -338,13 +318,14 @@ export function App() {
           <Route index element={<CompanyRootRedirect />} />
           <Route path="onboarding" element={<OnboardingRoutePage />} />
           <Route path="instance" element={<Navigate to="/instance/settings/general" replace />} />
-          <Route path="instance/settings" element={<InstanceShell />}>
+          <Route path="instance/settings" element={<Layout />}>
             <Route index element={<Navigate to="general" replace />} />
             <Route path="general" element={<InstanceGeneralSettings />} />
             <Route path="heartbeats" element={<InstanceSettings />} />
             <Route path="experimental" element={<InstanceExperimentalSettings />} />
             <Route path="plugins" element={<PluginManager />} />
             <Route path="plugins/:pluginId" element={<PluginSettings />} />
+            <Route path="adapters" element={<AdapterManager />} />
           </Route>
           <Route path="companies" element={<UnprefixedBoardRedirect />} />
           <Route path="issues" element={<UnprefixedBoardRedirect />} />
@@ -364,9 +345,13 @@ export function App() {
           <Route path="projects/:projectId/overview" element={<UnprefixedBoardRedirect />} />
           <Route path="projects/:projectId/issues" element={<UnprefixedBoardRedirect />} />
           <Route path="projects/:projectId/issues/:filter" element={<UnprefixedBoardRedirect />} />
+          <Route path="projects/:projectId/workspaces" element={<UnprefixedBoardRedirect />} />
+          <Route path="projects/:projectId/workspaces/:workspaceId" element={<UnprefixedBoardRedirect />} />
           <Route path="projects/:projectId/configuration" element={<UnprefixedBoardRedirect />} />
+          <Route path="execution-workspaces/:workspaceId" element={<UnprefixedBoardRedirect />} />
+          <Route path="tests/ux/chat" element={<UnprefixedBoardRedirect />} />
           <Route path="tests/ux/runs" element={<UnprefixedBoardRedirect />} />
-          <Route path=":companyPrefix" element={<RazorclipShell />}>
+          <Route path=":companyPrefix" element={<Layout />}>
             {boardRoutes()}
           </Route>
           <Route path="*" element={<NotFoundPage scope="global" />} />

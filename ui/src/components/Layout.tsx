@@ -14,10 +14,10 @@ import { NewGoalDialog } from "./NewGoalDialog";
 import { NewAgentDialog } from "./NewAgentDialog";
 import { ToastViewport } from "./ToastViewport";
 import { MobileBottomNav } from "./MobileBottomNav";
-import { FloatingChatBar } from "./chat/FloatingChatBar";
 import { WorktreeBanner } from "./WorktreeBanner";
 import { DevRestartBanner } from "./DevRestartBanner";
 import { useDialog } from "../context/DialogContext";
+import { GeneralSettingsProvider } from "../context/GeneralSettingsContext";
 import { usePanel } from "../context/PanelContext";
 import { useCompany } from "../context/CompanyContext";
 import { useSidebar } from "../context/SidebarContext";
@@ -25,6 +25,7 @@ import { useTheme } from "../context/ThemeContext";
 import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
 import { useCompanyPageMemory } from "../hooks/useCompanyPageMemory";
 import { healthApi } from "../api/health";
+import { instanceSettingsApi } from "../api/instanceSettings";
 import { shouldSyncCompanySelectionFromRoute } from "../lib/company-selection";
 import {
   DEFAULT_INSTANCE_SETTINGS_PATH,
@@ -86,6 +87,10 @@ export function Layout() {
     },
     refetchIntervalInBackground: true,
   });
+  const keyboardShortcutsEnabled = useQuery({
+    queryKey: queryKeys.instance.generalSettings,
+    queryFn: () => instanceSettingsApi.getGeneral(),
+  }).data?.keyboardShortcuts === true;
 
   useEffect(() => {
     if (companiesLoading || onboardingTriggered.current) return;
@@ -142,6 +147,7 @@ export function Layout() {
   useCompanyPageMemory();
 
   useKeyboardShortcuts({
+    enabled: keyboardShortcutsEnabled,
     onNewIssue: () => openNewIssue(),
     onToggleSidebar: toggleSidebar,
     onTogglePanel: togglePanel,
@@ -260,12 +266,13 @@ export function Layout() {
   }, [location.hash, location.pathname, location.search]);
 
   return (
-    <div
+    <GeneralSettingsProvider value={{ keyboardShortcutsEnabled }}>
+      <div
       className={cn(
         "bg-background text-foreground pt-[env(safe-area-inset-top)]",
         isMobile ? "min-h-dvh" : "flex h-dvh flex-col overflow-hidden",
       )}
-    >
+      >
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[200] focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -295,7 +302,7 @@ export function Layout() {
               <CompanyRail />
               {isInstanceSettingsRoute ? <InstanceSidebar /> : <Sidebar />}
             </div>
-            <div className="border-t border-r border-white/5 px-3 py-2 bg-[--rc-surface-container-lowest]">
+            <div className="border-t border-r border-border px-3 py-2 bg-background">
               <div className="flex items-center gap-1">
                 <a
                   href="https://docs.paperclip.ing/"
@@ -353,7 +360,7 @@ export function Layout() {
                 {isInstanceSettingsRoute ? <InstanceSidebar /> : <Sidebar />}
               </div>
             </div>
-            <div className="border-t border-r border-white/5 px-3 py-2">
+            <div className="border-t border-r border-border px-3 py-2">
               <div className="flex items-center gap-1">
                 <a
                   href="https://docs.paperclip.ing/"
@@ -431,13 +438,13 @@ export function Layout() {
         </div>
       </div>
       {isMobile && <MobileBottomNav visible={mobileNavVisible} />}
-      {!isMobile && <FloatingChatBar />}
       <CommandPalette />
       <NewIssueDialog />
       <NewProjectDialog />
       <NewGoalDialog />
       <NewAgentDialog />
       <ToastViewport />
-    </div>
+      </div>
+    </GeneralSettingsProvider>
   );
 }

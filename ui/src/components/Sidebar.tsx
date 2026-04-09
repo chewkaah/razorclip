@@ -11,10 +11,6 @@ import {
   Boxes,
   Repeat,
   Settings,
-  MessageSquare,
-  House,
-  HeartPulse,
-  Plug,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { SidebarSection } from "./SidebarSection";
@@ -51,7 +47,7 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="w-60 h-full min-h-0 border-r border-white/5 bg-[--rc-surface-container-lowest] flex flex-col">
+    <aside className="w-60 h-full min-h-0 border-r border-border bg-background flex flex-col">
       {/* Top bar: Company name (bold) + Search — aligned with top sections (no visible border) */}
       <div className="flex items-center gap-1 px-3 h-12 shrink-0">
         {selectedCompany?.brandColor && (
@@ -60,7 +56,7 @@ export function Sidebar() {
             style={{ backgroundColor: selectedCompany.brandColor }}
           />
         )}
-        <span className="flex-1 text-sm font-bold text-[--rc-on-surface] truncate pl-1 tracking-tight">
+        <span className="flex-1 text-sm font-bold text-foreground truncate pl-1">
           {selectedCompany?.name ?? "Select company"}
         </span>
         <Button
@@ -83,9 +79,7 @@ export function Sidebar() {
             <SquarePen className="h-4 w-4 shrink-0" />
             <span className="truncate">New Issue</span>
           </button>
-          <SidebarNavItem to="/home" label="Home" icon={House} />
           <SidebarNavItem to="/dashboard" label="Dashboard" icon={LayoutDashboard} liveCount={liveRunCount} />
-          <SidebarNavItem to="/chat" label="Chat" icon={MessageSquare} />
           <SidebarNavItem
             to="/inbox"
             label="Inbox"
@@ -113,15 +107,10 @@ export function Sidebar() {
 
         <SidebarAgents />
 
-        <SidebarSection label="Business">
-          <SidebarNavItem to="/health" label="Health" icon={HeartPulse} />
-          <SidebarNavItem to="/connections" label="Connections" icon={Plug} />
-          <SidebarNavItem to="/costs" label="Costs" icon={DollarSign} />
-        </SidebarSection>
-
         <SidebarSection label="Company">
           <SidebarNavItem to="/org" label="Org" icon={Network} />
           <SidebarNavItem to="/skills" label="Skills" icon={Boxes} />
+          <SidebarNavItem to="/costs" label="Costs" icon={DollarSign} />
           <SidebarNavItem to="/activity" label="Activity" icon={History} />
           <SidebarNavItem to="/company/settings" label="Settings" icon={Settings} />
         </SidebarSection>

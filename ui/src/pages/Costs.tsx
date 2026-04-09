@@ -12,7 +12,6 @@ import type {
 import { ArrowDownLeft, ArrowUpRight, ChevronDown, ChevronRight, Coins, DollarSign, ReceiptText } from "lucide-react";
 import { budgetsApi } from "../api/budgets";
 import { costsApi } from "../api/costs";
-import { BurnBreakdown } from "../components/kinetic/BurnBreakdown";
 import { BillerSpendCard } from "../components/BillerSpendCard";
 import { BudgetIncidentCard } from "../components/BudgetIncidentCard";
 import { BudgetPolicyCard } from "../components/BudgetPolicyCard";
@@ -542,15 +541,8 @@ export function Costs() {
       <div className="space-y-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-                <nav className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[--rc-on-surface-variant] mb-2">
-                  <span>Razorclip</span>
-                  <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 0, 'wght' 300" }}>chevron_right</span>
-                  <span className="text-[--rc-primary]">Costs</span>
-                </nav>
-                <h1 className="text-3xl font-light tracking-tight text-[--rc-on-surface]">
-                  Agent <span className="font-bold">Costs</span>
-                </h1>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-[--rc-on-surface-variant]">
+                <h1 className="text-3xl font-semibold tracking-tight">Costs</h1>
+                <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
                   Inference spend, platform fees, credits, and live quota windows.
                 </p>
             </div>
@@ -623,8 +615,6 @@ export function Costs() {
               icon={ArrowUpRight}
             />
           </div>
-
-          {selectedCompanyId && <BurnBreakdown companyId={selectedCompanyId} />}
       </div>
 
       <Tabs value={mainTab} onValueChange={(value) => setMainTab(value as typeof mainTab)}>

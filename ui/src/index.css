@@ -3,59 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ═══════════════════════════════════════════════════════
-   KINETIC TERMINAL — Razorclip V1 Design System
-   The Kinetic Terminal merges Bloomberg data density with
-   iMessage frosted aesthetics and Linear surgical precision.
-   ═══════════════════════════════════════════════════════ */
-
 @theme inline {
-  /* Kinetic Terminal: Surface tiers (Integral palette) */
-  --color-kt-surface: #0A0A0A;
-  --color-kt-surface-dim: #0A0A0A;
-  --color-kt-surface-container-lowest: #080808;
-  --color-kt-surface-container-low: #141414;
-  --color-kt-surface-container: #1A1A1A;
-  --color-kt-surface-container-high: #222222;
-  --color-kt-surface-container-highest: #2A2A2A;
-  --color-kt-surface-bright: #333333;
-  --color-kt-surface-variant: #2A2A2A;
-
-  /* Kinetic Terminal: Primary accent (Integral neon green) */
-  --color-kt-primary: #00FFAA;
-  --color-kt-primary-container: #00CC88;
-  --color-kt-on-primary: #080808;
-
-  /* Kinetic Terminal: Text layers */
-  --color-kt-on-surface: #E5E5E5;
-  --color-kt-on-surface-variant: #A0A0A0;
-  --color-kt-outline: #555555;
-  --color-kt-outline-variant: #333333;
-
-  /* Kinetic Terminal: Semantic */
-  --color-kt-tertiary: #eac400;
-  --color-kt-error: #FF6B6B;
-
-  /* Kinetic Terminal: Agent accents */
-  --color-agent-dante: #8B5CF6;
-  --color-agent-dante-light: #D8B4FE;
-  --color-agent-brent: #3B82F6;
-  --color-agent-brent-light: #93C5FD;
-  --color-agent-rex: #10B981;
-  --color-agent-rex-light: #6EE7B7;
-  --color-agent-scout: #F59E0B;
-  --color-agent-scout-light: #FCD34D;
-  --color-agent-nova: #EC4899;
-  --color-agent-nova-light: #FBCFE8;
-  --color-agent-victor: #EAB308;
-  --color-agent-victor-light: #FEF08A;
-
-  /* Kinetic Terminal: Metric colors */
-  --color-kt-positive: #10B981;
-  --color-kt-warning: #F59E0B;
-  --color-kt-danger: #ffb4ab;
-
-  /* Original Paperclip theme tokens (preserved) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -88,132 +36,82 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
 }
 
-/* ═══════════════════════════════════════════════════════
-   RAZORCLIP — Light Mode (Integral palette)
-   Matte, high-contrast inverse. Clean and legible.
-   Colors drawn from Integral Studio brand system.
-   ═══════════════════════════════════════════════════════ */
 :root {
   color-scheme: light;
-  --radius: 0.75rem;
-  --background: #FAFAFA;
-  --foreground: #0A0A0A;
-  --card: #FFFFFF;
-  --card-foreground: #0A0A0A;
-  --popover: #FFFFFF;
-  --popover-foreground: #0A0A0A;
-  --primary: #059669;             /* Integral green (darker for light bg legibility) */
-  --primary-foreground: #FFFFFF;
-  --secondary: #F3F4F6;
-  --secondary-foreground: #080808;
-  --muted: #F3F4F6;
-  --muted-foreground: #525252;
-  --accent: #F0FDF4;              /* green tint for accent surfaces */
-  --accent-foreground: #080808;
-  --destructive: #DC2626;
-  --destructive-foreground: #FFFFFF;
-  --border: rgba(0, 0, 0, 0.10);
-  --input: rgba(0, 0, 0, 0.10);
-  --ring: #059669;
-  --chart-1: #059669;
-  --chart-2: #059669;
-  --chart-3: #D97706;
-  --chart-4: #DB2777;
-  --chart-5: #2563EB;
-  --sidebar: #F9FAFB;
-  --sidebar-foreground: #080808;
-  --sidebar-primary: #059669;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F3F4F6;
-  --sidebar-accent-foreground: #080808;
-  --sidebar-border: rgba(0, 0, 0, 0.08);
-  --sidebar-ring: #059669;
-
-  /* Razorclip semantic colors — light (Integral palette) */
-  --rc-surface: #FAFAFA;
-  --rc-surface-dim: #F3F4F6;
-  --rc-surface-container-lowest: #FFFFFF;
-  --rc-surface-container-low: #F9FAFB;
-  --rc-surface-container: #F3F4F6;
-  --rc-surface-container-high: #E5E7EB;
-  --rc-surface-container-highest: #D1D5DB;
-  --rc-on-surface: #080808;
-  --rc-on-surface-variant: #525252;
-  --rc-primary: #059669;
-  --rc-primary-light: #6EE7B7;
-  --rc-on-primary: #FFFFFF;
-  --rc-outline: #9CA3AF;
-  --rc-outline-variant: #D1D5DB;
-  --rc-glass-bg: rgba(255, 255, 255, 0.85);
-  --rc-glass-border: rgba(0, 0, 0, 0.08);
-  --rc-sidebar-bg: #F9FAFB;
-  --rc-topbar-bg: rgba(250, 250, 250, 0.9);
+  --radius: 0;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
-/* ═══════════════════════════════════════════════════════
-   KINETIC TERMINAL — Dark theme (Integral palette)
-   Near-black surfaces, neon green primary, purple secondary.
-   Brand: #0A0A0A bg, #03FFAA green, #7c3aed purple.
-   ═══════════════════════════════════════════════════════ */
 .dark {
-  --background: #080808;          /* Integral near-black */
-  --foreground: #FAFAFA;
-  --card: #1F1F1F;
-  --card-foreground: #FAFAFA;
-  --popover: #1F1F1F;
-  --popover-foreground: #FAFAFA;
-  --primary: #00FFAA;             /* Integral neon green */
-  --primary-foreground: #080808;
-  --secondary: #1F1F1F;
-  --secondary-foreground: #FAFAFA;
-  --muted: #141414;
-  --muted-foreground: #999999;
-  --accent: #1F1F1F;
-  --accent-foreground: #FAFAFA;
-  --destructive: #FF6B6B;
-  --destructive-foreground: #FAFAFA;
-  --border: rgba(255, 255, 255, 0.06);
-  --input: rgba(255, 255, 255, 0.06);
-  --ring: #00FFAA;
-  --chart-1: #8B5CF6;
-  --chart-2: #10B981;
-  --chart-3: #F59E0B;
-  --chart-4: #EC4899;
-  --chart-5: #3B82F6;
-  --sidebar: #080808;
-  --sidebar-foreground: #FAFAFA;
-  --sidebar-primary: #00FFAA;
-  --sidebar-primary-foreground: #080808;
-  --sidebar-accent: #1F1F1F;
-  --sidebar-accent-foreground: #FAFAFA;
-  --sidebar-border: rgba(255, 255, 255, 0.06);
-  --sidebar-ring: #00FFAA;
-
-  /* Razorclip semantic colors — dark (Integral palette) */
-  --rc-surface: #080808;
-  --rc-surface-dim: #080808;
-  --rc-surface-container-lowest: #050505;
-  --rc-surface-container-low: #141414;
-  --rc-surface-container: #1F1F1F;
-  --rc-surface-container-high: #2A2A2A;
-  --rc-surface-container-highest: #3F3C39;
-  --rc-on-surface: #FAFAFA;
-  --rc-on-surface-variant: #999999;
-  --rc-primary: #00FFAA;          /* Integral neon green */
-  --rc-primary-light: #66FFD0;
-  --rc-on-primary: #080808;
-  --rc-outline: #3F3C39;
-  --rc-outline-variant: #2A2A2A;
-  --rc-glass-bg: rgba(8, 8, 8, 0.75);
-  --rc-glass-border: rgba(255, 255, 255, 0.06);
-  --rc-sidebar-bg: rgba(8, 8, 8, 0.95);
-  --rc-topbar-bg: rgba(8, 8, 8, 0.8);
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.637 0.237 25.331);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.145 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
 }
 
 @layer base {
@@ -227,276 +125,12 @@
   body {
     @apply bg-background text-foreground antialiased;
     height: 100%;
-    overflow: hidden; /* Paperclip Layout needs this — RazorclipShell overrides per-page */
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  }
-  /* RazorclipShell pages: main content scrolls, body stays locked for sidebar */
-  body:has(.razorclip-shell) {
     overflow: hidden;
   }
   h1,
   h2,
   h3 {
     text-wrap: balance;
-  }
-
-  /* ═══════════════════════════════════════════════════════
-     KINETIC TERMINAL — Global component overrides
-     Force ALL old Paperclip components to look like KT
-     ═══════════════════════════════════════════════════════ */
-
-  /* Round all sharp corners — Paperclip uses border-radius: 0 */
-  .dark [data-slot="dialog-content"],
-  .dark [data-slot="popover-content"],
-  .dark [data-slot="select-content"],
-  .dark [data-slot="dropdown-menu-content"],
-  .dark [data-slot="sheet-content"] {
-    border-radius: 1rem !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
-    background: #1e1f26 !important;
-    backdrop-filter: blur(24px);
-  }
-
-  /* Buttons — soften and round */
-  .dark button[class*="bg-primary"],
-  .dark [data-slot="button"][class*="default"] {
-    border-radius: 0.75rem;
-  }
-
-  .dark button[class*="variant-outline"],
-  .dark [data-slot="button"][class*="outline"] {
-    border-color: rgba(255, 255, 255, 0.1);
-    border-radius: 0.75rem;
-  }
-
-  /* Tab bars — glass style */
-  .dark [role="tablist"] {
-    background: rgba(26, 29, 39, 0.6) !important;
-    border-radius: 0.75rem !important;
-    border: 1px solid rgba(255, 255, 255, 0.06) !important;
-    padding: 3px !important;
-    backdrop-filter: blur(12px);
-  }
-
-  .dark [role="tab"] {
-    border-radius: 0.5rem !important;
-    font-size: 0.75rem !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-    font-weight: 600 !important;
-    transition: all 0.2s !important;
-  }
-
-  .dark [role="tab"][data-state="active"] {
-    background: rgba(194, 193, 255, 0.1) !important;
-    color: #c2c1ff !important;
-  }
-
-  /* Entity rows — glass treatment */
-  .dark [class*="EntityRow"],
-  .dark a[class*="hover:bg-accent"] {
-    border-radius: 0.75rem;
-    transition: all 0.2s;
-  }
-
-  .dark [class*="EntityRow"]:hover,
-  .dark a[class*="hover:bg-accent"]:hover {
-    background: rgba(255, 255, 255, 0.04) !important;
-  }
-
-  /* Status badges — pill shape */
-  .dark [class*="StatusBadge"],
-  .dark [class*="status-badge"] {
-    border-radius: 9999px !important;
-    font-size: 0.625rem !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-    font-weight: 700 !important;
-  }
-
-  /* Cards and panels — glass treatment */
-  .dark [class*="rounded-lg"][class*="border"][class*="bg-card"] {
-    background: rgba(26, 29, 39, 0.6) !important;
-    backdrop-filter: blur(16px);
-    border-color: rgba(255, 255, 255, 0.06) !important;
-    border-radius: 1rem !important;
-  }
-
-  /* Input fields — KT style */
-  .dark input[class*="border"],
-  .dark textarea[class*="border"],
-  .dark [data-slot="select-trigger"] {
-    border-color: rgba(255, 255, 255, 0.08) !important;
-    border-radius: 0.75rem !important;
-    background: #1e1f26 !important;
-  }
-
-  .dark input:focus,
-  .dark textarea:focus {
-    border-color: rgba(194, 193, 255, 0.4) !important;
-    box-shadow: 0 0 20px rgba(194, 193, 255, 0.08) !important;
-  }
-
-  /* Section labels — uppercase tracking */
-  .dark [class*="SidebarSection"] span[class*="text-xs"],
-  .dark [class*="text-xs"][class*="font-medium"][class*="text-muted"] {
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 700;
-    font-size: 0.625rem;
-  }
-
-  /* Metric cards — glass */
-  .dark [class*="MetricCard"] {
-    background: rgba(26, 29, 39, 0.6) !important;
-    backdrop-filter: blur(16px);
-    border-color: rgba(255, 255, 255, 0.06) !important;
-    border-radius: 1rem !important;
-  }
-
-  /* Scrollable areas — hide scrollbars for cleaner look */
-  .dark [class*="ScrollArea"] [data-radix-scroll-area-viewport] {
-    scrollbar-width: thin;
-    scrollbar-color: #33343b transparent;
-  }
-
-  /* Page title override */
-  .dark [class*="text-xl"][class*="font-semibold"],
-  .dark h1[class*="font-semibold"] {
-    letter-spacing: -0.02em;
-  }
-
-  /* ═══════════════════════════════════════════════════════
-     RAZORCLIP — Paperclip page overrides
-     Make Issues, Inbox, Dashboard, etc. look like Razorclip
-     without rewriting 3000+ lines of components
-     ═══════════════════════════════════════════════════════ */
-
-  /* Issues list — restyle the table/list view */
-  .razorclip-shell [class*="border-border"] {
-    border-color: var(--rc-glass-border) !important;
-  }
-
-  /* Search inputs in issues/inbox */
-  .razorclip-shell input[type="text"],
-  .razorclip-shell input[type="search"],
-  .razorclip-shell input[placeholder*="Search"],
-  .razorclip-shell input[placeholder*="search"] {
-    background: var(--rc-surface-container-low) !important;
-    border-color: var(--rc-glass-border) !important;
-    border-radius: 0.75rem !important;
-  }
-
-  .razorclip-shell input:focus {
-    border-color: rgba(194, 193, 255, 0.4) !important;
-    box-shadow: 0 0 20px rgba(194, 193, 255, 0.08) !important;
-  }
-
-  /* Issue rows — rounded, glass hover */
-  .razorclip-shell a[href*="/issues/"] {
-    border-radius: 0.5rem;
-    transition: all 0.15s;
-  }
-
-  .razorclip-shell a[href*="/issues/"]:hover {
-    background: var(--rc-glass-bg) !important;
-  }
-
-  /* Buttons throughout Paperclip pages */
-  .razorclip-shell button {
-    border-radius: 0.75rem;
-  }
-
-  .razorclip-shell [data-slot="button"] {
-    border-radius: 0.75rem !important;
-  }
-
-  /* All borders should be ghost borders */
-  .razorclip-shell [class*="border-b"],
-  .razorclip-shell [class*="border-t"],
-  .razorclip-shell [class*="border-r"],
-  .razorclip-shell [class*="border-l"] {
-    border-color: var(--rc-glass-border) !important;
-  }
-
-  /* Metric cards in dashboard */
-  .razorclip-shell [class*="bg-card"] {
-    background: var(--rc-glass-bg) !important;
-    backdrop-filter: blur(16px);
-    border-radius: 1rem !important;
-  }
-
-  /* The new issue button / primary actions */
-  .razorclip-shell [class*="bg-primary"]:not(input):not(textarea) {
-    border-radius: 0.75rem !important;
-  }
-
-  /* Priority/status badges — pill shape everywhere */
-  .razorclip-shell span[class*="rounded-full"][class*="text-xs"],
-  .razorclip-shell span[class*="rounded-full"][class*="text-\\[10px\\]"] {
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.03em !important;
-  }
-
-  /* Inbox sidebar items */
-  .razorclip-shell nav a[class*="py-2"] {
-    border-radius: 0.5rem;
-  }
-
-  /* Section headers in issues/inbox */
-  .razorclip-shell h1,
-  .razorclip-shell h2,
-  .razorclip-shell h3 {
-    letter-spacing: -0.01em;
-  }
-
-  /* Charts in dashboard — rounded containers */
-  .razorclip-shell [class*="rounded-lg"][class*="border"] {
-    border-radius: 1rem !important;
-    border-color: var(--rc-glass-border) !important;
-  }
-
-  /* Agent detail tabs */
-  .razorclip-shell [role="tablist"] {
-    background: var(--rc-glass-bg) !important;
-    border-radius: 0.75rem !important;
-    border: 1px solid var(--rc-glass-border) !important;
-    padding: 3px !important;
-    backdrop-filter: blur(12px);
-  }
-
-  .razorclip-shell [role="tab"] {
-    border-radius: 0.5rem !important;
-    font-size: 0.75rem !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-    font-weight: 600 !important;
-  }
-
-  .razorclip-shell [role="tab"][data-state="active"] {
-    background: rgba(194, 193, 255, 0.1) !important;
-    color: var(--rc-primary) !important;
-  }
-
-  /* Collapsible sections */
-  .razorclip-shell [data-state="open"] > div,
-  .razorclip-shell [data-state="closed"] > div {
-    border-radius: 0.75rem;
-  }
-
-  /* Empty states */
-  .razorclip-shell [class*="EmptyState"] {
-    border-radius: 1rem;
-  }
-
-  /* Markdown content areas */
-  .razorclip-shell .prose {
-    color: var(--rc-on-surface-variant);
-  }
-
-  .razorclip-shell .prose strong {
-    color: var(--rc-on-surface);
   }
   /* Prevent double-tap-to-zoom on interactive elements for mobile */
   a,
@@ -507,6 +141,11 @@
   textarea,
   label {
     touch-action: manipulation;
+  }
+  /* Let font-mono (utilities layer) override for monospace editors */
+  .paperclip-mdxeditor [class*="_placeholder_"],
+  .paperclip-mdxeditor-content {
+    font-family: inherit;
   }
 }
 
@@ -536,265 +175,16 @@
 }
 
 .dark *::-webkit-scrollbar-track {
-  background: #1e1f26;  /* kt-surface-container */
+  background: oklch(0.205 0 0);
 }
 
 .dark *::-webkit-scrollbar-thumb {
-  background: #33343b;  /* kt-surface-container-highest */
+  background: oklch(0.4 0 0);
   border-radius: 4px;
 }
 
 .dark *::-webkit-scrollbar-thumb:hover {
-  background: #464554;  /* kt-outline-variant */
-}
-
-/* ═══════════════════════════════════════════════════════
-   KINETIC TERMINAL — Shared utility classes
-   ═══════════════════════════════════════════════════════ */
-
-/* Glass card: frosted glass surface for floating elements */
-.glass-card {
-  background: var(--rc-glass-bg);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-}
-
-.glass-card-subtle {
-  background: var(--rc-glass-bg);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  opacity: 0.8;
-}
-
-/* Agent glow effects */
-.agent-glow-dante { box-shadow: 0 0 15px rgba(139, 92, 246, 0.15); }
-.agent-glow-brent { box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); }
-.agent-glow-rex { box-shadow: 0 0 15px rgba(16, 185, 129, 0.15); }
-.agent-glow-scout { box-shadow: 0 0 15px rgba(245, 158, 11, 0.15); }
-.agent-glow-nova { box-shadow: 0 0 15px rgba(236, 72, 153, 0.15); }
-.agent-glow-victor { box-shadow: 0 0 15px rgba(234, 179, 8, 0.15); }
-
-/* Status dot glows */
-.status-glow-connected { box-shadow: 0 0 8px rgba(16, 185, 129, 0.6); }
-.status-glow-error { box-shadow: 0 0 8px rgba(255, 180, 171, 0.6); }
-.status-glow-pending { box-shadow: 0 0 8px rgba(245, 158, 11, 0.6); }
-
-/* Kinetic Terminal ambient shadow for floating elements */
-.kt-shadow {
-  box-shadow: 0 20px 40px -12px rgba(194, 193, 255, 0.08);
-}
-
-/* Ghost border — subtle borders that don't break the nocturnal immersion */
-.ghost-border {
-  border: 1px solid rgba(70, 69, 84, 0.15);
-}
-
-/* No-scrollbar utility */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* Mobile touch target minimum — 44px per Apple HIG */
-@media (pointer: coarse) {
-  /* Nav links in sidebar and bottom nav */
-  .razorclip-shell nav a,
-  .razorclip-shell nav button {
-    min-height: 44px;
-  }
-  /* List items and card links */
-  .razorclip-shell [role="button"],
-  .razorclip-shell [role="switch"] {
-    min-height: 44px;
-  }
-}
-
-/* Scroll fade indicator — shows a gradient at the bottom to hint more content */
-.scroll-fade {
-  position: relative;
-}
-.scroll-fade::after {
-  content: "";
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: block;
-  height: 32px;
-  background: linear-gradient(to bottom, transparent, var(--rc-surface, #080808));
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Tabular nums for all metrics */
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
-}
-
-/* Spring-physics-inspired transition (stiffness: 400, damping: 28) */
-.spring-transition {
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Kinetic Terminal page background */
-.kt-page {
-  background-color: #111319;
-  color: #e2e2eb;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Agent status ring pulse */
-@keyframes kt-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-.kt-pulse {
-  animation: kt-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Ambient card glow for active agents */
-@keyframes kt-ambient-glow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
-}
-.kt-ambient-glow {
-  animation: kt-ambient-glow 3s ease-in-out infinite;
-}
-
-/* ═══════════════════════════════════════════════════════
-   RAZORCLIP — Light mode content color overrides
-   Forces hardcoded dark hex colors to swap in light mode.
-   This is a bridge until pages use CSS variables directly.
-   ═══════════════════════════════════════════════════════ */
-
-/* Light mode glass card */
-:root .glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(0, 0, 0, 0.06);
-}
-.dark .glass-card {
-  background: rgba(26, 29, 39, 0.6);
-  border-color: rgba(255, 255, 255, 0.05);
-}
-
-/* ═══════════════════════════════════════════════════════
-   RAZORCLIP — Light mode color remapping
-   In light mode, remap the hardcoded Razorclip dark colors
-   to their light equivalents via style attribute overrides.
-   ═══════════════════════════════════════════════════════ */
-
-/* Light mode page background */
-html:not(.dark) body {
-  background-color: #f8f8fc !important;
-  color: #1a1a2e !important;
-}
-
-/* Light mode: remap the main content area background from RazorclipShell */
-html:not(.dark) main {
-  color: #1a1a2e;
-}
-
-/* Agent glow effects — softer in light mode */
-html:not(.dark) .agent-glow-dante { box-shadow: 0 4px 20px -5px rgba(139, 92, 246, 0.12); }
-html:not(.dark) .agent-glow-brent { box-shadow: 0 4px 20px -5px rgba(59, 130, 246, 0.12); }
-html:not(.dark) .agent-glow-rex { box-shadow: 0 4px 20px -5px rgba(16, 185, 129, 0.12); }
-html:not(.dark) .agent-glow-scout { box-shadow: 0 4px 20px -5px rgba(245, 158, 11, 0.12); }
-html:not(.dark) .agent-glow-nova { box-shadow: 0 4px 20px -5px rgba(236, 72, 153, 0.12); }
-html:not(.dark) .agent-glow-victor { box-shadow: 0 4px 20px -5px rgba(234, 179, 8, 0.12); }
-
-/* Light mode active glow effects */
-html:not(.dark) .active-glow-purple { box-shadow: 0 4px 25px -5px rgba(139, 92, 246, 0.15); }
-html:not(.dark) .active-glow-blue { box-shadow: 0 4px 25px -5px rgba(59, 130, 246, 0.15); }
-html:not(.dark) .active-glow-green { box-shadow: 0 4px 25px -5px rgba(16, 185, 129, 0.15); }
-html:not(.dark) .active-glow-orange { box-shadow: 0 4px 25px -5px rgba(245, 158, 11, 0.15); }
-
-/* Light mode status glows */
-html:not(.dark) .status-glow-connected { box-shadow: 0 0 6px rgba(16, 185, 129, 0.3); }
-html:not(.dark) .status-glow-error { box-shadow: 0 0 6px rgba(220, 53, 69, 0.3); }
-html:not(.dark) .status-glow-pending { box-shadow: 0 0 6px rgba(245, 158, 11, 0.3); }
-
-/* Light mode ambient shadow */
-html:not(.dark) .kt-shadow {
-  box-shadow: 0 10px 30px -8px rgba(77, 74, 213, 0.08);
-}
-
-/* Light mode scrollbars */
-html:not(.dark) *::-webkit-scrollbar-track {
-  background: #f0f0f6;
-}
-html:not(.dark) *::-webkit-scrollbar-thumb {
-  background: #d8d8e4;
-  border-radius: 4px;
-}
-html:not(.dark) *::-webkit-scrollbar-thumb:hover {
-  background: #c8c8da;
-}
-
-/* ═══════════════════════════════════════════════════════
-   RAZORCLIP — Light mode full polish
-   Fix hardcoded dark-only borders, shadows, and glows
-   ═══════════════════════════════════════════════════════ */
-
-/* border-white/5 and border-white/10 are invisible in light mode — replace with visible borders */
-html:not(.dark) .razorclip-shell [class*="border-white/5"],
-html:not(.dark) .razorclip-shell [class*="border-white/10"] {
-  border-color: rgba(0, 0, 0, 0.08) !important;
-}
-
-/* Glass cards in light mode need more contrast */
-html:not(.dark) .razorclip-shell .glass-card {
-  background: rgba(255, 255, 255, 0.85) !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02);
-}
-
-/* Primary button shadows use green — adapt for light mode */
-html:not(.dark) .razorclip-shell [class*="shadow-[0_10px_20px_-5px_rgba(0,255,170"],
-html:not(.dark) .razorclip-shell [class*="shadow-[0_20px_40px_-12px_rgba(0,255,170"] {
-  box-shadow: 0 4px 14px -3px rgba(5, 150, 105, 0.25) !important;
-}
-
-/* Status ring glows — softer in light mode */
-html:not(.dark) .razorclip-shell [class*="shadow-[0_0_8px_rgba(0,255,170"] {
-  box-shadow: 0 0 6px rgba(5, 150, 105, 0.3) !important;
-}
-html:not(.dark) .razorclip-shell [class*="shadow-[0_0_15px_rgba(139,92,246"] {
-  box-shadow: 0 0 8px rgba(139, 92, 246, 0.2) !important;
-}
-
-/* Sidebar in light mode — cleaner separation */
-html:not(.dark) .razorclip-shell aside {
-  border-color: rgba(0, 0, 0, 0.06) !important;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
-}
-
-/* Topbar in light mode */
-html:not(.dark) .razorclip-shell header {
-  border-color: rgba(0, 0, 0, 0.06) !important;
-}
-
-/* Mobile bottom nav — light mode */
-html:not(.dark) .razorclip-shell nav.fixed.bottom-0 {
-  background: rgba(249, 250, 251, 0.95) !important;
-  border-color: rgba(0, 0, 0, 0.06) !important;
-}
-
-/* bg-white/[0.03] and bg-white/[0.06] used in Focus/other pages — invisible in light */
-html:not(.dark) .razorclip-shell [class*="bg-white/[0.03]"],
-html:not(.dark) .razorclip-shell [class*="bg-white/[0.06]"] {
-  background-color: rgba(0, 0, 0, 0.02) !important;
-}
-html:not(.dark) .razorclip-shell [class*="hover:bg-white/[0.06]"]:hover {
-  background-color: rgba(0, 0, 0, 0.04) !important;
-}
-
-/* Terminal sections should stay dark even in light mode */
-html:not(.dark) .razorclip-shell [class*="bg-black"] {
-  background-color: #1a1a2e !important;
-}
-
-/* Background glows — almost invisible in light mode */
-html:not(.dark) .razorclip-shell .fixed[class*="blur-"] {
-  opacity: 0.3;
+  background: oklch(0.5 0 0);
 }
 
 /* Auto-hide scrollbar: always reserves space, thumb visible only on hover */
@@ -808,14 +198,25 @@ html:not(.dark) .razorclip-shell .fixed[class*="blur-"] {
 .scrollbar-auto-hide::-webkit-scrollbar-thumb {
   background: transparent !important;
 }
+/* Light mode scrollbar on hover */
 .scrollbar-auto-hide:hover::-webkit-scrollbar-track {
-  background: #1e1f26 !important;
+  background: oklch(0.92 0 0) !important;
 }
 .scrollbar-auto-hide:hover::-webkit-scrollbar-thumb {
-  background: #33343b !important;
+  background: oklch(0.7 0 0) !important;
 }
 .scrollbar-auto-hide:hover::-webkit-scrollbar-thumb:hover {
-  background: #464554 !important;
+  background: oklch(0.6 0 0) !important;
+}
+/* Dark mode scrollbar on hover */
+.dark .scrollbar-auto-hide:hover::-webkit-scrollbar-track {
+  background: oklch(0.205 0 0) !important;
+}
+.dark .scrollbar-auto-hide:hover::-webkit-scrollbar-thumb {
+  background: oklch(0.4 0 0) !important;
+}
+.dark .scrollbar-auto-hide:hover::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.5 0 0) !important;
 }
 
 /* Expandable dialog transition for max-width changes */
@@ -862,6 +263,64 @@ html:not(.dark) .razorclip-shell .fixed[class*="blur-"] {
 @media (prefers-reduced-motion: reduce) {
   .activity-row-enter {
     animation: none;
+  }
+}
+
+/* Chain-of-thought reasoning line ticker animations.
+   Pure translate, no opacity — the overflow-hidden container clips.
+   Both keyframes share the same easing so the two spans move in lockstep. */
+@keyframes cot-line-slide-in {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes cot-line-slide-out {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-100%); }
+}
+
+.cot-line-enter {
+  animation: cot-line-slide-in 300ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.cot-line-exit {
+  animation: cot-line-slide-out 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cot-line-enter,
+  .cot-line-exit {
+    animation: none;
+  }
+}
+
+/* Shimmer text effect for active "Working" state */
+@keyframes shimmer-text-slide {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+.shimmer-text {
+  --shimmer-base: hsl(var(--foreground) / 0.75);
+  --shimmer-highlight: hsl(var(--foreground) / 0.3);
+  background: linear-gradient(
+    110deg,
+    var(--shimmer-base) 35%,
+    var(--shimmer-highlight) 50%,
+    var(--shimmer-base) 65%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-text-slide 2.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-text {
+    animation: none;
+    -webkit-text-fill-color: unset;
+    background: none;
   }
 }
 
@@ -923,14 +382,12 @@ html:not(.dark) .razorclip-shell .fixed[class*="blur-"] {
 }
 
 .paperclip-mdxeditor [class*="_placeholder_"] {
-  font-family: inherit;
   font-size: 0.875rem;
   line-height: 1.5;
   color: var(--muted-foreground);
 }
 
 .paperclip-mdxeditor-content {
-  font-family: inherit;
   font-size: inherit;
   line-height: inherit;
   color: inherit;
@@ -956,6 +413,17 @@ html:not(.dark) .razorclip-shell .fixed[class*="blur-"] {
 
 .paperclip-mdxeditor-content p + p {
   margin-top: 1.1em;
+}
+
+.paperclip-mdxeditor-content a:not(.paperclip-mention-chip):not(.paperclip-project-mention-chip) {
+  color: color-mix(in oklab, var(--foreground) 76%, #0969da 24%);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.dark .paperclip-mdxeditor-content a:not(.paperclip-mention-chip):not(.paperclip-project-mention-chip) {
+  color: color-mix(in oklab, var(--foreground) 80%, #58a6ff 20%);
 }
 
 .paperclip-mdxeditor-content a.paperclip-mention-chip,
@@ -1276,12 +744,13 @@ a.paperclip-mention-chip[data-mention-kind="agent"]::before {
 
 .paperclip-markdown a {
   color: color-mix(in oklab, var(--foreground) 76%, #0969da 24%);
-  text-decoration: none;
-}
-
-.paperclip-markdown a:hover {
   text-decoration: underline;
   text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.paperclip-markdown a.paperclip-mention-chip {
+  text-decoration: none;
 }
 
 .dark .paperclip-markdown a {
@@ -1382,48 +851,4 @@ a.paperclip-project-mention-chip {
 [class*="_toolbarButtonDropdownContainer_"],
 [class*="_toolbarNodeKindSelectContainer_"] {
   z-index: 81 !important;
-}
-
-/* ── Kinetic Terminal: Agent Detail page restyle ─────────── */
-.rc-agent-detail [data-slot="tab-bar"],
-.rc-agent-detail [role="tablist"] {
-  background: var(--rc-surface-container, rgba(255, 255, 255, 0.03));
-  border-radius: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 0.25rem;
-}
-
-.rc-agent-detail .rounded-lg.border.border-border {
-  background: var(--rc-surface-container, rgba(255, 255, 255, 0.04));
-  border-color: rgba(255, 255, 255, 0.05);
-  border-radius: 1rem;
-  backdrop-filter: blur(24px);
-}
-
-.rc-agent-detail .bg-card,
-.rc-agent-detail .bg-background\/60 {
-  background: var(--rc-surface-container, rgba(255, 255, 255, 0.04));
-  border-color: rgba(255, 255, 255, 0.05);
-}
-
-/* ── Kinetic Terminal: Issue Detail page restyle ─────────── */
-.rc-issue-detail .rounded-lg.border {
-  background: var(--rc-surface-container, rgba(255, 255, 255, 0.04));
-  border-color: rgba(255, 255, 255, 0.05);
-  border-radius: 1rem;
-  backdrop-filter: blur(24px);
-}
-
-.rc-issue-detail .bg-card {
-  background: var(--rc-surface-container, rgba(255, 255, 255, 0.04));
-}
-
-/* ── Kinetic Terminal: Mobile bottom sheet ─────────── */
-.rc-bottom-sheet-enter {
-  animation: rc-slide-up 0.3s ease-out;
-}
-
-@keyframes rc-slide-up {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
 }

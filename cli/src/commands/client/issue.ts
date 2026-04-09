@@ -1,11 +1,10 @@
-import fs from "node:fs/promises";
-import os from "node:os";
-import path from "node:path";
 import { Command } from "commander";
+import { writeFile } from "node:fs/promises";
 import {
   addIssueCommentSchema,
   checkoutIssueSchema,
   createIssueSchema,
+  type FeedbackTrace,
   updateIssueSchema,
   type Issue,
   type IssueComment,
@@ -17,9 +16,12 @@ import {
   printOutput,
   resolveCommandContext,
   type BaseClientOptions,
-  type ResolvedClientContext,
 } from "./common.js";
-import { ApiRequestError, ApiConnectionError } from "../../client/http.js";
+import {
+  buildFeedbackTraceQuery,
+  normalizeFeedbackTraceExportFormat,
+  serializeFeedbackTraces,
+} from "./feedback.js";
 
 interface IssueBaseOptions extends BaseClientOptions {
   status?: string;
@@ -64,6 +66,18 @@ interface IssueCommentOptions extends BaseClientOptions {
 interface IssueCheckoutOptions extends BaseClientOptions {
   agentId: string;
   expectedStatuses?: string;
+}
+
+interface IssueFeedbackOptions extends BaseClientOptions {
+  targetType?: string;
+  vote?: string;
+  status?: string;
+  from?: string;
+  to?: string;
+  sharedOnly?: boolean;
+  includePayload?: boolean;
+  out?: string;
+  format?: string;
 }
 
 export function registerIssueCommands(program: Command): void {
@@ -223,7 +237,7 @@ export function registerIssueCommands(program: Command): void {
   addCommonClientOptions(
     issue
       .command("comment")
-      .description("Add comment to issue with retry and verification")
+      .description("Add comment to issue")
       .argument("<issueId>", "Issue ID")
       .requiredOption("--body <text>", "Comment body")
       .option("--reopen", "Reopen if issue is done/cancelled")
@@ -234,8 +248,87 @@ export function registerIssueCommands(program: Command): void {
             body: opts.body,
             reopen: opts.reopen,
           });
-          const comment = await postCommentWithRetry(ctx, issueId, payload);
+          const comment = await ctx.api.post<IssueComment>(`/api/issues/${issueId}/comments`, payload);
           printOutput(comment, { json: ctx.json });
+        } catch (err) {
+          handleCommandError(err);
+        }
+      }),
+  );
+
+  addCommonClientOptions(
+    issue
+      .command("feedback:list")
+      .description("List feedback traces for an issue")
+      .argument("<issueId>", "Issue ID")
+      .option("--target-type <type>", "Filter by target type")
+      .option("--vote <vote>", "Filter by vote value")
+      .option("--status <status>", "Filter by trace status")
+      .option("--from <iso8601>", "Only include traces created at or after this timestamp")
+      .option("--to <iso8601>", "Only include traces created at or before this timestamp")
+      .option("--shared-only", "Only include traces eligible for sharing/export")
+      .option("--include-payload", "Include stored payload snapshots in the response")
+      .action(async (issueId: string, opts: IssueFeedbackOptions) => {
+        try {
+          const ctx = resolveCommandContext(opts);
+          const traces = (await ctx.api.get<FeedbackTrace[]>(
+            `/api/issues/${issueId}/feedback-traces${buildFeedbackTraceQuery(opts)}`,
+          )) ?? [];
+          if (ctx.json) {
+            printOutput(traces, { json: true });
+            return;
+          }
+          printOutput(
+            traces.map((trace) => ({
+              id: trace.id,
+              issue: trace.issueIdentifier ?? trace.issueId,
+              vote: trace.vote,
+              status: trace.status,
+              targetType: trace.targetType,
+              target: trace.targetSummary.label,
+            })),
+            { json: false },
+          );
+        } catch (err) {
+          handleCommandError(err);
+        }
+      }),
+  );
+
+  addCommonClientOptions(
+    issue
+      .command("feedback:export")
+      .description("Export feedback traces for an issue")
+      .argument("<issueId>", "Issue ID")
+      .option("--target-type <type>", "Filter by target type")
+      .option("--vote <vote>", "Filter by vote value")
+      .option("--status <status>", "Filter by trace status")
+      .option("--from <iso8601>", "Only include traces created at or after this timestamp")
+      .option("--to <iso8601>", "Only include traces created at or before this timestamp")
+      .option("--shared-only", "Only include traces eligible for sharing/export")
+      .option("--include-payload", "Include stored payload snapshots in the export")
+      .option("--out <path>", "Write export to a file path instead of stdout")
+      .option("--format <format>", "Export format: json or ndjson", "ndjson")
+      .action(async (issueId: string, opts: IssueFeedbackOptions) => {
+        try {
+          const ctx = resolveCommandContext(opts);
+          const traces = (await ctx.api.get<FeedbackTrace[]>(
+            `/api/issues/${issueId}/feedback-traces${buildFeedbackTraceQuery(opts, opts.includePayload ?? true)}`,
+          )) ?? [];
+            const serialized = serializeFeedbackTraces(traces, opts.format);
+            if (opts.out?.trim()) {
+              await writeFile(opts.out, serialized, "utf8");
+              if (ctx.json) {
+                printOutput(
+                  { out: opts.out, count: traces.length, format: normalizeFeedbackTraceExportFormat(opts.format) },
+                  { json: true },
+                );
+                return;
+              }
+              console.log(`Wrote ${traces.length} feedback trace(s) to ${opts.out}`);
+            return;
+          }
+          process.stdout.write(`${serialized}${serialized.endsWith("\n") ? "" : "\n"}`);
         } catch (err) {
           handleCommandError(err);
         }
@@ -315,131 +408,4 @@ function filterIssueRows(rows: Issue[], match: string | undefined): Issue[] {
       .toLowerCase();
     return text.includes(needle);
   });
-}
-
-/**
- * Retry helper with exponential backoff.
- * Retries on 5xx errors and connection errors.
- * Does NOT retry on 4xx (client errors).
- */
-async function withRetry<T>(
-  fn: () => Promise<T>,
-  opts: { maxRetries?: number; onRetry?: (attempt: number, error: Error) => void } = {},
-): Promise<T> {
-  const maxRetries = opts.maxRetries ?? 3;
-  const backoffMs = [1000, 2000, 4000];
-
-  let lastError: Error | undefined;
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
-    try {
-      return await fn();
-    } catch (err) {
-      lastError = err instanceof Error ? err : new Error(String(err));
-
-      // Don't retry on 4xx client errors (they won't succeed on retry)
-      if (err instanceof ApiRequestError && err.status >= 400 && err.status < 500) {
-        throw err;
-      }
-
-      // Retry on 5xx server errors and connection errors
-      const isRetryable =
-        (err instanceof ApiRequestError && err.status >= 500) ||
-        err instanceof ApiConnectionError;
-
-      if (!isRetryable || attempt >= maxRetries) {
-        throw err;
-      }
-
-      // Wait before retry
-      const delay = backoffMs[attempt] ?? backoffMs[backoffMs.length - 1];
-      opts.onRetry?.(attempt + 1, lastError);
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-  }
-
-  throw lastError ?? new Error("Unknown error in retry loop");
-}
-
-/**
- * Save failed comment to fallback file for later recovery.
- */
-async function saveFailedComment(issueId: string, body: string, error: Error): Promise<string> {
-  const failedCommentsDir = path.join(os.homedir(), ".paperclip", "failed-comments");
-  await fs.mkdir(failedCommentsDir, { recursive: true });
-
-  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const filename = `${issueId}-${timestamp}.md`;
-  const filepath = path.join(failedCommentsDir, filename);
-
-  const content = [
-    `# Failed Comment for ${issueId}`,
-    ``,
-    `**Timestamp**: ${new Date().toISOString()}`,
-    `**Error**: ${error.message}`,
-    ``,
-    `---`,
-    ``,
-    body,
-  ].join("\n");
-
-  await fs.writeFile(filepath, content, "utf-8");
-  return filepath;
-}
-
-/**
- * Post comment with retry, verification, and fallback.
- */
-async function postCommentWithRetry(
-  ctx: ResolvedClientContext,
-  issueId: string,
-  payload: { body: string; reopen?: boolean },
-): Promise<IssueComment> {
-  let comment: IssueComment | null = null;
-
-  // Step 1: POST with retry
-  try {
-    comment = await withRetry(
-      () => ctx.api.post<IssueComment>(`/api/issues/${issueId}/comments`, payload),
-      {
-        onRetry: (attempt, error) => {
-          console.error(`[paperclip] Comment POST failed (attempt ${attempt}): ${error.message}. Retrying...`);
-        },
-      },
-    );
-  } catch (err) {
-    // All retries failed - save to fallback file
-    const error = err instanceof Error ? err : new Error(String(err));
-    const fallbackPath = await saveFailedComment(issueId, payload.body, error);
-    console.error(`[paperclip] Failed to post comment after retries. Saved to: ${fallbackPath}`);
-    throw err;
-  }
-
-  if (!comment?.id) {
-    const error = new Error("Comment POST succeeded but returned no ID");
-    const fallbackPath = await saveFailedComment(issueId, payload.body, error);
-    console.error(`[paperclip] Comment POST returned no ID. Saved to: ${fallbackPath}`);
-    throw error;
-  }
-
-  // Step 2: Verify with GET
-  try {
-    const verified = await withRetry(
-      () => ctx.api.get<IssueComment>(`/api/issues/${issueId}/comments/${comment!.id}`),
-      {
-        maxRetries: 2,
-        onRetry: (attempt, error) => {
-          console.error(`[paperclip] Comment verification failed (attempt ${attempt}): ${error.message}. Retrying...`);
-        },
-      },
-    );
-
-    if (!verified) {
-      console.error(`[paperclip] Warning: Comment ${comment.id} could not be verified but POST succeeded.`);
-    }
-  } catch (verifyErr) {
-    // Verification failed but POST succeeded - log warning but don't fail
-    console.error(`[paperclip] Warning: Could not verify comment ${comment.id}: ${verifyErr instanceof Error ? verifyErr.message : String(verifyErr)}`);
-  }
-
-  return comment;
 }
