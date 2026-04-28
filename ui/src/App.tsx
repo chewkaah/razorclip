@@ -275,6 +275,10 @@ export function App() {
           <Route path="companies" element={<UnprefixedBoardRedirect />} />
           <Route path="issues" element={<UnprefixedBoardRedirect />} />
           <Route path="issues/:issueId" element={<UnprefixedBoardRedirect />} />
+          <Route path="approvals" element={<UnprefixedBoardRedirect />} />
+          <Route path="approvals/pending" element={<UnprefixedBoardRedirect />} />
+          <Route path="approvals/all" element={<UnprefixedBoardRedirect />} />
+          <Route path="approvals/:approvalId" element={<UnprefixedBoardRedirect />} />
           <Route path="routines" element={<UnprefixedBoardRedirect />} />
           <Route path="routines/:routineId" element={<UnprefixedBoardRedirect />} />
           <Route path="u/:userSlug" element={<UnprefixedBoardRedirect />} />
