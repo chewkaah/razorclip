@@ -43,6 +43,7 @@ import type { AdapterExecutionResult, AdapterInvocationMeta, AdapterSessionCodec
 import { createLocalAgentJwt } from "../agent-auth-jwt.js";
 import { parseObject, asBoolean, asNumber, appendWithByteCap, MAX_EXCERPT_BYTES } from "../adapters/utils.js";
 import { costService } from "./costs.js";
+import { usageAggregatorService } from "./usage-aggregator.js";
 import { trackAgentFirstHeartbeat } from "@paperclipai/shared/telemetry";
 import { getTelemetryClient } from "../telemetry.js";
 import { companySkillService } from "./company-skills.js";
@@ -5299,6 +5300,43 @@ export function heartbeatService(db: Db, options: HeartbeatServiceOptions = {}) 
           payload: meta as unknown as Record<string, unknown>,
         });
       };
+
+      // Rate limit throttle check before adapter execution
+      const usageAgg = usageAggregatorService(db);
+      const rateLimits = await usageAgg.getLatestRateLimits(agent.companyId);
+      const throttleRec = usageAgg.evaluateThrottle(rateLimits);
+
+      if (throttleRec.action === "warn") {
+        logger.warn({ runId: run.id, agentId: agent.id, reason: throttleRec.reason }, "[RATE_LIMIT] Warning threshold");
+      }
+      if (throttleRec.action === "throttle_non_critical" || throttleRec.action === "pause_all") {
+        logger.warn({ runId: run.id, agentId: agent.id, reason: throttleRec.reason }, "[RATE_LIMIT] Throttle active");
+      }
+
+      const agentPriority = (agent.runtimeConfig as Record<string, unknown> | null)?.throttlePriority as number | undefined ?? 5;
+      const throttleDecision = usageAgg.shouldThrottleAgent(agentPriority, throttleRec);
+
+      if (throttleDecision.shouldPause) {
+        logger.warn({ runId: run.id, agentId: agent.id }, "[THROTTLE] Pausing run due to rate limits (90%+)");
+        await setRunStatus(run.id, "failed", {
+          error: "Run paused due to Opus rate limit (90%+)",
+          errorCode: "rate_limit_pause",
+          finishedAt: new Date(),
+        });
+        await setWakeupStatus(run.wakeupRequestId, "failed", {
+          finishedAt: new Date(),
+          error: "Rate limit pause",
+        });
+        const pausedRun = await getRun(run.id);
+        if (pausedRun) await releaseIssueExecutionAndPromote(pausedRun);
+        return;
+      }
+
+      const configModel = (runtimeConfig as Record<string, unknown>).model as string | undefined;
+      if (throttleDecision.downgradeToSonnet && configModel?.toLowerCase().includes("opus")) {
+        logger.info({ runId: run.id, agentId: agent.id }, "[THROTTLE] Downgrading to Sonnet due to rate limits");
+        (runtimeConfig as Record<string, unknown>).model = "claude-sonnet-4-6";
+      }
 
       const adapter = getServerAdapter(agent.adapterType);
       const authToken = adapter.supportsLocalAgentJwt

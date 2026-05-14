@@ -77,3 +77,4 @@ export { connections, connectionSyncLogs } from "./connections.js";
 export { userProfiles } from "./user_profiles.js";
 export { chatThreads } from "./chat_threads.js";
 export { chatMessages } from "./chat_messages.js";
+export { rateLimitSnapshots } from "./rate_limit_snapshots.js";

@@ -25,13 +25,29 @@ services:
       SERVE_UI: "true"
       PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
       PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
+      PAPERCLIP_AGENT_JWT_SECRET: "c1526c0d69f05085bcb867630f284675fab926759af22481f594b5ee41c5c691"
       PAPERCLIP_PUBLIC_URL: "${PAPERCLIP_PUBLIC_URL:-http://localhost:3100}"
+      # Internal URL injected into agent runtimes. Do not use public tunnel DNS here.
+      PAPERCLIP_RUNTIME_API_URL: "http://127.0.0.1:3100"
+      # Hosted Office MCP bridge for Notion/agent access. Secrets are supplied
+      # from the host .env and are intentionally not committed here.
+      INTEGRAL_OFFICE_MCP_TOKEN: "${INTEGRAL_OFFICE_MCP_TOKEN:-}"
+      INTEGRAL_OFFICE_PAPERCLIP_API_KEY: "${INTEGRAL_OFFICE_PAPERCLIP_API_KEY:-}"
+      TRACKER_API_URL: "${TRACKER_API_URL:-https://tracker.integral.sh}"
+      TRACKER_INTERNAL_API_TOKEN: "${TRACKER_INTERNAL_API_TOKEN:-}"
+      PAPERCLIP_COMPANY_ID: "${PAPERCLIP_COMPANY_ID:-}"
       BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}"
+      # Do not pass ANTHROPIC_API_KEY into the server container.
+      # claude_local agents use Claude Code OAuth via CLAUDE_CONFIG_DIR.
+      # Passing a stale API key makes Claude prefer API-key mode and fail with 401.
       # Pin CLI auth dirs so claude_local / codex_local adapters find host tokens.
       # Container HOME is /paperclip (see Dockerfile), so the CLIs look here by default,
       # but we set the env vars explicitly to survive any future HOME changes.
       CLAUDE_CONFIG_DIR: /paperclip/.claude
       CODEX_HOME: /paperclip/.codex
+      # Agent-accessible Obsidian mirror path. Direct Docker bind-mounting
+      # ~/Documents/Obsidian Vault can hang Docker Desktop on macOS/iCloud paths.
+      OBSIDIAN_VAULT_PATH: /paperclip/obsidian-vault
     volumes:
       - paperclip-data:/paperclip
       # Bind-mount host CLI auth into the container so subscription logins
@@ -39,12 +55,18 @@ services:
       # See 03-Infrastructure/Agent-Runtime.md for the full plan.
       - /Users/agent0/.claude:/paperclip/.claude
       - /Users/agent0/.codex:/paperclip/.codex
+      # Master Hermes skills and non-secret runtime dotfiles. Do not mount .env or secrets.
+      # Agents reference these at /paperclip/.hermes/skills and /Users/agent0/.hermes/skills.
+      - /Users/agent0/.hermes/skills:/paperclip/.hermes/skills:ro
       # SSH key used by the in-container /usr/local/bin/hermes shim to reach
       # host hermes via agent0@host.docker.internal. See Obsidian note
       # 03-Infrastructure/Hermes-Install-Per-Machine.md.
       - /Users/agent0/.ssh/paperclip_hermes:/paperclip/.ssh/paperclip_hermes:ro
-      # Host repos for codex_local agents (INT-57). Read-only — agents write via git worktrees.
-      - /Users/agent0/Dev:/Users/agent0/Dev:ro
+      # Apollo MCP server for agent access to Apollo.io (sequences, contacts, deals)
+      - /Users/agent0/Dev/apollo-mcp-server:/app/apollo-mcp:ro
+      # Host repos for agent runtime work. Chuka explicitly approved direct code writes.
+      # Agents must still use git hygiene and avoid touching unrelated repos.
+      - /Users/agent0/Dev:/Users/agent0/Dev:rw
     depends_on:
       db:
         condition: service_healthy

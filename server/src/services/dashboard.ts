@@ -3,6 +3,7 @@ import type { Db } from "@paperclipai/db";
 import { agents, approvals, companies, costEvents, heartbeatRuns, issues } from "@paperclipai/db";
 import { notFound } from "../errors.js";
 import { budgetService } from "./budgets.js";
+import { usageAggregatorService, type RateLimitStatus } from "./usage-aggregator.js";
 
 const DASHBOARD_RUN_ACTIVITY_DAYS = 14;
 
@@ -156,6 +157,67 @@ export function dashboardService(db: Db) {
           pausedProjects: budgetOverview.pausedProjectCount,
         },
         runActivity: Array.from(runActivity.values()),
+      };
+    },
+
+    summaryWithUsage: async (companyId: string, includeUsage = false) => {
+      const self = dashboardService(db);
+      const base = await self.summary(companyId);
+      if (!includeUsage) return base;
+
+      const usageAgg = usageAggregatorService(db);
+      const [hourlyUsage, dailyUsage, rateLimits] = await Promise.all([
+        usageAgg.aggregateUsage(companyId, "hour"),
+        usageAgg.aggregateUsage(companyId, "day"),
+        usageAgg.getLatestRateLimits(companyId),
+      ]);
+
+      const throttleRec = usageAgg.evaluateThrottle(rateLimits);
+
+      const formatUsage = (data: typeof hourlyUsage) => ({
+        opus: data.byModel.find((m) => m.modelFamily === "opus") ?? null,
+        sonnet: data.byModel.find((m) => m.modelFamily === "sonnet") ?? null,
+        topAgents: data.topAgents,
+      });
+
+      const formatRateLimits = (limits: RateLimitStatus[]) => {
+        const opus = limits.find((l) => l.modelFamily === "opus");
+        const sonnet = limits.find((l) => l.modelFamily === "sonnet");
+        const getStatus = (util: number) =>
+          util >= 90 ? "critical" : util >= 75 ? "throttle" : util >= 50 ? "warning" : "normal";
+        return {
+          opus: opus
+            ? {
+                utilizationPercent: Number(opus.utilizationPercent.toFixed(1)),
+                remainingTokens: opus.remainingTokens,
+                resetAt: opus.resetAt?.toISOString() ?? null,
+                status: getStatus(opus.utilizationPercent),
+              }
+            : null,
+          sonnet: sonnet
+            ? {
+                utilizationPercent: Number(sonnet.utilizationPercent.toFixed(1)),
+                remainingTokens: sonnet.remainingTokens,
+                resetAt: sonnet.resetAt?.toISOString() ?? null,
+                status: getStatus(sonnet.utilizationPercent),
+              }
+            : null,
+        };
+      };
+
+      return {
+        ...base,
+        usage: {
+          lastHour: formatUsage(hourlyUsage),
+          lastDay: formatUsage(dailyUsage),
+        },
+        rateLimits: formatRateLimits(rateLimits),
+        throttle: {
+          active: throttleRec.action !== "none" && throttleRec.action !== "warn",
+          recommendation: throttleRec.action,
+          reason: throttleRec.reason,
+          affectedAgents: throttleRec.affectedAgents,
+        },
       };
     },
   };

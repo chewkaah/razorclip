@@ -75,14 +75,20 @@ export class PaperclipApiClient {
     return resolved;
   }
 
-  async requestJson<T>(method: string, path: string, options: JsonRequestOptions = {}): Promise<T> {
+  private async requestScopedJson<T>(
+    method: string,
+    path: string,
+    options: JsonRequestOptions,
+    baseUrl: string,
+    apiKey: string,
+  ): Promise<T> {
     if (!path.startsWith("/")) {
       throw new Error(`API path must start with "/": ${path}`);
     }
 
-    const url = new URL(path.slice(1), `${this.config.apiUrl}/`);
+    const url = new URL(path.slice(1), `${baseUrl}/`);
     const headers: Record<string, string> = {
-      Authorization: `Bearer ${this.config.apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       Accept: "application/json",
     };
     if (options.body !== undefined) {
@@ -110,5 +116,16 @@ export class PaperclipApiClient {
     }
 
     return parsedBody as T;
+  }
+
+  async requestJson<T>(method: string, path: string, options: JsonRequestOptions = {}): Promise<T> {
+    return this.requestScopedJson(method, path, options, this.config.apiUrl, this.config.apiKey);
+  }
+
+  async requestTrackerJson<T>(method: string, path: string, options: JsonRequestOptions = {}): Promise<T> {
+    if (!this.config.trackerApiUrl || !this.config.trackerApiKey) {
+      throw new Error("Tracker API is not configured");
+    }
+    return this.requestScopedJson(method, path, options, this.config.trackerApiUrl, this.config.trackerApiKey);
   }
 }
