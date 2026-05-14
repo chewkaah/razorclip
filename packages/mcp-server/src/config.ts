@@ -4,6 +4,8 @@ export interface PaperclipMcpConfig {
   companyId: string | null;
   agentId: string | null;
   runId: string | null;
+  trackerApiUrl?: string | null;
+  trackerApiKey?: string | null;
 }
 
 function nonEmpty(value: string | undefined): string | null {
@@ -35,5 +37,7 @@ export function readConfigFromEnv(env: NodeJS.ProcessEnv = process.env): Papercl
     companyId: nonEmpty(env.PAPERCLIP_COMPANY_ID),
     agentId: nonEmpty(env.PAPERCLIP_AGENT_ID),
     runId: nonEmpty(env.PAPERCLIP_RUN_ID),
+    trackerApiUrl: nonEmpty(env.TRACKER_API_URL),
+    trackerApiKey: nonEmpty(env.TRACKER_INTERNAL_API_TOKEN),
   };
 }
