@@ -1024,6 +1024,33 @@ describe.sequential("issue comment reopen routes", () => {
     expect(mockHeartbeatService.cancelRun).not.toHaveBeenCalled();
   });
 
+  it("does not wake the assignee when a PATCH closes an issue with a comment", async () => {
+    const issue = makeIssue("todo");
+    mockIssueService.getById.mockResolvedValue(issue);
+    mockIssueService.update.mockImplementation(async (_id: string, patch: Record<string, unknown>) => ({
+      ...issue,
+      ...patch,
+      status: "done",
+      completedAt: new Date(),
+      updatedAt: new Date(),
+    }));
+
+    const res = await request(await installActor(createApp()))
+      .patch("/api/issues/11111111-1111-4111-8111-111111111111")
+      .send({ status: "done", comment: "Board cleanup: terminal-clearing stale work." });
+
+    expect(res.status).toBe(200);
+    expect(mockIssueService.addComment).toHaveBeenCalled();
+    expect(mockHeartbeatService.wakeup).not.toHaveBeenCalledWith(
+      "22222222-2222-4222-8222-222222222222",
+      expect.objectContaining({ reason: "issue_commented" }),
+    );
+    expect(mockHeartbeatService.wakeup).not.toHaveBeenCalledWith(
+      "22222222-2222-4222-8222-222222222222",
+      expect.objectContaining({ reason: "issue_assigned" }),
+    );
+  });
+
   it("writes decision ids into executionState and inserts the decision inside the transaction", async () => {
     const policy = await normalizePolicy({
       stages: [

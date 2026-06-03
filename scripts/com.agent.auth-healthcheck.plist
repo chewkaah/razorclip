@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <!--
-  Daily auth healthcheck for the razorclip agent runtime.
+  Auth healthcheck / keepalive for the razorclip agent runtime.
   Install with:
     cp scripts/com.agent.auth-healthcheck.plist ~/Library/LaunchAgents/
     chmod +x scripts/auth-healthcheck.sh
-    launchctl load ~/Library/LaunchAgents/com.agent.auth-healthcheck.plist
-  Runs at 08:00 every day. See scripts/auth-healthcheck.sh for what it checks.
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.agent.auth-healthcheck.plist
+  Runs on load and every two hours. See scripts/auth-healthcheck.sh for what it checks.
 -->
 <plist version="1.0">
 <dict>
@@ -15,34 +15,35 @@
 
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/agent0/Dev/razorclip/scripts/auth-healthcheck.sh</string>
+        <string>/Users/chuka/Dev/razorclip/scripts/auth-healthcheck.sh</string>
     </array>
 
-    <key>StartCalendarInterval</key>
-    <dict>
-        <key>Hour</key>
-        <integer>8</integer>
-        <key>Minute</key>
-        <integer>0</integer>
-    </dict>
+    <key>StartInterval</key>
+    <integer>7200</integer>
 
     <key>RunAtLoad</key>
-    <false/>
+    <true/>
 
     <key>StandardOutPath</key>
-    <string>/Users/agent0/agent/auth-healthcheck-out.log</string>
+    <string>/Users/chuka/agent/auth-healthcheck-out.log</string>
 
     <key>StandardErrorPath</key>
-    <string>/Users/agent0/agent/auth-healthcheck-error.log</string>
+    <string>/Users/chuka/agent/auth-healthcheck-error.log</string>
 
     <key>EnvironmentVariables</key>
     <dict>
         <key>PATH</key>
-        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-        <key>RAZORCLIP_CONTAINER</key>
-        <string>razorclip-server-1</string>
+        <string>/Users/chuka/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>AUTH_HEALTHCHECK_MODE</key>
+        <string>local</string>
+        <key>CLAUDE_BIN</key>
+        <string>/Users/chuka/.local/bin/claude</string>
+        <key>CLAUDE_KEEPALIVE_PROBE</key>
+        <string>1</string>
+        <key>CLAUDE_PROBE_TIMEOUT_SEC</key>
+        <string>90</string>
         <key>HERMES_ENV_FILE</key>
-        <string>/Users/agent0/.hermes/.env</string>
+        <string>/Users/chuka/.hermes/.env</string>
         <key>TELEGRAM_CHAT_ID</key>
         <string>1870056157</string>
     </dict>
