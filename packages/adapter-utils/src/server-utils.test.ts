@@ -287,8 +287,38 @@ describe("renderPaperclipWakePrompt", () => {
 
     expect(prompt).toContain("## Paperclip Wake Payload");
     expect(prompt).toContain("Execution contract: take concrete action in this heartbeat");
+    expect(prompt).toContain("If the latest comments correct your prior interpretation");
+    expect(prompt).toContain("A direct human instruction or named assignee in the latest comments beats keyword matching");
     expect(prompt).toContain("use child issues instead of polling");
     expect(prompt).toContain("mark blocked work with the unblock owner/action");
+  });
+
+  it("keeps correction precedence in resumed wake prompts", () => {
+    const prompt = renderPaperclipWakePrompt(
+      {
+        reason: "issue_commented",
+        issue: {
+          id: "issue-1",
+          identifier: "PAP-1845",
+          title: "Route corrected ask",
+          status: "in_progress",
+        },
+        commentWindow: {
+          requestedCount: 1,
+          includedCount: 1,
+          missingCount: 0,
+        },
+        commentIds: ["comment-1"],
+        latestCommentId: "comment-1",
+        comments: [{ id: "comment-1", body: "No, send this to Brent." }],
+        fallbackFetchNeeded: false,
+      },
+      { resumedSession: true },
+    );
+
+    expect(prompt).toContain("## Paperclip Resume Delta");
+    expect(prompt).toContain("If the latest comments correct your prior interpretation");
+    expect(prompt).toContain("A direct human instruction or named assignee in the latest comments beats keyword matching");
   });
 
   it("renders dependency-blocked interaction guidance", () => {
