@@ -56,7 +56,7 @@ import {
   workProductService,
 } from "../services/index.js";
 import { logger } from "../middleware/logger.js";
-import { conflict, forbidden, HttpError, notFound, unauthorized } from "../errors.js";
+import { conflict, forbidden, HttpError, notFound, unauthorized, unprocessable } from "../errors.js";
 import { assertBoard, assertCompanyAccess, getActorInfo } from "./authz.js";
 import {
   assertNoAgentHostWorkspaceCommandMutation,
@@ -183,6 +183,33 @@ function summarizeExecutionParticipants(
 
 function isClosedIssueStatus(status: string | null | undefined): status is "done" | "cancelled" {
   return status === "done" || status === "cancelled";
+}
+
+function normalizeRoutePolicyText(value: unknown) {
+  return typeof value === "string" ? value.toLowerCase() : "";
+}
+
+function isNamedAgent(agent: { name?: string | null } | null | undefined, expectedName: string) {
+  return normalizeRoutePolicyText(agent?.name).trim() === expectedName.toLowerCase();
+}
+
+function looksLikeDeckProposalTrackingTask(input: {
+  title?: unknown;
+  description?: unknown;
+}) {
+  const text = `${normalizeRoutePolicyText(input.title)}\n${normalizeRoutePolicyText(input.description)}`;
+  const mentionsDeckOrProposal =
+    /\b(deck|proposal|pitch|outline|brief|scope|sow)\b/.test(text)
+    || /\bpfizer ai implementation\b/.test(text);
+  if (!mentionsDeckOrProposal) return false;
+
+  const mentionsDeliveryTracking =
+    /\b(share|link|url|stage|ready|track|status|update|follow[-\s]?up|land|lands|delivered|delivery)\b/.test(text)
+    || /\bwhen it'?s ready\b/.test(text);
+  const mentionsCreativeProduction =
+    /\b(video|motion|remotion|sizzle|static ad|carousel|social|linkedin|instagram|ugc|arcads|visual asset|creative asset|image|graphic|figma|weave|flux|ad creative|design system|brand kit)\b/.test(text);
+
+  return mentionsDeliveryTracking || !mentionsCreativeProduction;
 }
 
 function shouldImplicitlyMoveCommentedIssueToTodo(input: {
@@ -454,6 +481,34 @@ export function issueRoutes(
       environmentId,
       { allowedDrivers: ["local", "ssh", "sandbox"] },
     );
+  }
+
+  async function assertAgentRouteAssignmentPolicy(input: {
+    companyId: string;
+    actorAgentId?: string | null;
+    assigneeAgentId?: string | null;
+    title?: unknown;
+    description?: unknown;
+  }) {
+    if (!input.actorAgentId || !input.assigneeAgentId) return;
+    if (!looksLikeDeckProposalTrackingTask(input)) return;
+
+    const [actorAgent, assigneeAgent] = await Promise.all([
+      agentsSvc.getById(input.actorAgentId),
+      agentsSvc.getById(input.assigneeAgentId),
+    ]);
+    if (!actorAgent || actorAgent.companyId !== input.companyId) return;
+    if (!assigneeAgent || assigneeAgent.companyId !== input.companyId) return;
+    if (!isNamedAgent(actorAgent, "Rex") || !isNamedAgent(assigneeAgent, "Nova")) return;
+
+    throw unprocessable("Rex cannot assign deck/proposal tracking work to Nova", {
+      reason: "deck_proposal_tracking_belongs_to_brent",
+      actorAgent: actorAgent.name,
+      requestedAssigneeAgent: assigneeAgent.name,
+      recommendedAssigneeAgent: "Brent",
+      guidance:
+        "Deck/proposal status, stage, ready, link, or delivery follow-up tasks belong with Brent unless the request explicitly asks for video, motion, static ads, social content, or other creative asset production.",
+    });
   }
 
   async function logExpiredRequestConfirmations(input: {
@@ -1769,6 +1824,13 @@ export function issueRoutes(
     await assertIssueEnvironmentSelection(companyId, req.body.executionWorkspaceSettings?.environmentId);
 
     const actor = getActorInfo(req);
+    await assertAgentRouteAssignmentPolicy({
+      companyId,
+      actorAgentId: actor.agentId,
+      assigneeAgentId: req.body.assigneeAgentId,
+      title: req.body.title,
+      description: req.body.description,
+    });
     const executionPolicy = normalizeIssueExecutionPolicy(req.body.executionPolicy);
     const issue = await svc.create(companyId, {
       ...req.body,
@@ -1836,6 +1898,13 @@ export function issueRoutes(
     await assertIssueEnvironmentSelection(parent.companyId, req.body.executionWorkspaceSettings?.environmentId);
 
     const actor = getActorInfo(req);
+    await assertAgentRouteAssignmentPolicy({
+      companyId: parent.companyId,
+      actorAgentId: actor.agentId,
+      assigneeAgentId: req.body.assigneeAgentId,
+      title: req.body.title,
+      description: req.body.description,
+    });
     const executionPolicy = normalizeIssueExecutionPolicy(req.body.executionPolicy);
     const { issue, parentBlockerAdded } = await svc.createChild(parent.id, {
       ...req.body,
@@ -2074,6 +2143,13 @@ export function issueRoutes(
         await assertCanAssignTasks(req, existing.companyId);
       }
     }
+    await assertAgentRouteAssignmentPolicy({
+      companyId: existing.companyId,
+      actorAgentId: actor.agentId,
+      assigneeAgentId: nextAssigneeAgentId,
+      title: updateFields.title ?? existing.title,
+      description: updateFields.description ?? existing.description,
+    });
 
     let issue;
     try {
