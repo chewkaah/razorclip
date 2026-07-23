@@ -335,9 +335,10 @@ increment_failure_counters() {
       ;;
     cloudflare_path_broken)
       previous="$public_failures"
+      local previous_cloudflare="$cloudflare_failures"
       reset_failure_counters
       public_failures=$((previous + 1))
-      cloudflare_failures=$((cloudflare_failures + 1))
+      cloudflare_failures=$((previous_cloudflare + 1))
       ;;
   esac
 }
@@ -497,7 +498,58 @@ perform_action() {
     return 0
   fi
   log_line "action=$action"
-  action_command "$action"
+  case "$action" in
+    docker-recover)
+      action_command restart-docker || return 1
+      if [[ "${PAPERCLIP_TEST_MODE:-0}" != "1" ]]; then
+        wait_for_docker_engine || return 1
+      fi
+      action_command compose-up
+      ;;
+    *)
+      action_command "$action"
+      ;;
+  esac
+}
+
+wait_for_docker_engine() {
+  local attempts=0
+  while [[ "$attempts" -lt 60 ]]; do
+    if "$DOCKER_BIN" info >/dev/null 2>&1; then
+      return 0
+    fi
+    /bin/sleep 2
+    attempts=$((attempts + 1))
+  done
+  return 1
+}
+
+cooldown_elapsed() {
+  local last="$1"
+  local cooldown="$2"
+  [[ "$last" -eq 0 || $((NOW - last)) -ge "$cooldown" ]]
+}
+
+select_with_cooldown() {
+  local action="$1"
+  local last="$2"
+  local cooldown="$3"
+  if cooldown_elapsed "$last" "$cooldown"; then
+    printf '%s' "$action"
+  else
+    log_line "action=suppressed reason=cooldown action=$action"
+  fi
+}
+
+choose_local_recovery() {
+  local action="$1"
+  local last="$2"
+  local cooldown="$3"
+  if [[ "$local_recovery_cycles" -ge 3 ]]; then
+    select_with_cooldown reboot-host "$last_reboot_at" "$REBOOT_COOLDOWN_SEC"
+  else
+    select_with_cooldown "$action" "$last" "$cooldown"
+  fi
 }
 
 choose_recovery_action() {
@@ -513,8 +565,25 @@ choose_recovery_action() {
         fi
       fi
       ;;
+    docker_engine_down)
+      if [[ "$docker_failures" -ge "$FAILURES_REQUIRED" ]]; then
+        choose_local_recovery docker-recover "$last_docker_at" "$DOCKER_COOLDOWN_SEC"
+      fi
+      ;;
     container_down)
-      [[ "$container_failures" -ge "$FAILURES_REQUIRED" ]] && printf '%s' compose-up
+      if [[ "$container_failures" -ge "$FAILURES_REQUIRED" ]]; then
+        choose_local_recovery compose-up "$last_compose_at" "$COMPOSE_COOLDOWN_SEC"
+      fi
+      ;;
+    docker_forwarding_broken)
+      if [[ "$host_failures" -ge "$FAILURES_REQUIRED" ]]; then
+        choose_local_recovery docker-recover "$last_docker_at" "$DOCKER_COOLDOWN_SEC"
+      fi
+      ;;
+    cloudflare_path_broken)
+      if [[ "$public_failures" -ge "$FAILURES_REQUIRED" ]]; then
+        select_with_cooldown restart-cloudflare "$last_cloudflare_at" "$CLOUDFLARE_COOLDOWN_SEC"
+      fi
       ;;
   esac
 }
@@ -551,6 +620,16 @@ main() {
         compose-up)
           last_compose_at="$NOW"
           local_recovery_cycles=$((local_recovery_cycles + 1))
+          ;;
+        docker-recover)
+          last_docker_at="$NOW"
+          local_recovery_cycles=$((local_recovery_cycles + 1))
+          ;;
+        restart-cloudflare)
+          last_cloudflare_at="$NOW"
+          ;;
+        reboot-host)
+          last_reboot_at="$NOW"
           ;;
       esac
     fi

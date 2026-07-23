@@ -251,6 +251,179 @@ test_socket_pressure_alone_never_advances_reboot() {
   fi
 }
 
+test_docker_engine_failure_recovers_docker_and_compose() {
+  begin_case
+  export PAPERCLIP_TEST_DOCKER_ENGINE=down
+  export PAPERCLIP_TEST_CONTAINER=down
+  export PAPERCLIP_TEST_HOST=down
+  export PAPERCLIP_TEST_PUBLIC=down
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_command_count "restart-docker" 1 \
+    && assert_command_count "compose-up" 1; then
+    pass "Docker engine failure restarts Docker then restores Compose"
+  else
+    fail "Docker engine failure restarts Docker then restores Compose"
+  fi
+}
+
+test_forwarding_failure_recovers_docker_and_compose() {
+  begin_case
+  export PAPERCLIP_TEST_HOST=down
+  export PAPERCLIP_TEST_PUBLIC=down
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_command_count "restart-docker" 1 \
+    && assert_command_count "compose-up" 1; then
+    pass "host forwarding failure restarts Docker then restores Compose"
+  else
+    fail "host forwarding failure restarts Docker then restores Compose"
+  fi
+}
+
+test_public_failure_restarts_cloudflare_only() {
+  begin_case
+  export PAPERCLIP_TEST_PUBLIC=down
+  export PAPERCLIP_TEST_CLOUDFLARE=down
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_command_count "restart-cloudflare" 1 \
+    && assert_command_not_called "restart-docker" \
+    && assert_command_not_called "compose-up" \
+    && assert_state_value "local_recovery_cycles" 0; then
+    pass "public-only failure restarts Cloudflare only"
+  else
+    fail "public-only failure restarts Cloudflare only"
+  fi
+}
+
+test_persistent_public_failure_never_reboots() {
+  begin_case
+  export PAPERCLIP_TEST_PUBLIC=down
+  export PAPERCLIP_TEST_CLOUDFLARE=down
+  local now=1000
+  local cycle=0
+  while [[ "$cycle" -lt 6 ]]; do
+    export PAPERCLIP_TEST_NOW="$now"
+    run_watchdog
+    now=$((now + 360))
+    cycle=$((cycle + 1))
+  done
+
+  if assert_command_not_called "reboot-host" \
+    && assert_state_value "local_recovery_cycles" 0; then
+    pass "persistent public-only failure never authorizes reboot"
+  else
+    fail "persistent public-only failure never authorizes reboot"
+  fi
+}
+
+test_local_outage_reboots_after_three_failed_recoveries() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  export PAPERCLIP_TEST_HOST=down
+  export PAPERCLIP_TEST_PUBLIC=down
+  local now
+  for now in 1000 1060 1361 1662 1963; do
+    export PAPERCLIP_TEST_NOW="$now"
+    run_watchdog
+  done
+
+  if assert_command_count "compose-up" 3 \
+    && assert_command_count "reboot-host" 1; then
+    pass "local outage reboots after exactly three failed recoveries"
+  else
+    fail "local outage reboots after exactly three failed recoveries"
+  fi
+}
+
+test_local_recovery_before_third_attempt_prevents_reboot() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  export PAPERCLIP_TEST_HOST=down
+  export PAPERCLIP_TEST_PUBLIC=down
+  local now
+  for now in 1000 1060 1361; do
+    export PAPERCLIP_TEST_NOW="$now"
+    run_watchdog
+  done
+  export PAPERCLIP_TEST_CONTAINER=ok
+  export PAPERCLIP_TEST_HOST=ok
+  export PAPERCLIP_TEST_PUBLIC=ok
+  export PAPERCLIP_TEST_NOW=1421
+  run_watchdog
+
+  if assert_command_not_called "reboot-host" \
+    && assert_state_value "local_recovery_cycles" 0; then
+    pass "local recovery before the third attempt prevents reboot"
+  else
+    fail "local recovery before the third attempt prevents reboot"
+  fi
+}
+
+test_compose_cooldown_suppresses_duplicate_recovery() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  export PAPERCLIP_TEST_HOST=down
+  export PAPERCLIP_TEST_PUBLIC=down
+  local now
+  for now in 1000 1060 1120; do
+    export PAPERCLIP_TEST_NOW="$now"
+    run_watchdog
+  done
+
+  if assert_command_count "compose-up" 1 \
+    && assert_log_contains "action=suppressed reason=cooldown action=compose-up"; then
+    pass "Compose cooldown suppresses duplicate recovery"
+  else
+    fail "Compose cooldown suppresses duplicate recovery"
+  fi
+}
+
+test_docker_cooldown_suppresses_duplicate_recovery() {
+  begin_case
+  export PAPERCLIP_TEST_DOCKER_ENGINE=down
+  export PAPERCLIP_TEST_CONTAINER=down
+  export PAPERCLIP_TEST_HOST=down
+  export PAPERCLIP_TEST_PUBLIC=down
+  local now
+  for now in 1000 1060 1120; do
+    export PAPERCLIP_TEST_NOW="$now"
+    run_watchdog
+  done
+
+  if assert_command_count "restart-docker" 1 \
+    && assert_log_contains "action=suppressed reason=cooldown action=docker-recover"; then
+    pass "Docker cooldown suppresses duplicate recovery"
+  else
+    fail "Docker cooldown suppresses duplicate recovery"
+  fi
+}
+
+test_cloudflare_cooldown_suppresses_duplicate_recovery() {
+  begin_case
+  export PAPERCLIP_TEST_PUBLIC=down
+  export PAPERCLIP_TEST_CLOUDFLARE=down
+  local now
+  for now in 1000 1060 1120; do
+    export PAPERCLIP_TEST_NOW="$now"
+    run_watchdog
+  done
+
+  if assert_command_count "restart-cloudflare" 1 \
+    && assert_log_contains "action=suppressed reason=cooldown action=restart-cloudflare"; then
+    pass "Cloudflare cooldown suppresses duplicate recovery"
+  else
+    fail "Cloudflare cooldown suppresses duplicate recovery"
+  fi
+}
+
 test_healthy_cycle_takes_no_action
 test_first_container_failure_only_increments_counter
 test_second_container_failure_runs_compose
@@ -262,6 +435,15 @@ test_first_socket_intervention_cycle_only_counts
 test_second_socket_intervention_stops_allowlisted_owner
 test_unknown_socket_owner_is_not_terminated
 test_socket_pressure_alone_never_advances_reboot
+test_docker_engine_failure_recovers_docker_and_compose
+test_forwarding_failure_recovers_docker_and_compose
+test_public_failure_restarts_cloudflare_only
+test_persistent_public_failure_never_reboots
+test_local_outage_reboots_after_three_failed_recoveries
+test_local_recovery_before_third_attempt_prevents_reboot
+test_compose_cooldown_suppresses_duplicate_recovery
+test_docker_cooldown_suppresses_duplicate_recovery
+test_cloudflare_cooldown_suppresses_duplicate_recovery
 
 printf '%s tests, %s failures\n' "$TESTS_RUN" "$TESTS_FAILED"
 [[ "$TESTS_FAILED" -eq 0 ]]
