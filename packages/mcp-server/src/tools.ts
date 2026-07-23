@@ -1,9 +1,13 @@
 import { z } from "zod";
 import {
   addIssueCommentSchema,
+  askUserQuestionsPayloadSchema,
   checkoutIssueSchema,
   createApprovalSchema,
   createIssueSchema,
+  issueThreadInteractionContinuationPolicySchema,
+  requestConfirmationPayloadSchema,
+  suggestTasksPayloadSchema,
   updateIssueSchema,
   upsertIssueDocumentSchema,
   linkIssueApprovalSchema,
@@ -14,16 +18,16 @@ import { formatErrorResponse, formatTextResponse } from "./format.js";
 export interface ToolDefinition {
   name: string;
   description: string;
-  schema: z.AnyZodObject;
+  schema: z.ZodTypeAny;
   execute: (input: Record<string, unknown>) => Promise<{
     content: Array<{ type: "text"; text: string }>;
   }>;
 }
 
-function makeTool<TSchema extends z.ZodRawShape>(
+function makeTool<TSchema extends z.ZodTypeAny>(
   name: string,
   description: string,
-  schema: z.ZodObject<TSchema>,
+  schema: TSchema,
   execute: (input: z.infer<typeof schema>) => Promise<unknown>,
 ): ToolDefinition {
   return {
@@ -107,6 +111,39 @@ const addCommentToolSchema = z.object({
   issueId: issueIdSchema,
 }).merge(addIssueCommentSchema);
 
+const createSuggestTasksToolSchema = z.object({
+  issueId: issueIdSchema,
+  idempotencyKey: z.string().trim().max(255).nullable().optional(),
+  sourceCommentId: z.string().uuid().nullable().optional(),
+  sourceRunId: z.string().uuid().nullable().optional(),
+  title: z.string().trim().max(240).nullable().optional(),
+  summary: z.string().trim().max(1000).nullable().optional(),
+  continuationPolicy: issueThreadInteractionContinuationPolicySchema.optional().default("wake_assignee"),
+  payload: suggestTasksPayloadSchema,
+});
+
+const createAskUserQuestionsToolSchema = z.object({
+  issueId: issueIdSchema,
+  idempotencyKey: z.string().trim().max(255).nullable().optional(),
+  sourceCommentId: z.string().uuid().nullable().optional(),
+  sourceRunId: z.string().uuid().nullable().optional(),
+  title: z.string().trim().max(240).nullable().optional(),
+  summary: z.string().trim().max(1000).nullable().optional(),
+  continuationPolicy: issueThreadInteractionContinuationPolicySchema.optional().default("wake_assignee"),
+  payload: askUserQuestionsPayloadSchema,
+});
+
+const createRequestConfirmationToolSchema = z.object({
+  issueId: issueIdSchema,
+  idempotencyKey: z.string().trim().max(255).nullable().optional(),
+  sourceCommentId: z.string().uuid().nullable().optional(),
+  sourceRunId: z.string().uuid().nullable().optional(),
+  title: z.string().trim().max(240).nullable().optional(),
+  summary: z.string().trim().max(1000).nullable().optional(),
+  continuationPolicy: issueThreadInteractionContinuationPolicySchema.optional().default("none"),
+  payload: requestConfirmationPayloadSchema,
+});
+
 const approvalDecisionSchema = z.object({
   approvalId: approvalIdSchema,
   action: z.enum(["approve", "reject", "requestRevision", "resubmit"]),
@@ -124,7 +161,277 @@ const apiRequestSchema = z.object({
   jsonBody: z.string().optional(),
 });
 
-export function createToolDefinitions(client: PaperclipApiClient): ToolDefinition[] {
+const workspaceRuntimeControlTargetSchema = z.object({
+  workspaceCommandId: z.string().min(1).optional().nullable(),
+  runtimeServiceId: z.string().uuid().optional().nullable(),
+  serviceIndex: z.number().int().nonnegative().optional().nullable(),
+});
+
+const issueWorkspaceRuntimeControlSchema = z.object({
+  issueId: issueIdSchema,
+  action: z.enum(["start", "stop", "restart"]),
+}).merge(workspaceRuntimeControlTargetSchema);
+
+const waitForIssueWorkspaceServiceSchema = z.object({
+  issueId: issueIdSchema,
+  runtimeServiceId: z.string().uuid().optional().nullable(),
+  serviceName: z.string().min(1).optional().nullable(),
+  timeoutSeconds: z.number().int().positive().max(300).optional(),
+});
+
+const officeScopeLookupSchema = z.object({
+  campaignId: z.string().min(1).optional(),
+  clientSlug: z.string().min(1).optional(),
+  notionPageId: z.string().min(1).optional(),
+}).superRefine((value, ctx) => {
+  const lookupCount = [value.campaignId, value.clientSlug, value.notionPageId]
+    .filter((entry) => typeof entry === "string" && entry.trim().length > 0)
+    .length;
+  if (lookupCount !== 1) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Provide exactly one of campaignId, clientSlug, or notionPageId",
+      path: ["campaignId"],
+    });
+  }
+});
+
+const officeCreateTaskSchema = z.object({
+  companyId: companyIdOptional,
+  projectId: z.string().uuid().optional().nullable(),
+  goalId: z.string().uuid().optional().nullable(),
+  parentId: z.string().uuid().optional().nullable(),
+  blockedByIssueIds: z.array(z.string().uuid()).optional(),
+  title: z.string().min(1),
+  description: z.string().optional().nullable(),
+  status: createIssueSchema.shape.status.optional(),
+  priority: createIssueSchema.shape.priority.optional(),
+  assigneeAgentId: z.string().uuid().optional().nullable(),
+  assigneeUserId: z.string().trim().min(1).optional().nullable(),
+  labelIds: z.array(z.string().uuid()).optional(),
+}).superRefine((value, ctx) => {
+  if (value.assigneeAgentId && value.assigneeUserId) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Tasks can only target one assignee",
+      path: ["assigneeAgentId"],
+    });
+  }
+});
+
+const officeUpdateTaskSchema = z.object({
+  issueId: issueIdSchema,
+  title: z.string().min(1).optional(),
+  description: z.string().optional().nullable(),
+  status: updateIssueSchema.shape.status.optional(),
+  priority: updateIssueSchema.shape.priority.optional(),
+  assigneeAgentId: z.string().trim().min(1).optional().nullable(),
+  assigneeUserId: z.string().trim().min(1).optional().nullable(),
+  comment: updateIssueSchema.shape.comment.optional(),
+  reopen: updateIssueSchema.shape.reopen.optional(),
+  resume: updateIssueSchema.shape.resume.optional(),
+  interrupt: updateIssueSchema.shape.interrupt.optional(),
+}).superRefine((value, ctx) => {
+  if (value.assigneeAgentId && value.assigneeUserId) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Tasks can only target one assignee",
+      path: ["assigneeAgentId"],
+    });
+  }
+});
+
+const officeCommentTaskSchema = z.object({
+  issueId: issueIdSchema,
+}).merge(addIssueCommentSchema);
+
+const officeWakeAgentSchema = z.object({
+  agentId: z.string().uuid(),
+  reason: z.string().trim().min(1).max(255),
+  idempotencyKey: z.string().trim().min(1).max(255),
+  issueId: issueIdSchema.optional(),
+  forceFreshSession: z.boolean().optional().default(false),
+  payload: z.record(z.unknown()).optional().nullable(),
+});
+
+const officeGetAgentStatusSchema = z.object({
+  agentId: z.string().uuid(),
+});
+
+const officeListActiveRunsSchema = z.object({
+  companyId: companyIdOptional,
+  issueId: issueIdSchema.optional(),
+  minCount: z.number().int().nonnegative().max(50).optional(),
+  limit: z.number().int().nonnegative().max(50).optional(),
+});
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function readCurrentExecutionWorkspace(context: unknown): Record<string, unknown> | null {
+  if (!context || typeof context !== "object") return null;
+  const workspace = (context as { currentExecutionWorkspace?: unknown }).currentExecutionWorkspace;
+  return workspace && typeof workspace === "object" ? workspace as Record<string, unknown> : null;
+}
+
+function readWorkspaceRuntimeServices(workspace: Record<string, unknown> | null): Array<Record<string, unknown>> {
+  const raw = workspace?.runtimeServices;
+  return Array.isArray(raw)
+    ? raw.filter((entry): entry is Record<string, unknown> => Boolean(entry) && typeof entry === "object")
+    : [];
+}
+
+function selectRuntimeService(
+  services: Array<Record<string, unknown>>,
+  input: { runtimeServiceId?: string | null; serviceName?: string | null },
+) {
+  if (input.runtimeServiceId) {
+    return services.find((service) => service.id === input.runtimeServiceId) ?? null;
+  }
+  if (input.serviceName) {
+    return services.find((service) => service.serviceName === input.serviceName) ?? null;
+  }
+  return services.find((service) => service.status === "running" || service.status === "starting")
+    ?? services[0]
+    ?? null;
+}
+
+async function getIssueWorkspaceRuntime(client: PaperclipApiClient, issueId: string) {
+  const context = await client.requestJson("GET", `/issues/${encodeURIComponent(issueId)}/heartbeat-context`);
+  const workspace = readCurrentExecutionWorkspace(context);
+  return {
+    context,
+    workspace,
+    runtimeServices: readWorkspaceRuntimeServices(workspace),
+  };
+}
+
+function buildOfficeClientScopePath(input: z.infer<typeof officeScopeLookupSchema>): string {
+  const params = new URLSearchParams();
+  if (input.campaignId) params.set("campaignId", input.campaignId);
+  if (input.clientSlug) params.set("clientSlug", input.clientSlug);
+  if (input.notionPageId) params.set("notionPageId", input.notionPageId);
+  return `/internal/office/client-scope?${params.toString()}`;
+}
+
+function createOfficeToolDefinitions(client: PaperclipApiClient): ToolDefinition[] {
+  return [
+    makeTool(
+      "integralOfficeGetApprovedPlan",
+      "Get the approved plan mirror state for a Tracker client or campaign",
+      officeScopeLookupSchema,
+      async (input) => client.requestTrackerJson("GET", buildOfficeClientScopePath(input), { includeRunId: false }),
+    ),
+    makeTool(
+      "integralOfficeListDeliverables",
+      "List mapped deliverables and action items for a Tracker client or campaign",
+      officeScopeLookupSchema,
+      async (input) => {
+        const scope = await client.requestTrackerJson<Record<string, unknown>>(
+          "GET",
+          buildOfficeClientScopePath(input),
+          { includeRunId: false },
+        );
+        return {
+          campaign: scope.campaign ?? null,
+          deliverables: scope.deliverables ?? [],
+          actionItems: scope.actionItems ?? [],
+        };
+      },
+    ),
+    makeTool(
+      "integralOfficeListUnmappedScope",
+      "List unmapped promised services for a Tracker client or campaign",
+      officeScopeLookupSchema,
+      async (input) => {
+        const scope = await client.requestTrackerJson<Record<string, unknown>>(
+          "GET",
+          buildOfficeClientScopePath(input),
+          { includeRunId: false },
+        );
+        return {
+          campaign: scope.campaign ?? null,
+          unmappedServices: scope.unmappedServices ?? [],
+        };
+      },
+    ),
+    makeTool(
+      "integralOfficeGetClientScope",
+      "Get approved plan, deliverables, action items, unmapped scope, and workstreams for one Tracker client or campaign",
+      officeScopeLookupSchema,
+      async (input) => client.requestTrackerJson("GET", buildOfficeClientScopePath(input), { includeRunId: false }),
+    ),
+    makeTool(
+      "integralOfficeCreateTask",
+      "Create a Paperclip issue for Office operations work",
+      officeCreateTaskSchema,
+      async ({ companyId, ...body }) =>
+        client.requestJson("POST", `/companies/${client.resolveCompanyId(companyId)}/issues`, { body }),
+    ),
+    makeTool(
+      "integralOfficeCommentTask",
+      "Add an Office workflow comment to an existing Paperclip issue",
+      officeCommentTaskSchema,
+      async ({ issueId, ...body }) =>
+        client.requestJson("POST", `/issues/${encodeURIComponent(issueId)}/comments`, { body }),
+    ),
+    makeTool(
+      "integralOfficeUpdateTask",
+      "Update Office workflow task state, ownership, or add a comment on an existing issue",
+      officeUpdateTaskSchema,
+      async ({ issueId, ...body }) =>
+        client.requestJson("PATCH", `/issues/${encodeURIComponent(issueId)}`, { body }),
+    ),
+    makeTool(
+      "integralOfficeWakeAgent",
+      "Request an explicit agent wakeup for Office follow-up using a duplicate-safe idempotency key",
+      officeWakeAgentSchema,
+      async ({ agentId, issueId, payload, ...body }) =>
+        client.requestJson("POST", `/agents/${encodeURIComponent(agentId)}/wakeup`, {
+          body: {
+            source: "on_demand",
+            triggerDetail: "manual",
+            ...body,
+            payload: {
+              ...(payload ?? {}),
+              issueId: issueId ?? null,
+            },
+          },
+        }),
+    ),
+    makeTool(
+      "integralOfficeGetAgentStatus",
+      "Get the current Paperclip status and detail for one Office-routed agent",
+      officeGetAgentStatusSchema,
+      async ({ agentId }) => client.requestJson("GET", `/agents/${encodeURIComponent(agentId)}`),
+    ),
+    makeTool(
+      "integralOfficeListActiveRuns",
+      "List queued and running Paperclip heartbeats for a company or one issue",
+      officeListActiveRunsSchema,
+      async ({ companyId, issueId, minCount, limit }) => {
+        if (issueId) {
+          return client.requestJson("GET", `/issues/${encodeURIComponent(issueId)}/live-runs`, {
+            includeRunId: false,
+          });
+        }
+
+        const params = new URLSearchParams();
+        if (typeof minCount === "number") params.set("minCount", String(minCount));
+        if (typeof limit === "number") params.set("limit", String(limit));
+        const query = params.toString();
+        return client.requestJson(
+          "GET",
+          `/companies/${client.resolveCompanyId(companyId)}/live-runs${query ? `?${query}` : ""}`,
+          { includeRunId: false },
+        );
+      },
+    ),
+  ];
+}
+
+function createPaperclipToolDefinitions(client: PaperclipApiClient): ToolDefinition[] {
   return [
     makeTool(
       "paperclipMe",
@@ -248,6 +555,55 @@ export function createToolDefinitions(client: PaperclipApiClient): ToolDefinitio
       },
     ),
     makeTool(
+      "paperclipGetIssueWorkspaceRuntime",
+      "Get the current execution workspace and runtime services for an issue, including service URLs",
+      z.object({ issueId: issueIdSchema }),
+      async ({ issueId }) => getIssueWorkspaceRuntime(client, issueId),
+    ),
+    makeTool(
+      "paperclipControlIssueWorkspaceServices",
+      "Start, stop, or restart the current issue execution workspace runtime services",
+      issueWorkspaceRuntimeControlSchema,
+      async ({ issueId, action, ...target }) => {
+        const runtime = await getIssueWorkspaceRuntime(client, issueId);
+        const workspaceId = typeof runtime.workspace?.id === "string" ? runtime.workspace.id : null;
+        if (!workspaceId) {
+          throw new Error("Issue has no current execution workspace");
+        }
+        return client.requestJson(
+          "POST",
+          `/execution-workspaces/${encodeURIComponent(workspaceId)}/runtime-services/${action}`,
+          { body: target },
+        );
+      },
+    ),
+    makeTool(
+      "paperclipWaitForIssueWorkspaceService",
+      "Wait until an issue execution workspace runtime service is running and has a URL when one is exposed",
+      waitForIssueWorkspaceServiceSchema,
+      async ({ issueId, runtimeServiceId, serviceName, timeoutSeconds }) => {
+        const deadline = Date.now() + (timeoutSeconds ?? 60) * 1000;
+        let latest: Awaited<ReturnType<typeof getIssueWorkspaceRuntime>> | null = null;
+        while (Date.now() <= deadline) {
+          latest = await getIssueWorkspaceRuntime(client, issueId);
+          const service = selectRuntimeService(latest.runtimeServices, { runtimeServiceId, serviceName });
+          if (service?.status === "running" && service.healthStatus !== "unhealthy") {
+            return {
+              workspace: latest.workspace,
+              service,
+            };
+          }
+          await sleep(1000);
+        }
+
+        return {
+          timedOut: true,
+          latestWorkspace: latest?.workspace ?? null,
+          latestRuntimeServices: latest?.runtimeServices ?? [],
+        };
+      },
+    ),
+    makeTool(
       "paperclipListGoals",
       "List goals in a company",
       z.object({ companyId: companyIdOptional }),
@@ -304,7 +660,7 @@ export function createToolDefinitions(client: PaperclipApiClient): ToolDefinitio
     ),
     makeTool(
       "paperclipUpdateIssue",
-      "Patch an issue, optionally including a comment",
+      "Patch an issue, optionally including a comment; include resume=true when intentionally requesting follow-up on resumable closed work",
       updateIssueToolSchema,
       async ({ issueId, ...body }) =>
         client.requestJson("PATCH", `/issues/${encodeURIComponent(issueId)}`, { body }),
@@ -329,10 +685,46 @@ export function createToolDefinitions(client: PaperclipApiClient): ToolDefinitio
     ),
     makeTool(
       "paperclipAddComment",
-      "Add a comment to an issue",
+      "Add a comment to an issue; include resume=true when intentionally requesting follow-up on resumable closed work",
       addCommentToolSchema,
       async ({ issueId, ...body }) =>
         client.requestJson("POST", `/issues/${encodeURIComponent(issueId)}/comments`, { body }),
+    ),
+    makeTool(
+      "paperclipSuggestTasks",
+      "Create a suggest_tasks interaction on an issue",
+      createSuggestTasksToolSchema,
+      async ({ issueId, ...body }) =>
+        client.requestJson("POST", `/issues/${encodeURIComponent(issueId)}/interactions`, {
+          body: {
+            kind: "suggest_tasks",
+            ...body,
+          },
+        }),
+    ),
+    makeTool(
+      "paperclipAskUserQuestions",
+      "Create an ask_user_questions interaction on an issue",
+      createAskUserQuestionsToolSchema,
+      async ({ issueId, ...body }) =>
+        client.requestJson("POST", `/issues/${encodeURIComponent(issueId)}/interactions`, {
+          body: {
+            kind: "ask_user_questions",
+            ...body,
+          },
+        }),
+    ),
+    makeTool(
+      "paperclipRequestConfirmation",
+      "Create a request_confirmation interaction on an issue",
+      createRequestConfirmationToolSchema,
+      async ({ issueId, ...body }) =>
+        client.requestJson("POST", `/issues/${encodeURIComponent(issueId)}/interactions`, {
+          body: {
+            kind: "request_confirmation",
+            ...body,
+          },
+        }),
     ),
     makeTool(
       "paperclipUpsertIssueDocument",
@@ -424,4 +816,14 @@ export function createToolDefinitions(client: PaperclipApiClient): ToolDefinitio
       },
     ),
   ];
+}
+
+export function createToolDefinitions(
+  client: PaperclipApiClient,
+  preset: "paperclip" | "office" = "paperclip",
+): ToolDefinition[] {
+  if (preset === "office") {
+    return createOfficeToolDefinitions(client);
+  }
+  return createPaperclipToolDefinitions(client);
 }

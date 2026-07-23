@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from "@/lib/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { approvalsApi } from "../api/approvals";
 import { agentsApi } from "../api/agents";
+import { budgetsApi } from "../api/budgets";
 import { useCompany } from "../context/CompanyContext";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { queryKeys } from "../lib/queryKeys";
@@ -10,6 +11,7 @@ import { StatusBadge } from "../components/StatusBadge";
 import { Identity } from "../components/Identity";
 import { approvalLabel, typeIcon, defaultTypeIcon, ApprovalPayloadRenderer } from "../components/ApprovalPayload";
 import { PageSkeleton } from "../components/PageSkeleton";
+import { BudgetIncidentCard } from "../components/BudgetIncidentCard";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, ChevronRight, Sparkles } from "lucide-react";
@@ -52,6 +54,12 @@ export function ApprovalDetail() {
     enabled: !!resolvedCompanyId,
   });
 
+  const { data: budgetOverview } = useQuery({
+    queryKey: queryKeys.budgets.overview(resolvedCompanyId ?? ""),
+    queryFn: () => budgetsApi.overview(resolvedCompanyId ?? ""),
+    enabled: !!resolvedCompanyId,
+  });
+
   useEffect(() => {
     if (!approval?.companyId || approval.companyId === selectedCompanyId) return;
     setSelectedCompanyId(approval.companyId, { source: "route_sync" });
@@ -81,6 +89,7 @@ export function ApprovalDetail() {
         queryKey: queryKeys.approvals.list(approval.companyId, "pending"),
       });
       queryClient.invalidateQueries({ queryKey: queryKeys.agents.list(approval.companyId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.budgets.overview(approval.companyId) });
     }
   };
 
@@ -141,6 +150,21 @@ export function ApprovalDetail() {
     onError: (err) => setError(err instanceof Error ? err.message : "Delete failed"),
   });
 
+  const budgetIncidentMutation = useMutation({
+    mutationFn: (input: { incidentId: string; action: "keep_paused" | "raise_budget_and_resume"; amount?: number }) => {
+      if (!approval?.companyId) throw new Error("Approval company is not loaded yet");
+      return budgetsApi.resolveIncident(approval.companyId, input.incidentId, input);
+    },
+    onSuccess: (_incident, input) => {
+      setError(null);
+      refresh();
+      if (input.action === "raise_budget_and_resume") {
+        navigate(`/approvals/${approvalId}?resolved=approved`, { replace: true });
+      }
+    },
+    onError: (err) => setError(err instanceof Error ? err.message : "Budget resolution failed"),
+  });
+
   if (isLoading) return <PageSkeleton variant="detail" />;
   if (!approval) return <p className="text-sm text-muted-foreground">Approval not found.</p>;
 
@@ -148,6 +172,9 @@ export function ApprovalDetail() {
   const linkedAgentId = typeof payload.agentId === "string" ? payload.agentId : null;
   const isActionable = approval.status === "pending" || approval.status === "revision_requested";
   const isBudgetApproval = approval.type === "budget_override_required";
+  const budgetIncident = isBudgetApproval
+    ? (budgetOverview?.activeIncidents ?? []).find((incident) => incident.approvalId === approval.id) ?? null
+    : null;
   const TypeIcon = typeIcon[approval.type] ?? defaultTypeIcon;
   const showApprovedBanner = searchParams.get("resolved") === "approved" && approval.status === "approved";
   const primaryLinkedIssue = linkedIssues?.[0] ?? null;
@@ -260,6 +287,27 @@ export function ApprovalDetail() {
             </p>
           </div>
         )}
+        {budgetIncident && approval.status === "pending" && (
+          <div className="pt-2 border-t border-border/60">
+            <BudgetIncidentCard
+              incident={budgetIncident}
+              isMutating={budgetIncidentMutation.isPending}
+              onRaiseAndResume={(amount) =>
+                budgetIncidentMutation.mutate({
+                  incidentId: budgetIncident.id,
+                  action: "raise_budget_and_resume",
+                  amount,
+                })
+              }
+              onKeepPaused={() =>
+                budgetIncidentMutation.mutate({
+                  incidentId: budgetIncident.id,
+                  action: "keep_paused",
+                })
+              }
+            />
+          </div>
+        )}
         <div className="flex flex-wrap items-center gap-2">
           {isActionable && !isBudgetApproval && (
             <>
@@ -281,9 +329,9 @@ export function ApprovalDetail() {
               </Button>
             </>
           )}
-          {isBudgetApproval && approval.status === "pending" && (
+          {isBudgetApproval && approval.status === "pending" && !budgetIncident && (
             <p className="text-sm text-muted-foreground">
-              Resolve this budget stop from the budget controls on <Link to="/costs" className="underline underline-offset-2">/costs</Link>.
+              Budget incident controls are still loading. You can also open <Link to="/costs" className="underline underline-offset-2">/costs</Link>.
             </p>
           )}
           {approval.status === "pending" && (
