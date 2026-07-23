@@ -41,6 +41,7 @@
     "evals:smoke": "cd evals/promptfoo && npx promptfoo@0.103.3 eval",
     "test:release-smoke": "npx playwright test --config tests/release-smoke/playwright.config.ts",
     "test:release-smoke:headed": "npx playwright test --config tests/release-smoke/playwright.config.ts --headed",
+    "test:paperclip-watchdog": "bash tests/scripts/paperclip-watchdog.test.sh",
     "metrics:paperclip-commits": "tsx scripts/paperclip-commit-metrics.ts"
   },
   "devDependencies": {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.agent.paperclip-watchdog</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/agent0/Dev/razorclip/scripts/paperclip-watchdog.sh</string>
+        <string>--state-dir</string>
+        <string>/Users/agent0/agent/paperclip-watchdog</string>
+    </array>
+
+    <key>StartInterval</key>
+    <integer>60</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+
+    <key>StandardOutPath</key>
+    <string>/Users/agent0/agent/paperclip-watchdog/launchd.out.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/agent0/agent/paperclip-watchdog/launchd.err.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>PAPERCLIP_COMPOSE_FILE</key>
+        <string>/Users/agent0/Dev/razorclip/docker/docker-compose.yml</string>
+        <key>PAPERCLIP_CLOUDFLARE_LABEL</key>
+        <string>com.cloudflare.cloudflared</string>
+        <key>PAPERCLIP_HERMES_DASHBOARD_LABELS</key>
+        <string>ai.hermes.desktop,ai.hermes.dashboard</string>
+        <key>HERMES_ENV_FILE</key>
+        <string>/Users/agent0/.hermes/.env</string>
+    </dict>
+</dict>
+</plist>
