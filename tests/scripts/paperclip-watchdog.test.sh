@@ -65,6 +65,20 @@ assert_command_not_called() {
   ! grep -Fxq "$command" "$COMMAND_LOG"
 }
 
+assert_command_count() {
+  local command="$1"
+  local expected="$2"
+  local actual
+  actual="$(grep -Fxc "$command" "$COMMAND_LOG" || true)"
+  [[ "$actual" -eq "$expected" ]]
+}
+
+assert_state_value() {
+  local key="$1"
+  local expected="$2"
+  grep -Fxq "$key=$expected" "$CASE_DIR/state/state"
+}
+
 test_healthy_cycle_takes_no_action() {
   begin_case
   run_watchdog
@@ -81,7 +95,73 @@ test_healthy_cycle_takes_no_action() {
   fi
 }
 
+test_first_container_failure_only_increments_counter() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  run_watchdog
+
+  if assert_status 0 \
+    && assert_state_value "container_failures" 1 \
+    && assert_command_not_called "compose-up"; then
+    pass "first container failure only increments its counter"
+  else
+    fail "first container failure only increments its counter"
+  fi
+}
+
+test_second_container_failure_runs_compose() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_status 0 \
+    && assert_command_count "compose-up" 1; then
+    pass "second container failure runs Compose recovery"
+  else
+    fail "second container failure runs Compose recovery"
+  fi
+}
+
+test_dry_run_records_but_does_not_run_recovery() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog --dry-run
+
+  if assert_status 0 \
+    && assert_log_contains "dry_run action=compose-up" \
+    && assert_command_not_called "compose-up"; then
+    pass "dry-run records recovery without executing it"
+  else
+    fail "dry-run records recovery without executing it"
+  fi
+}
+
+test_healthy_cycle_resets_failure_state() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  run_watchdog
+  export PAPERCLIP_TEST_CONTAINER=ok
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_status 0 \
+    && assert_state_value "container_failures" 0 \
+    && assert_state_value "local_recovery_cycles" 0; then
+    pass "healthy cycle resets failure and recovery counters"
+  else
+    fail "healthy cycle resets failure and recovery counters"
+  fi
+}
+
 test_healthy_cycle_takes_no_action
+test_first_container_failure_only_increments_counter
+test_second_container_failure_runs_compose
+test_dry_run_records_but_does_not_run_recovery
+test_healthy_cycle_resets_failure_state
 
 printf '%s tests, %s failures\n' "$TESTS_RUN" "$TESTS_FAILED"
 [[ "$TESTS_FAILED" -eq 0 ]]
