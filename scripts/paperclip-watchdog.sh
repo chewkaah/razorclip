@@ -31,12 +31,16 @@ DRY_RUN=0
 LOCK_HELD=0
 NOW=0
 SOCKET_PERCENT=0
+SOCKET_USED=0
+SOCKET_TIME_WAIT=0
+SOCKET_TOP_OWNER=unknown
 DOCKER_ENGINE_RESULT=down
 CONTAINER_RESULT=down
 HOST_RESULT=down
 PUBLIC_RESULT=down
 CLOUDFLARE_RESULT=down
 CLASSIFICATION=unknown
+POST_ACTION=0
 
 socket_failures=0
 docker_failures=0
@@ -181,35 +185,66 @@ sysctl_value() {
 probe_socket_capacity() {
   if [[ "${PAPERCLIP_TEST_MODE:-0}" == "1" ]]; then
     SOCKET_PERCENT="${PAPERCLIP_TEST_SOCKET_PERCENT:-0}"
+    SOCKET_USED="${PAPERCLIP_TEST_SOCKET_USED:-0}"
+    SOCKET_TIME_WAIT="${PAPERCLIP_TEST_TIME_WAIT:-0}"
+    SOCKET_TOP_OWNER="${PAPERCLIP_TEST_SOCKET_TOP_OWNER:-test-owner}"
     valid_uint "$SOCKET_PERCENT" || return 1
     return 0
   fi
 
-  local first last hifirst hilast low high capacity used
+  local first last hifirst hilast capacity overlap_low overlap_high overlap result
   first="$(sysctl_value net.inet.ip.portrange.first)" || return 1
   last="$(sysctl_value net.inet.ip.portrange.last)" || return 1
   hifirst="$(sysctl_value net.inet.ip.portrange.hifirst)" || return 1
   hilast="$(sysctl_value net.inet.ip.portrange.hilast)" || return 1
-  low="$first"
-  [[ "$hifirst" -lt "$low" ]] && low="$hifirst"
-  high="$last"
-  [[ "$hilast" -gt "$high" ]] && high="$hilast"
-  capacity=$((high - low + 1))
+  capacity=$((last - first + 1 + hilast - hifirst + 1))
+  overlap_low="$first"
+  [[ "$hifirst" -gt "$overlap_low" ]] && overlap_low="$hifirst"
+  overlap_high="$last"
+  [[ "$hilast" -lt "$overlap_high" ]] && overlap_high="$hilast"
+  overlap=0
+  [[ "$overlap_high" -ge "$overlap_low" ]] && overlap=$((overlap_high - overlap_low + 1))
+  capacity=$((capacity - overlap))
   [[ "$capacity" -gt 0 ]] || return 1
-  used="$("$NETSTAT_BIN" -an -p tcp 2>/dev/null | awk -v low="$low" -v high="$high" '
+  result="$("$NETSTAT_BIN" -an -p tcp 2>/dev/null | awk \
+    -v first="$first" -v last="$last" -v hifirst="$hifirst" -v hilast="$hilast" '
     $1 ~ /^tcp/ && $NF ~ /^(ESTABLISHED|SYN_SENT|FIN_WAIT_1|FIN_WAIT_2|CLOSE_WAIT|LAST_ACK|TIME_WAIT)$/ {
       endpoint=$4
       sub(/^.*[.:]/, "", endpoint)
-      if (endpoint + 0 >= low && endpoint + 0 <= high) seen[$0]=1
+      port=endpoint + 0
+      in_range=(port >= first && port <= last) || (port >= hifirst && port <= hilast)
+      if (in_range && !seen[$0]++) {
+        used++
+        if ($NF == "TIME_WAIT") time_wait++
+      }
     }
-    END { print length(seen) }
+    END { print used + 0, time_wait + 0 }
   ')" || return 1
-  SOCKET_PERCENT=$((used * 100 / capacity))
+  SOCKET_USED="${result%% *}"
+  SOCKET_TIME_WAIT="${result##* }"
+  valid_uint "$SOCKET_USED" && valid_uint "$SOCKET_TIME_WAIT" || return 1
+  SOCKET_PERCENT=$((SOCKET_USED * 100 / capacity))
+  SOCKET_TOP_OWNER="$("$LSOF_BIN" -nP -iTCP 2>/dev/null | awk '
+    NR > 1 { count[$1]++ }
+    END {
+      winner="unknown"; max=0
+      for (name in count) {
+        if (count[name] > max) { winner=name; max=count[name] }
+      }
+      gsub(/[^A-Za-z0-9_.-]/, "", winner)
+      print winner
+    }
+  ')"
+  [[ -n "$SOCKET_TOP_OWNER" ]] || SOCKET_TOP_OWNER=unknown
 }
 
 probe_docker_engine() {
   if [[ "${PAPERCLIP_TEST_MODE:-0}" == "1" ]]; then
-    DOCKER_ENGINE_RESULT="${PAPERCLIP_TEST_DOCKER_ENGINE:-down}"
+    if [[ "$POST_ACTION" -eq 1 && -n "${PAPERCLIP_TEST_POST_ACTION_DOCKER_ENGINE:-}" ]]; then
+      DOCKER_ENGINE_RESULT="$PAPERCLIP_TEST_POST_ACTION_DOCKER_ENGINE"
+    else
+      DOCKER_ENGINE_RESULT="${PAPERCLIP_TEST_DOCKER_ENGINE:-down}"
+    fi
     return
   fi
   if "$DOCKER_BIN" info >/dev/null 2>&1; then
@@ -221,7 +256,11 @@ probe_docker_engine() {
 
 probe_container() {
   if [[ "${PAPERCLIP_TEST_MODE:-0}" == "1" ]]; then
-    CONTAINER_RESULT="${PAPERCLIP_TEST_CONTAINER:-down}"
+    if [[ "$POST_ACTION" -eq 1 && -n "${PAPERCLIP_TEST_POST_ACTION_CONTAINER:-}" ]]; then
+      CONTAINER_RESULT="$PAPERCLIP_TEST_POST_ACTION_CONTAINER"
+    else
+      CONTAINER_RESULT="${PAPERCLIP_TEST_CONTAINER:-down}"
+    fi
     return
   fi
   if [[ "$DOCKER_ENGINE_RESULT" != "ok" ]]; then
@@ -244,7 +283,11 @@ http_probe() {
 
 probe_host_health() {
   if [[ "${PAPERCLIP_TEST_MODE:-0}" == "1" ]]; then
-    HOST_RESULT="${PAPERCLIP_TEST_HOST:-down}"
+    if [[ "$POST_ACTION" -eq 1 && -n "${PAPERCLIP_TEST_POST_ACTION_HOST:-}" ]]; then
+      HOST_RESULT="$PAPERCLIP_TEST_POST_ACTION_HOST"
+    else
+      HOST_RESULT="${PAPERCLIP_TEST_HOST:-down}"
+    fi
   elif http_probe "$LOCAL_HEALTH_URL"; then
     HOST_RESULT=ok
   else
@@ -254,7 +297,11 @@ probe_host_health() {
 
 probe_public_health() {
   if [[ "${PAPERCLIP_TEST_MODE:-0}" == "1" ]]; then
-    PUBLIC_RESULT="${PAPERCLIP_TEST_PUBLIC:-down}"
+    if [[ "$POST_ACTION" -eq 1 && -n "${PAPERCLIP_TEST_POST_ACTION_PUBLIC:-}" ]]; then
+      PUBLIC_RESULT="$PAPERCLIP_TEST_POST_ACTION_PUBLIC"
+    else
+      PUBLIC_RESULT="${PAPERCLIP_TEST_PUBLIC:-down}"
+    fi
   elif http_probe "$PUBLIC_HEALTH_URL"; then
     PUBLIC_RESULT=ok
   else
@@ -264,7 +311,11 @@ probe_public_health() {
 
 probe_cloudflare() {
   if [[ "${PAPERCLIP_TEST_MODE:-0}" == "1" ]]; then
-    CLOUDFLARE_RESULT="${PAPERCLIP_TEST_CLOUDFLARE:-down}"
+    if [[ "$POST_ACTION" -eq 1 && -n "${PAPERCLIP_TEST_POST_ACTION_CLOUDFLARE:-}" ]]; then
+      CLOUDFLARE_RESULT="$PAPERCLIP_TEST_POST_ACTION_CLOUDFLARE"
+    else
+      CLOUDFLARE_RESULT="${PAPERCLIP_TEST_CLOUDFLARE:-down}"
+    fi
   elif "$LAUNCHCTL_BIN" print "system/$CLOUDFLARE_LABEL" >/dev/null 2>&1; then
     CLOUDFLARE_RESULT=ok
   else
@@ -600,6 +651,46 @@ choose_recovery_action() {
   esac
 }
 
+recovery_target_healthy() {
+  local action="$1"
+  case "$action" in
+    stop-hermes-dashboard)
+      [[ "$SOCKET_PERCENT" -lt "$SOCKET_ACTION_PERCENT" ]]
+      ;;
+    compose-up|docker-recover)
+      [[ "$DOCKER_ENGINE_RESULT" == "ok" && "$CONTAINER_RESULT" == "ok" && "$HOST_RESULT" == "ok" ]]
+      ;;
+    restart-cloudflare)
+      [[ "$HOST_RESULT" == "ok" && "$PUBLIC_RESULT" == "ok" ]]
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+verify_after_action() {
+  local action="$1"
+  local attempts=0
+  local max_attempts=30
+  POST_ACTION=1
+  while [[ "$attempts" -lt "$max_attempts" ]]; do
+    run_probes
+    classify_failure
+    if recovery_target_healthy "$action"; then
+      log_line "post_action=healthy action=$action classification=$CLASSIFICATION"
+      return 0
+    fi
+    if [[ "${PAPERCLIP_TEST_MODE:-0}" == "1" ]]; then
+      break
+    fi
+    /bin/sleep 2
+    attempts=$((attempts + 1))
+  done
+  log_line "post_action=failed action=$action classification=$CLASSIFICATION"
+  return 1
+}
+
 main() {
   parse_args "$@" || return $?
   umask 077
@@ -617,7 +708,7 @@ main() {
   run_probes
   classify_failure
   increment_failure_counters
-  log_line "classification=$CLASSIFICATION socket_percent=$SOCKET_PERCENT docker=$DOCKER_ENGINE_RESULT container=$CONTAINER_RESULT host=$HOST_RESULT public=$PUBLIC_RESULT cloudflare=$CLOUDFLARE_RESULT"
+  log_line "classification=$CLASSIFICATION socket_percent=$SOCKET_PERCENT socket_used=$SOCKET_USED time_wait=$SOCKET_TIME_WAIT socket_top_owner=$SOCKET_TOP_OWNER docker=$DOCKER_ENGINE_RESULT container=$CONTAINER_RESULT host=$HOST_RESULT public=$PUBLIC_RESULT cloudflare=$CLOUDFLARE_RESULT"
 
   if [[ "$SOCKET_PERCENT" -ge "$SOCKET_WARNING_PERCENT" && "$SOCKET_PERCENT" -lt "$SOCKET_ACTION_PERCENT" ]]; then
     send_rate_limited_warning socket_pressure "Ephemeral TCP socket use reached ${SOCKET_PERCENT}%."
@@ -633,24 +724,51 @@ main() {
   local action
   action="$(choose_recovery_action)"
   if [[ -n "$action" ]]; then
-    perform_action "$action" || log_line "action_failed=$action"
+    if [[ "$action" == "reboot-host" ]]; then
+      send_alert critical reboot \
+        "Paperclip remains locally unavailable after three recovery cycles; rebooting the Mac mini." || true
+    else
+      send_alert recovery_action "$CLASSIFICATION" \
+        "Paperclip watchdog selected $action for $CLASSIFICATION." || true
+    fi
+    if ! perform_action "$action"; then
+      log_line "action_failed=$action"
+    fi
     if [[ "$DRY_RUN" -eq 0 ]]; then
       case "$action" in
         compose-up)
           last_compose_at="$NOW"
-          local_recovery_cycles=$((local_recovery_cycles + 1))
+          if verify_after_action "$action"; then
+            local_recovery_cycles=0
+          else
+            local_recovery_cycles=$((local_recovery_cycles + 1))
+          fi
           ;;
         docker-recover)
           last_docker_at="$NOW"
-          local_recovery_cycles=$((local_recovery_cycles + 1))
+          if verify_after_action "$action"; then
+            local_recovery_cycles=0
+          else
+            local_recovery_cycles=$((local_recovery_cycles + 1))
+          fi
           ;;
         restart-cloudflare)
           last_cloudflare_at="$NOW"
+          verify_after_action "$action" || true
+          ;;
+        stop-hermes-dashboard)
+          verify_after_action "$action" || true
           ;;
         reboot-host)
           last_reboot_at="$NOW"
           ;;
       esac
+      if [[ "$CLASSIFICATION" == "healthy" && "$action" != "reboot-host" ]]; then
+        reset_failure_counters
+        local_recovery_cycles=0
+        send_alert recovery service_restored \
+          "Paperclip health recovered after $action." || true
+      fi
     fi
   fi
 

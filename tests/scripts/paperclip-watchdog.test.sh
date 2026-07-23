@@ -44,6 +44,12 @@ begin_case() {
   export PAPERCLIP_TEST_CLOUDFLARE=ok
   export PAPERCLIP_TEST_HERMES_OWNER=none
   export PAPERCLIP_TEST_NOW=1000
+  unset PAPERCLIP_TEST_ALERT_RESULT
+  unset PAPERCLIP_TEST_POST_ACTION_DOCKER_ENGINE
+  unset PAPERCLIP_TEST_POST_ACTION_CONTAINER
+  unset PAPERCLIP_TEST_POST_ACTION_HOST
+  unset PAPERCLIP_TEST_POST_ACTION_PUBLIC
+  unset PAPERCLIP_TEST_POST_ACTION_CLOUDFLARE
 }
 
 run_watchdog() {
@@ -632,6 +638,62 @@ test_installer_never_prints_telegram_token() {
   fi
 }
 
+test_recovery_action_is_alerted() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_command_count "alert:recovery_action:container_down" 1; then
+    pass "recovery action emits an operator alert"
+  else
+    fail "recovery action emits an operator alert"
+  fi
+}
+
+test_post_action_health_is_verified() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  export PAPERCLIP_TEST_HOST=down
+  export PAPERCLIP_TEST_PUBLIC=down
+  export PAPERCLIP_TEST_POST_ACTION_CONTAINER=ok
+  export PAPERCLIP_TEST_POST_ACTION_HOST=ok
+  export PAPERCLIP_TEST_POST_ACTION_PUBLIC=ok
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_state_value "local_recovery_cycles" 0 \
+    && assert_state_value "last_classification" healthy \
+    && assert_command_count "alert:recovery:service_restored" 1; then
+    pass "watchdog re-probes and records successful post-action health"
+  else
+    fail "watchdog re-probes and records successful post-action health"
+  fi
+}
+
+test_reboot_alert_precedes_reboot_command() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  export PAPERCLIP_TEST_HOST=down
+  export PAPERCLIP_TEST_PUBLIC=down
+  local now
+  for now in 1000 1060 1361 1662 1963; do
+    export PAPERCLIP_TEST_NOW="$now"
+    run_watchdog
+  done
+  local alert_line reboot_line
+  alert_line="$(grep -nFx "alert:critical:reboot" "$COMMAND_LOG" | cut -d: -f1)"
+  reboot_line="$(grep -nFx "reboot-host" "$COMMAND_LOG" | cut -d: -f1)"
+
+  if [[ -n "$alert_line" && -n "$reboot_line" && "$alert_line" -lt "$reboot_line" ]]; then
+    pass "critical alert is attempted before reboot"
+  else
+    fail "critical alert is attempted before reboot"
+  fi
+}
+
 test_healthy_cycle_takes_no_action
 test_first_container_failure_only_increments_counter
 test_second_container_failure_runs_compose
@@ -665,6 +727,9 @@ test_installer_dry_run_changes_no_launchd_state
 test_installer_refuses_wrong_production_user
 test_uninstall_targets_only_new_services
 test_installer_never_prints_telegram_token
+test_recovery_action_is_alerted
+test_post_action_health_is_verified
+test_reboot_alert_precedes_reboot_command
 
 printf '%s tests, %s failures\n' "$TESTS_RUN" "$TESTS_FAILED"
 [[ "$TESTS_FAILED" -eq 0 ]]
