@@ -10,6 +10,8 @@ PUBLIC_HEALTH_URL="${PAPERCLIP_PUBLIC_HEALTH_URL:-https://office.integral.sh/api
 CLOUDFLARE_LABEL="${PAPERCLIP_CLOUDFLARE_LABEL:-com.cloudflare.cloudflared}"
 HERMES_ENV_FILE="${HERMES_ENV_FILE:-${HOME}/.hermes/.env}"
 TELEGRAM_CHAT_ID="${TELEGRAM_CHAT_ID:-1870056157}"
+HERMES_DASHBOARD_LABELS="${PAPERCLIP_HERMES_DASHBOARD_LABELS:-ai.hermes.desktop,ai.hermes.dashboard}"
+HERMES_DASHBOARD_EXECUTABLES="${PAPERCLIP_HERMES_DASHBOARD_EXECUTABLES:-}"
 DOCKER_BIN="${DOCKER_BIN:-/usr/local/bin/docker}"
 CURL_BIN="${CURL_BIN:-/usr/bin/curl}"
 LAUNCHCTL_BIN="${LAUNCHCTL_BIN:-/bin/launchctl}"
@@ -357,11 +359,133 @@ action_command() {
     restart-cloudflare)
       "$LAUNCHCTL_BIN" kickstart -k "system/$CLOUDFLARE_LABEL"
       ;;
+    stop-hermes-dashboard)
+      stop_hermes_dashboard
+      ;;
     reboot-host)
       /sbin/shutdown -r now
       ;;
     *)
       return 64
+      ;;
+  esac
+}
+
+resolve_telegram_token() {
+  if [[ -n "${TELEGRAM_BOT_TOKEN:-}" ]]; then
+    printf '%s' "$TELEGRAM_BOT_TOKEN"
+    return 0
+  fi
+  if [[ -r "$HERMES_ENV_FILE" ]]; then
+    awk -F= '/^TELEGRAM_BOT_TOKEN=/{
+      sub(/^TELEGRAM_BOT_TOKEN=/, "");
+      gsub(/^["'\'']|["'\'']$/, "");
+      print; exit
+    }' "$HERMES_ENV_FILE"
+    return 0
+  fi
+  return 1
+}
+
+send_alert() {
+  local severity="$1"
+  local alert_class="$2"
+  local message="$3"
+  if [[ "${PAPERCLIP_TEST_MODE:-0}" == "1" ]]; then
+    printf 'alert:%s:%s\n' "$severity" "$alert_class" >> "${PAPERCLIP_TEST_COMMAND_LOG:?test command log required}"
+    return 0
+  fi
+  local token
+  token="$(resolve_telegram_token || true)"
+  if [[ -z "$token" ]]; then
+    log_line "alert_delivery=skipped class=$alert_class reason=missing_token"
+    return 0
+  fi
+  "$CURL_BIN" -fsS --connect-timeout 3 --max-time 10 \
+    -d "chat_id=$TELEGRAM_CHAT_ID" \
+    --data-urlencode "text=[paperclip watchdog][$severity] $message" \
+    "https://api.telegram.org/bot${token}/sendMessage" >/dev/null 2>&1 || {
+      log_line "alert_delivery=failed class=$alert_class"
+      return 0
+    }
+}
+
+list_csv() {
+  printf '%s' "$1" | tr ',' '\n'
+}
+
+is_allowlisted_label() {
+  local candidate="$1"
+  local allowed
+  while IFS= read -r allowed; do
+    [[ -n "$allowed" && "$candidate" == "$allowed" ]] && return 0
+  done <<EOF
+$(list_csv "$HERMES_DASHBOARD_LABELS")
+EOF
+  return 1
+}
+
+is_allowlisted_executable() {
+  local candidate="$1"
+  local remaining="$HERMES_DASHBOARD_EXECUTABLES"
+  local allowed
+  while [[ -n "$remaining" ]]; do
+    allowed="${remaining%%:*}"
+    if [[ "$remaining" == *:* ]]; then
+      remaining="${remaining#*:}"
+    else
+      remaining=""
+    fi
+    [[ -n "$allowed" && "$candidate" == "$allowed" ]] && return 0
+  done
+  return 1
+}
+
+identify_hermes_dashboard_owner() {
+  if [[ "${PAPERCLIP_TEST_MODE:-0}" == "1" ]]; then
+    [[ "${PAPERCLIP_TEST_HERMES_OWNER:-none}" == "allowlisted" ]]
+    return
+  fi
+
+  local pids pid executable label label_pid
+  pids="$("$LSOF_BIN" -nP -t -iTCP@127.0.0.1:9120 2>/dev/null | sort -u)"
+  [[ -n "$pids" ]] || return 1
+  for pid in $pids; do
+    executable="$(/bin/ps -p "$pid" -o comm= 2>/dev/null | sed 's/^[[:space:]]*//')"
+    if is_allowlisted_executable "$executable"; then
+      printf 'pid:%s' "$pid"
+      return 0
+    fi
+    while IFS= read -r label; do
+      [[ -n "$label" ]] || continue
+      label_pid="$("$LAUNCHCTL_BIN" print "gui/$(id -u)/$label" 2>/dev/null | awk '/^[[:space:]]*pid = / { print $3; exit }')"
+      if [[ "$label_pid" == "$pid" ]] && is_allowlisted_label "$label"; then
+        printf 'label:%s' "$label"
+        return 0
+      fi
+    done <<EOF
+$(list_csv "$HERMES_DASHBOARD_LABELS")
+EOF
+  done
+  return 1
+}
+
+stop_hermes_dashboard() {
+  local owner
+  if [[ "${PAPERCLIP_TEST_MODE:-0}" == "1" ]]; then
+    [[ "${PAPERCLIP_TEST_HERMES_OWNER:-none}" == "allowlisted" ]]
+    return
+  fi
+  owner="$(identify_hermes_dashboard_owner)" || return 1
+  case "$owner" in
+    label:*)
+      "$LAUNCHCTL_BIN" kill SIGTERM "gui/$(id -u)/${owner#label:}"
+      ;;
+    pid:*)
+      /bin/kill -TERM "${owner#pid:}"
+      ;;
+    *)
+      return 1
       ;;
   esac
 }
@@ -378,6 +502,17 @@ perform_action() {
 
 choose_recovery_action() {
   case "$CLASSIFICATION" in
+    socket_pressure)
+      if [[ "$socket_failures" -ge "$FAILURES_REQUIRED" ]]; then
+        if identify_hermes_dashboard_owner >/dev/null; then
+          printf '%s' stop-hermes-dashboard
+        else
+          send_alert critical socket_owner_unverified \
+            "Socket use is ${SOCKET_PERCENT}% but the port 9120 owner is not allowlisted; no process was stopped."
+          log_line "action=suppressed reason=socket_owner_unverified"
+        fi
+      fi
+      ;;
     container_down)
       [[ "$container_failures" -ge "$FAILURES_REQUIRED" ]] && printf '%s' compose-up
       ;;
@@ -403,13 +538,21 @@ main() {
   increment_failure_counters
   log_line "classification=$CLASSIFICATION socket_percent=$SOCKET_PERCENT docker=$DOCKER_ENGINE_RESULT container=$CONTAINER_RESULT host=$HOST_RESULT public=$PUBLIC_RESULT cloudflare=$CLOUDFLARE_RESULT"
 
+  if [[ "$SOCKET_PERCENT" -ge "$SOCKET_WARNING_PERCENT" && "$SOCKET_PERCENT" -lt "$SOCKET_ACTION_PERCENT" ]]; then
+    send_alert warning socket_pressure "Ephemeral TCP socket use reached ${SOCKET_PERCENT}%."
+  fi
+
   local action
   action="$(choose_recovery_action)"
   if [[ -n "$action" ]]; then
     perform_action "$action" || log_line "action_failed=$action"
     if [[ "$DRY_RUN" -eq 0 ]]; then
-      last_compose_at="$NOW"
-      local_recovery_cycles=$((local_recovery_cycles + 1))
+      case "$action" in
+        compose-up)
+          last_compose_at="$NOW"
+          local_recovery_cycles=$((local_recovery_cycles + 1))
+          ;;
+      esac
     fi
   fi
 

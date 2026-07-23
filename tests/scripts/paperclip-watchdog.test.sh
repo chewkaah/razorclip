@@ -157,11 +157,111 @@ test_healthy_cycle_resets_failure_state() {
   fi
 }
 
+test_socket_below_warning_is_quiet() {
+  begin_case
+  export PAPERCLIP_TEST_SOCKET_PERCENT=69
+  run_watchdog
+
+  if assert_status 0 \
+    && assert_command_not_called "alert:warning:socket_pressure" \
+    && assert_command_not_called "stop-hermes-dashboard"; then
+    pass "socket use below warning threshold is quiet"
+  else
+    fail "socket use below warning threshold is quiet"
+  fi
+}
+
+test_socket_warning_alerts_without_termination() {
+  begin_case
+  export PAPERCLIP_TEST_SOCKET_PERCENT=70
+  run_watchdog
+
+  if assert_status 0 \
+    && assert_command_count "alert:warning:socket_pressure" 1 \
+    && assert_command_not_called "stop-hermes-dashboard"; then
+    pass "socket warning alerts without terminating a process"
+  else
+    fail "socket warning alerts without terminating a process"
+  fi
+}
+
+test_first_socket_intervention_cycle_only_counts() {
+  begin_case
+  export PAPERCLIP_TEST_SOCKET_PERCENT=85
+  export PAPERCLIP_TEST_HERMES_OWNER=allowlisted
+  run_watchdog
+
+  if assert_status 0 \
+    && assert_state_value "socket_failures" 1 \
+    && assert_command_not_called "stop-hermes-dashboard"; then
+    pass "first socket intervention cycle only increments its counter"
+  else
+    fail "first socket intervention cycle only increments its counter"
+  fi
+}
+
+test_second_socket_intervention_stops_allowlisted_owner() {
+  begin_case
+  export PAPERCLIP_TEST_SOCKET_PERCENT=85
+  export PAPERCLIP_TEST_HERMES_OWNER=allowlisted
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_status 0 \
+    && assert_command_count "stop-hermes-dashboard" 1 \
+    && assert_command_not_called "reboot-host"; then
+    pass "second socket intervention stops only the allowlisted owner"
+  else
+    fail "second socket intervention stops only the allowlisted owner"
+  fi
+}
+
+test_unknown_socket_owner_is_not_terminated() {
+  begin_case
+  export PAPERCLIP_TEST_SOCKET_PERCENT=85
+  export PAPERCLIP_TEST_HERMES_OWNER=unknown
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_status 0 \
+    && assert_command_not_called "stop-hermes-dashboard" \
+    && assert_command_count "alert:critical:socket_owner_unverified" 1; then
+    pass "unknown socket owner is alerted but not terminated"
+  else
+    fail "unknown socket owner is alerted but not terminated"
+  fi
+}
+
+test_socket_pressure_alone_never_advances_reboot() {
+  begin_case
+  export PAPERCLIP_TEST_SOCKET_PERCENT=90
+  export PAPERCLIP_TEST_HERMES_OWNER=allowlisted
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_status 0 \
+    && assert_state_value "local_recovery_cycles" 0 \
+    && assert_command_not_called "reboot-host"; then
+    pass "socket pressure alone never advances reboot escalation"
+  else
+    fail "socket pressure alone never advances reboot escalation"
+  fi
+}
+
 test_healthy_cycle_takes_no_action
 test_first_container_failure_only_increments_counter
 test_second_container_failure_runs_compose
 test_dry_run_records_but_does_not_run_recovery
 test_healthy_cycle_resets_failure_state
+test_socket_below_warning_is_quiet
+test_socket_warning_alerts_without_termination
+test_first_socket_intervention_cycle_only_counts
+test_second_socket_intervention_stops_allowlisted_owner
+test_unknown_socket_owner_is_not_terminated
+test_socket_pressure_alone_never_advances_reboot
 
 printf '%s tests, %s failures\n' "$TESTS_RUN" "$TESTS_FAILED"
 [[ "$TESTS_FAILED" -eq 0 ]]
