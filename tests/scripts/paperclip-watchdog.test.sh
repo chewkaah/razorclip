@@ -4,6 +4,7 @@ set -u
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 WATCHDOG="$ROOT_DIR/scripts/paperclip-watchdog.sh"
+INSTALLER="$ROOT_DIR/scripts/install-paperclip-watchdog.sh"
 TMP_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/paperclip-watchdog-test.XXXXXX")"
 TESTS_RUN=0
 TESTS_FAILED=0
@@ -544,6 +545,93 @@ test_reboot_cooldown_suppresses_second_reboot() {
   fi
 }
 
+test_launchd_plists_are_valid_and_bounded() {
+  begin_case
+  local watchdog_plist="$ROOT_DIR/scripts/com.agent.paperclip-watchdog.plist"
+  local network_plist="$ROOT_DIR/scripts/com.integral.paperclip-network-capacity.plist"
+
+  if plutil -lint "$watchdog_plist" >/dev/null 2>&1 \
+    && plutil -lint "$network_plist" >/dev/null 2>&1 \
+    && plutil -p "$watchdog_plist" | grep -Fq '"StartInterval" => 60' \
+    && plutil -p "$watchdog_plist" | grep -Fq '"RunAtLoad" => true' \
+    && ! plutil -p "$watchdog_plist" | grep -Fq '"KeepAlive"' \
+    && plutil -p "$network_plist" | grep -Fq 'net.inet.ip.portrange.first=10000' \
+    && plutil -p "$network_plist" | grep -Fq 'net.inet.ip.portrange.hifirst=10000'; then
+    pass "launchd plists are valid and use bounded one-shot schedules"
+  else
+    fail "launchd plists are valid and use bounded one-shot schedules"
+  fi
+}
+
+test_installer_dry_run_changes_no_launchd_state() {
+  begin_case
+  local output="$CASE_DIR/installer.out"
+  PAPERCLIP_INSTALL_TEST_MODE=1 \
+    PAPERCLIP_INSTALL_COMMAND_LOG="$COMMAND_LOG" \
+    PAPERCLIP_INSTALL_USER=agent0 \
+    "$INSTALLER" --dry-run >"$output" 2>&1
+  LAST_STATUS=$?
+
+  if assert_status 0 \
+    && [[ ! -s "$COMMAND_LOG" ]]; then
+    pass "installer dry-run changes no launchd state"
+  else
+    fail "installer dry-run changes no launchd state"
+  fi
+}
+
+test_installer_refuses_wrong_production_user() {
+  begin_case
+  PAPERCLIP_INSTALL_TEST_MODE=1 \
+    PAPERCLIP_INSTALL_COMMAND_LOG="$COMMAND_LOG" \
+    PAPERCLIP_INSTALL_USER=someone-else \
+    "$INSTALLER" --install >/dev/null 2>&1
+  LAST_STATUS=$?
+
+  if assert_status 77 \
+    && [[ ! -s "$COMMAND_LOG" ]]; then
+    pass "installer refuses a non-agent0 production install"
+  else
+    fail "installer refuses a non-agent0 production install"
+  fi
+}
+
+test_uninstall_targets_only_new_services() {
+  begin_case
+  PAPERCLIP_INSTALL_TEST_MODE=1 \
+    PAPERCLIP_INSTALL_COMMAND_LOG="$COMMAND_LOG" \
+    PAPERCLIP_INSTALL_USER=agent0 \
+    "$INSTALLER" --uninstall >/dev/null 2>&1
+  LAST_STATUS=$?
+
+  if assert_status 0 \
+    && assert_command_count "bootout:gui:com.agent.paperclip-watchdog" 1 \
+    && assert_command_count "bootout:system:com.integral.paperclip-network-capacity" 1 \
+    && [[ "$(wc -l < "$COMMAND_LOG" | tr -d ' ')" -eq 2 ]]; then
+    pass "uninstall targets only the two new services"
+  else
+    fail "uninstall targets only the two new services"
+  fi
+}
+
+test_installer_never_prints_telegram_token() {
+  begin_case
+  local output="$CASE_DIR/installer.out"
+  TELEGRAM_BOT_TOKEN=installer-secret-token \
+    PAPERCLIP_INSTALL_TEST_MODE=1 \
+    PAPERCLIP_INSTALL_COMMAND_LOG="$COMMAND_LOG" \
+    PAPERCLIP_INSTALL_USER=agent0 \
+    "$INSTALLER" --dry-run >"$output" 2>&1
+  LAST_STATUS=$?
+
+  if assert_status 0 \
+    && ! grep -Fq "installer-secret-token" "$output"; then
+    pass "installer output never prints the Telegram token"
+  else
+    fail "installer output never prints the Telegram token"
+  fi
+}
+
 test_healthy_cycle_takes_no_action
 test_first_container_failure_only_increments_counter
 test_second_container_failure_runs_compose
@@ -572,6 +660,11 @@ test_recovery_transition_alerts_once
 test_logs_and_state_do_not_contain_credentials
 test_unknown_argument_exits_before_probing
 test_reboot_cooldown_suppresses_second_reboot
+test_launchd_plists_are_valid_and_bounded
+test_installer_dry_run_changes_no_launchd_state
+test_installer_refuses_wrong_production_user
+test_uninstall_targets_only_new_services
+test_installer_never_prints_telegram_token
 
 printf '%s tests, %s failures\n' "$TESTS_RUN" "$TESTS_FAILED"
 [[ "$TESTS_FAILED" -eq 0 ]]
