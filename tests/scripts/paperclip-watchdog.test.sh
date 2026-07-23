@@ -424,6 +424,126 @@ test_cloudflare_cooldown_suppresses_duplicate_recovery() {
   fi
 }
 
+test_existing_lock_skips_cycle() {
+  begin_case
+  mkdir "$CASE_DIR/state/watchdog.lock"
+  run_watchdog
+
+  if assert_status 0 \
+    && [[ ! -s "$COMMAND_LOG" ]]; then
+    pass "existing lock skips the watchdog cycle"
+  else
+    fail "existing lock skips the watchdog cycle"
+  fi
+}
+
+test_invalid_state_fails_closed() {
+  begin_case
+  printf 'last_reboot_at=$(reboot-host)\n' > "$CASE_DIR/state/state"
+  run_watchdog
+
+  if assert_status 65 \
+    && [[ ! -s "$COMMAND_LOG" ]] \
+    && assert_log_contains "invalid_state action=suppressed"; then
+    pass "invalid state fails closed without a disruptive action"
+  else
+    fail "invalid state fails closed without a disruptive action"
+  fi
+}
+
+test_alert_delivery_failure_does_not_block_recovery() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  export PAPERCLIP_TEST_ALERT_RESULT=fail
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_status 0 \
+    && assert_command_count "compose-up" 1; then
+    pass "alert delivery failure does not block recovery"
+  else
+    fail "alert delivery failure does not block recovery"
+  fi
+}
+
+test_socket_warning_is_rate_limited() {
+  begin_case
+  export PAPERCLIP_TEST_SOCKET_PERCENT=70
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+
+  if assert_command_count "alert:warning:socket_pressure" 1; then
+    pass "unchanged socket warning is rate limited"
+  else
+    fail "unchanged socket warning is rate limited"
+  fi
+}
+
+test_recovery_transition_alerts_once() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  run_watchdog
+  export PAPERCLIP_TEST_CONTAINER=ok
+  export PAPERCLIP_TEST_NOW=1060
+  run_watchdog
+  export PAPERCLIP_TEST_NOW=1120
+  run_watchdog
+
+  if assert_command_count "alert:recovery:service_restored" 1; then
+    pass "healthy transition emits exactly one recovery alert"
+  else
+    fail "healthy transition emits exactly one recovery alert"
+  fi
+}
+
+test_logs_and_state_do_not_contain_credentials() {
+  begin_case
+  export TELEGRAM_BOT_TOKEN="watchdog-secret-token"
+  export PAPERCLIP_TEST_SOCKET_PERCENT=70
+  run_watchdog
+
+  if ! grep -Fq "watchdog-secret-token" "$CASE_DIR/state/watchdog.log" \
+    && ! grep -Fq "watchdog-secret-token" "$CASE_DIR/state/state"; then
+    pass "logs and state do not contain credentials"
+  else
+    fail "logs and state do not contain credentials"
+  fi
+  unset TELEGRAM_BOT_TOKEN
+}
+
+test_unknown_argument_exits_before_probing() {
+  begin_case
+  run_watchdog --not-a-real-option
+
+  if assert_status 64 \
+    && [[ ! -s "$COMMAND_LOG" ]]; then
+    pass "unknown argument exits before probes or actions"
+  else
+    fail "unknown argument exits before probes or actions"
+  fi
+}
+
+test_reboot_cooldown_suppresses_second_reboot() {
+  begin_case
+  export PAPERCLIP_TEST_CONTAINER=down
+  export PAPERCLIP_TEST_HOST=down
+  export PAPERCLIP_TEST_PUBLIC=down
+  local now
+  for now in 1000 1060 1361 1662 1963 2023; do
+    export PAPERCLIP_TEST_NOW="$now"
+    run_watchdog
+  done
+
+  if assert_command_count "reboot-host" 1 \
+    && assert_log_contains "action=suppressed reason=cooldown action=reboot-host"; then
+    pass "reboot cooldown suppresses a second reboot"
+  else
+    fail "reboot cooldown suppresses a second reboot"
+  fi
+}
+
 test_healthy_cycle_takes_no_action
 test_first_container_failure_only_increments_counter
 test_second_container_failure_runs_compose
@@ -444,6 +564,14 @@ test_local_recovery_before_third_attempt_prevents_reboot
 test_compose_cooldown_suppresses_duplicate_recovery
 test_docker_cooldown_suppresses_duplicate_recovery
 test_cloudflare_cooldown_suppresses_duplicate_recovery
+test_existing_lock_skips_cycle
+test_invalid_state_fails_closed
+test_alert_delivery_failure_does_not_block_recovery
+test_socket_warning_is_rate_limited
+test_recovery_transition_alerts_once
+test_logs_and_state_do_not_contain_credentials
+test_unknown_argument_exits_before_probing
+test_reboot_cooldown_suppresses_second_reboot
 
 printf '%s tests, %s failures\n' "$TESTS_RUN" "$TESTS_FAILED"
 [[ "$TESTS_FAILED" -eq 0 ]]

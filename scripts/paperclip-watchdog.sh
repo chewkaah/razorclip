@@ -394,7 +394,8 @@ send_alert() {
   local message="$3"
   if [[ "${PAPERCLIP_TEST_MODE:-0}" == "1" ]]; then
     printf 'alert:%s:%s\n' "$severity" "$alert_class" >> "${PAPERCLIP_TEST_COMMAND_LOG:?test command log required}"
-    return 0
+    [[ "${PAPERCLIP_TEST_ALERT_RESULT:-ok}" == "ok" ]]
+    return
   fi
   local token
   token="$(resolve_telegram_token || true)"
@@ -409,6 +410,17 @@ send_alert() {
       log_line "alert_delivery=failed class=$alert_class"
       return 0
     }
+}
+
+send_rate_limited_warning() {
+  local alert_class="$1"
+  local message="$2"
+  if [[ "$last_alert_at" -eq 0 || $((NOW - last_alert_at)) -ge 3600 ]]; then
+    send_alert warning "$alert_class" "$message" || true
+    last_alert_at="$NOW"
+  else
+    log_line "alert=suppressed reason=rate_limit class=$alert_class"
+  fi
 }
 
 list_csv() {
@@ -608,7 +620,14 @@ main() {
   log_line "classification=$CLASSIFICATION socket_percent=$SOCKET_PERCENT docker=$DOCKER_ENGINE_RESULT container=$CONTAINER_RESULT host=$HOST_RESULT public=$PUBLIC_RESULT cloudflare=$CLOUDFLARE_RESULT"
 
   if [[ "$SOCKET_PERCENT" -ge "$SOCKET_WARNING_PERCENT" && "$SOCKET_PERCENT" -lt "$SOCKET_ACTION_PERCENT" ]]; then
-    send_alert warning socket_pressure "Ephemeral TCP socket use reached ${SOCKET_PERCENT}%."
+    send_rate_limited_warning socket_pressure "Ephemeral TCP socket use reached ${SOCKET_PERCENT}%."
+  fi
+
+  if [[ "$CLASSIFICATION" == "healthy" \
+    && "$last_classification" != "healthy" \
+    && "$last_classification" != "unknown" ]]; then
+    send_alert recovery service_restored \
+      "Paperclip container, host port, and public health checks recovered." || true
   fi
 
   local action
